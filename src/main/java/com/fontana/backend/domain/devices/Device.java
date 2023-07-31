@@ -1,6 +1,6 @@
 package com.fontana.backend.domain.devices;
 
-import com.fontana.backend.domain.devices.DevicesType.DevicesType;
+import com.fontana.backend.domain.devices.DevicesType.DeviceType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -9,15 +9,15 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Devices {
+public class Device {
 
     @Id
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "type_id")
-    private DevicesType type;
+    private DeviceType type;
 
-    public Devices() {
+    public Device() {
     }
 
 }

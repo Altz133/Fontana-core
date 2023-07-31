@@ -1,6 +1,6 @@
 package com.fontana.backend.domain.devices.DevicesType;
 
-import com.fontana.backend.domain.devices.Devices;
+import com.fontana.backend.domain.devices.Device;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -11,12 +11,12 @@ import java.util.List;
 
 @Data
 @Entity
-public class DevicesType {
+public class DeviceType {
     @Id
     private Integer id;
     @OneToMany(mappedBy = "type")
-    private List<Devices> listOfDevices = new ArrayList<>();
+    private List<Device> listOfDevices = new ArrayList<>();
 
-    public DevicesType() {
+    public DeviceType() {
     }
 }
