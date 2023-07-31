@@ -1,6 +1,6 @@
 package com.fontana.backend.domain.Roles;
 
-import com.fontana.backend.domain.user.User;
+import com.fontana.backend.domain.user.Users;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,7 +14,7 @@ public class Roles {
     @Id
     private Integer id;
     @OneToMany(mappedBy = "role")
-    private List<User> listofUser = new ArrayList<>();
+    private List<Users> listOfUsers = new ArrayList<>();
     private String name;
 
 

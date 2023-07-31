@@ -4,12 +4,9 @@ import com.fontana.backend.domain.Roles.Roles;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Entity
-public class User {
+public class Users {
 
     @Id
     private String name;
@@ -18,7 +15,7 @@ public class User {
     @JoinColumn(name = "role_id")
     private Roles role;
 
-    public User() {
+    public Users() {
     }
 
 }
