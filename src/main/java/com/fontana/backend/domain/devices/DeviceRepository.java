@@ -1,6 +1,6 @@
 package com.fontana.backend.domain.devices;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface DeviceRepository extends JpaRepository<Device, Integer> {
+public interface DeviceRepository extends CrudRepository<Device, Integer> {
 }
