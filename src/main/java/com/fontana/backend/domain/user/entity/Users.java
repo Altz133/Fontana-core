@@ -15,6 +15,7 @@ public class Users {
     @JoinColumn(name = "role_id")
     private Roles role;
 
+
     public Users() {
     }
 
