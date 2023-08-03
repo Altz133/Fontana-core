@@ -1,6 +1,7 @@
 package com.fontana.backend.security;
 
 import com.fontana.backend.config.LdapConfig;
+import com.fontana.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class LdapService {
 
     private final LdapConfig ldapConfig;
+    private final UserService userService;
 
     public boolean isLdapRegistered(String username, String password) {
         return isUserValid(username, password);
