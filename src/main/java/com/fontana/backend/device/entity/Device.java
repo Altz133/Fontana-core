@@ -1,4 +1,4 @@
-package com.fontana.backend.devices.entity;
+package com.fontana.backend.device.entity;
 
 import com.fontana.backend.devicetype.entity.DeviceType;
 import jakarta.persistence.Entity;

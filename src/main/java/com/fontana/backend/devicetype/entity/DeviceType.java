@@ -1,6 +1,6 @@
 package com.fontana.backend.devicetype.entity;
 
-import com.fontana.backend.devices.entity.Device;
+import com.fontana.backend.device.entity.Device;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
