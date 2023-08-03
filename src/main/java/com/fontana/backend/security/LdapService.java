@@ -3,7 +3,6 @@ package com.fontana.backend.security;
 import com.fontana.backend.config.LdapConfig;
 import com.fontana.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.naming.Context;
@@ -44,13 +43,14 @@ public class LdapService {
 
         DirContext context = new InitialDirContext(env);
 
-        Attributes attrs = context.getAttributes(env.get(Context.SECURITY_PRINCIPAL));
-        List<String> l = new ArrayList<String>();
-        for (NamingEnumeration ae = attrs.getAll(); ae.hasMore();) {
-            Attribute attr = (Attribute) ae.next();
-            l.add(attr.getID());
+        Attributes attributes = context.getAttributes(env.get(Context.SECURITY_PRINCIPAL));
+        List<Object> ldapDetails = new ArrayList<Object>();
+        for (NamingEnumeration attributeEnumeration = attributes.getAll(); attributeEnumeration.hasMore();) {
+            Attribute attr = (Attribute) attributeEnumeration.next();
+            ldapDetails.add(attr.get());
         }
 
+        userService.extractUserFromLDAP(ldapDetails);
         context.close();
     }
 }

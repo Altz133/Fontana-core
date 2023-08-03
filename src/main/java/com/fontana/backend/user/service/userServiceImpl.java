@@ -7,6 +7,8 @@ import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -15,14 +17,28 @@ public class UserServiceImpl implements UserService {
     private final UserDtoMapper userDtoMapper;
 
     @Override
-    public void addUser(UserDTO userDto) {
-        User user = userDtoMapper.map(userDto);
+    public void add(User user) {
         userRepository.save(user);
     }
 
+    //FIXME modify the way to set role once the database is configured
+
     @Override
-    public UserDTO extractUserFromLDAP() {
-        return null;
+    public void extractUserFromLDAP(List<Object> ldapDetails) {
+        String[] nameParts = ldapDetails.get(10).toString().split("\\s+");
+
+        UserDTO userDto = UserDTO.builder()
+                .username(ldapDetails.get(7).toString())
+                .firstName(nameParts[0])
+                .lastName(nameParts[1])
+                .role(null)
+                .build();
+
+        User user = userDtoMapper.map(userDto);
+
+        if (userRepository.findById(user.getUsername()).isEmpty()) {
+            add(user);
+        }
     }
 }
 
