@@ -1,6 +1,7 @@
 package com.fontana.backend.config;
 
 import com.fontana.backend.security.jwt.JwtAuthenticationFilter;
+import com.fontana.backend.test.TestController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,16 +12,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-/**
- * Description: spring security configuration
- * @author: Sebastian Mazur
- */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class WebSecurityConfig {
 
     /**
      * This method provides various security configuration solutions, including protection against CSRF attacks, CORS
-     * configuration, session & jwt management and granting http requests access (or not).
+     * configuration, session & jwt management, and granting http requests access (or not).
      *
      * @param http The HttpSecurity object used to configure the security settings for HTTP requests.
      * @return configured SecurityFilterChain for the application's HTTP security.
@@ -51,7 +49,10 @@ public class WebSecurityConfig {
                     return configuration;
                 }))
                 .authorizeHttpRequests(requests ->
-                        requests.anyRequest().permitAll())  //TODO keep adding every endpoint/group of endpoints with proper access level
+                        requests
+                                .requestMatchers(new AntPathRequestMatcher("/fontana/api/v1/auth/*")).permitAll()
+                                .anyRequest().authenticated())
+//                              //TODO keep adding every endpoint/group of endpoints with proper access level
                 .sessionManagement((sessionManagement) ->
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
