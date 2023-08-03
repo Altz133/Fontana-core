@@ -68,6 +68,13 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>jd2xx</groupId>
+			<artifactId>j2dxx</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/jd2xx.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>
