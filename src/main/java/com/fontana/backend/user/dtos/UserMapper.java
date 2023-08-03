@@ -1,6 +1,6 @@
-package com.fontana.backend.domain.user.dtos;
+package com.fontana.backend.user.dtos;
 
-import com.fontana.backend.domain.user.entity.Users;
+import com.fontana.backend.user.entity.Users;
 import org.springframework.stereotype.Service;
 
 @Service

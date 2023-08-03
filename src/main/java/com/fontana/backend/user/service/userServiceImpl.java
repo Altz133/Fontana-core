@@ -1,9 +1,9 @@
-package com.fontana.backend.domain.user.service;
+package com.fontana.backend.user.service;
 
-import com.fontana.backend.domain.user.dtos.UserMapper;
-import com.fontana.backend.domain.user.dtos.UserRequestDTO;
-import com.fontana.backend.domain.user.repository.UsersRepository;
-import com.fontana.backend.domain.user.entity.Users;
+import com.fontana.backend.user.dtos.UserMapper;
+import com.fontana.backend.user.dtos.UserRequestDTO;
+import com.fontana.backend.user.repository.UsersRepository;
+import com.fontana.backend.user.entity.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package com.fontana.backend.domain.devices;
+package com.fontana.backend.devices.entity;
 
-import com.fontana.backend.domain.devices.DevicesType.DeviceType;
+import com.fontana.backend.devicesType.entity.DeviceType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
