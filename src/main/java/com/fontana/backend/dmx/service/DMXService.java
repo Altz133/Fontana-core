@@ -1,10 +1,13 @@
-package com.fontana.backend.dmx;
+package com.fontana.backend.dmx.service;
 
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DMXService {
 
+    Byte[] dmxData = new Byte[512+3];
     @PostConstruct
     public void init() {
         try {
@@ -21,15 +24,8 @@ public class DMXService {
 
     }
 
-    Byte[] translateDTo(){
-        return null;
+    public void setDMXData(Byte[] dmxData) {
+        this.dmxData = dmxData;
     }
-
-    Boolean validateByteArray(){
-        return null;
-    }
-
-
-
 
 }
