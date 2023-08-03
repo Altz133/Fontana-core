@@ -1,5 +1,5 @@
-package com.fontana.backend.device.entity;
 
+package com.fontana.backend.device.entity;
 import com.fontana.backend.devicetype.entity.DeviceType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
