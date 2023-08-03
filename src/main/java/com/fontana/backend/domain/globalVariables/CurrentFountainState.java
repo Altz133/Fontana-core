@@ -10,5 +10,5 @@ import java.util.List;
 @Component
 @Data
 public class CurrentFountainState {
-    private List<Integer> snapshot = new ArrayList<>(Collections.nCopies(50, 0)); // 50 zer
+    private byte[] snapshot= new byte[50];
 }
