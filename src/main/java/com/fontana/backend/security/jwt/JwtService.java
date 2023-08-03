@@ -23,7 +23,7 @@ public class JwtService {
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    public static final Long ACCESS_EXPIRATION_DELAY = 20000L;
+    public static final Long ACCESS_EXPIRATION_DELAY = 2000000L;
     public static final Long REFRESH_EXPIRATION_DELAY = 2629800000L;
 
     public String extractUsername(String token) {
