@@ -1,4 +1,4 @@
-package com.fontana.backend.domain.user.dtos;
+package com.fontana.backend.user.dtos;
 
 import lombok.Data;
 

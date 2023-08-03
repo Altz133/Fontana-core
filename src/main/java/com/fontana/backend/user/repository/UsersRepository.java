@@ -1,6 +1,6 @@
-package com.fontana.backend.domain.user.repository;
+package com.fontana.backend.user.repository;
 
-import com.fontana.backend.domain.user.entity.Users;
+import com.fontana.backend.user.entity.Users;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UsersRepository extends CrudRepository<Users, String> {

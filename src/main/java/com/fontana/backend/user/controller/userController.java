@@ -1,11 +1,11 @@
-package com.fontana.backend.domain.user.controller;
+package com.fontana.backend.user.controller;
 
-import com.fontana.backend.domain.user.dtos.UserRequestDTO;
+import com.fontana.backend.user.dtos.UserRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.fontana.backend.domain.user.service.userService;
+import com.fontana.backend.user.service.userService;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

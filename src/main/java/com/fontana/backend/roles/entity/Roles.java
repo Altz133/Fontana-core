@@ -1,6 +1,6 @@
-package com.fontana.backend.domain.Roles;
+package com.fontana.backend.roles.entity;
 
-import com.fontana.backend.domain.user.entity.Users;
+import com.fontana.backend.user.entity.Users;
 import jakarta.persistence.*;
 import lombok.Data;
 

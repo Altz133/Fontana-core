@@ -1,4 +1,4 @@
-package com.fontana.backend.domain.config;
+package com.fontana.backend.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

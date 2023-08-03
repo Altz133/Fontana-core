@@ -1,11 +1,12 @@
-package com.fontana.backend.domain.user.entity;
+package com.fontana.backend.user.entity;
 
-import com.fontana.backend.domain.Roles.Roles;
+import com.fontana.backend.roles.entity.Roles;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
+
 public class Users {
 
     @Id
