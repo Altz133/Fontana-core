@@ -1,13 +1,12 @@
 package com.fontana.backend.user.service;
 
-import com.fontana.backend.user.dtos.UserDTO;
-import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.entity.Users;
 
 import java.util.List;
 
 public interface UserService {
 
-    void add(User user);
+    void add(Users user);
 
     void extractUserFromLDAP(List<Object> ldapDetails);
 }
