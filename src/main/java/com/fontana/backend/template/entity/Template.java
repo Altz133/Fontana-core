@@ -4,6 +4,8 @@ import com.fontana.backend.schedule.entity.Schedule;
 import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.user.entity.Users;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,6 +16,7 @@ import java.util.List;
 @Table(name="templates")
 public class Template {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
