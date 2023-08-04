@@ -1,4 +1,4 @@
-package com.fontana.backend.domain.templates.snapshots;
+package com.fontana.backend.snapshot.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SnapshotsDTO {
-    private Integer index;
+public class SnapshotDTO {
+    private Integer id;
     private Integer value;
-
 }

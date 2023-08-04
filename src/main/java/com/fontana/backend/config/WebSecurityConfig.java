@@ -1,7 +1,6 @@
 package com.fontana.backend.config;
 
 import com.fontana.backend.security.jwt.JwtAuthenticationFilter;
-import com.fontana.backend.test.TestController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

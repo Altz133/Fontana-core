@@ -1,7 +1,7 @@
-package com.fontana.backend.domain.schedules;
+package com.fontana.backend.schedule.entity;
 
-import com.fontana.backend.domain.templates.Templates;
-import com.fontana.backend.domain.user.entity.Users;
+import com.fontana.backend.template.entity.Template;
+import com.fontana.backend.user.entity.Users;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,9 +10,10 @@ import java.util.List;
 
 @Entity
 @Data
-public class Schedules {
+@Table(name="schedules")
+public class Schedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
@@ -29,6 +30,5 @@ public class Schedules {
             joinColumns = @JoinColumn(name = "schedule_id"),
             inverseJoinColumns = @JoinColumn(name = "template_id")
     )
-    private List<Templates> templates;
-
+    private List<Template> templates;
 }

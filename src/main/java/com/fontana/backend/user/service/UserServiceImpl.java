@@ -1,7 +1,7 @@
 package com.fontana.backend.user.service;
 
 import com.fontana.backend.user.dtos.UserDTO;
-import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.entity.Users;
 import com.fontana.backend.user.mappers.UserDtoMapper;
 import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     private final UserDtoMapper userDtoMapper;
 
     @Override
-    public void add(User user) {
+    public void add(Users user) {
         userRepository.save(user);
     }
 
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
                 .role(null)
                 .build();
 
-        User user = userDtoMapper.map(userDto);
+        Users user = userDtoMapper.map(userDto);
 
         if (userRepository.findById(user.getUsername()).isEmpty()) {
             add(user);
