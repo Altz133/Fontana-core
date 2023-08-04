@@ -15,7 +15,6 @@ public class Users {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Roles role;
-
     public Users() {
     }
 

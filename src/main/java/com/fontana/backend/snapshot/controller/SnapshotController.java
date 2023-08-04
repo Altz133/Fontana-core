@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/snapshots")
+@RequestMapping("/api/v1/snapshots")
 public class SnapshotController {
 
     @Autowired
@@ -19,7 +19,7 @@ public class SnapshotController {
 
     @PostMapping("/update")
     public ResponseEntity<Void> updateSnapshot(@RequestBody SnapshotDTO snapshotDTO) {
-        snapshotService.updateSnapshot(snapshotDTO.getIndex(), snapshotDTO.getValue());
+        snapshotService.updateSnapshot(snapshotDTO.getId(), snapshotDTO.getValue());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name="snapshots")
 public class Snapshot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

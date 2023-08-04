@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SnapshotDTO {
-    private Integer index;
+    private Integer id;
     private Integer value;
-
 }

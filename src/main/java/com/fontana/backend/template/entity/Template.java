@@ -11,6 +11,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name="templates")
 public class Template {
     @Id
     private int id;
