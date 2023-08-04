@@ -17,9 +17,9 @@ public class SnapshotController {
     @Autowired
     private SnapshotService snapshotService;
 
-    @PostMapping("/update")
-    public ResponseEntity<Void> updateSnapshot(@RequestBody SnapshotDTO snapshotDTO) {
-        snapshotService.updateSnapshot(snapshotDTO.getId(), snapshotDTO.getValue());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PostMapping("/update")
+//    public ResponseEntity<Void> updateSnapshot(@RequestBody SnapshotDTO snapshotDTO) {
+//        snapshotService.updateSnapshot(snapshotDTO.getId(), snapshotDTO.getValue());
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }

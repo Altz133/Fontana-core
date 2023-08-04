@@ -37,6 +37,12 @@ public class LdapService {
         }
     }
 
+    /**
+     * Retrieves LDAP user details based on the provided environment properties and extracts them as a list.
+     *
+     * @param env represents the environment properties used to configure the initial context for the LDAP
+     * @throws NamingException when there are issues with the naming or directory operations
+     */
     private void getInitialDirContext(Hashtable<String, String> env) throws NamingException {
 
         //FIXME temporary solution
