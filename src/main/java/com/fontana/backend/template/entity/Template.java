@@ -1,8 +1,8 @@
-package com.fontana.backend.domain.templates;
+package com.fontana.backend.template.entity;
 
-import com.fontana.backend.domain.schedules.Schedules;
-import com.fontana.backend.domain.templates.snapshots.Snapshots;
-import com.fontana.backend.domain.user.entity.Users;
+import com.fontana.backend.schedule.entity.Schedule;
+import com.fontana.backend.snapshot.entity.Snapshot;
+import com.fontana.backend.user.entity.Users;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class Templates {
+public class Template {
     @Id
     private int id;
 
@@ -29,8 +29,8 @@ public class Templates {
     private int duration;
 
     @OneToMany(mappedBy = "template")
-    private List<Snapshots> snapshot;
+    private List<Snapshot> snapshot;
 
     @ManyToMany(mappedBy = "templates")
-    private List<Schedules> schedules;
+    private List<Schedule> schedules;
 }
