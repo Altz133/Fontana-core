@@ -1,21 +1,44 @@
 package com.fontana.backend.user.service;
 
-import com.fontana.backend.user.dtos.UserMapper;
-import com.fontana.backend.user.dtos.UserRequestDTO;
-import com.fontana.backend.user.repository.UsersRepository;
-import com.fontana.backend.user.entity.Users;
+import com.fontana.backend.user.dtos.UserDTO;
+import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.mappers.UserDtoMapper;
+import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
-@Service
-public class userServiceImpl implements userService{
+import java.util.List;
 
-    private final UsersRepository theUserRepository;
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+    private final UserDtoMapper userDtoMapper;
 
     @Override
-    public void addUser(UserRequestDTO userData) {
-        Users UserDTO = UserMapper.mapUser(userData);
-        theUserRepository.save(UserDTO);
+    public void add(User user) {
+        userRepository.save(user);
+    }
+
+    //FIXME modify the way to set role once the database is configured
+
+    @Override
+    public void extractUserFromLDAP(List<Object> ldapDetails) {
+        String[] nameParts = ldapDetails.get(10).toString().split("\\s+");
+
+        UserDTO userDto = UserDTO.builder()
+                .username(ldapDetails.get(7).toString())
+                .firstName(nameParts[0])
+                .lastName(nameParts[1])
+                .role(null)
+                .build();
+
+        User user = userDtoMapper.map(userDto);
+
+        if (userRepository.findById(user.getUsername()).isEmpty()) {
+            add(user);
+        }
     }
 }
+
