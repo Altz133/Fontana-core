@@ -13,9 +13,7 @@ public class DMXService {
         try {
             open();
             start();
-        } catch (Exception e) {
-
-        }
+        } catch (Exception e) {}
     }
     void open(){
 
@@ -24,8 +22,12 @@ public class DMXService {
 
     }
 
-    public void setDMXData(Byte[] dmxData) {
-        this.dmxData = dmxData;
+    public void setDMXDataField(Snapshot snapshot){
+        dmxData[snapshot.index]=snapshot.value;
     }
 
+    public Byte[] getDMXDataArray() {
+        //TODO
+        return dmxData;
+    }
 }

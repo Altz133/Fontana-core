@@ -3,20 +3,31 @@ package com.fontana.backend.dmxHandler.controler;
 import com.fontana.backend.dmxHandler.service.DMXHandlerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/fontana/api/v1/JSON")
 @RequiredArgsConstructor
 public class DMXHandlerController {
 
-    private final DMXHandlerService theDMXJSONInterpreter;
+    private final DMXHandlerService DMXHandlerService;
 
-    @GetMapping(value ="/interpret")
-    public ResponseEntity<Object> interpretSnapshot(){
-        /*interpreer oddzielic i a tak to git*/
+    @PostMapping(value ="/update")
+    public ResponseEntity<Object> updateSnapshot(@RequestBody Snapshot snapshotDTO){
+        /*translator na snapshot*/
+        /*
+        SnapshotDTO - name, value
+        Snapshot - index, value
+        */
+        /*na razie po prostu snapshot*/
+        DMXHandlerService.sendDMXData(Snapshot snapshot);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value ="/getCurrentState")
+    public ResponseEntity<Object> getCurrentState(){
+        /*TODO To bedzie to returnowalo do body*/
+        DMXHandlerService.getDMXDataArray();
         return ResponseEntity.ok().build();
     }
 
