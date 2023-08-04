@@ -1,12 +1,12 @@
-package com.fontana.backend.dmxJSONInterpreter.service;
+package com.fontana.backend.dmxHandler.service;
 
-import com.fontana.backend.dmx.service.DMXService;
+import com.fontana.backend.fountain.service.dmx.DMXService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class DMXJSONInterpreter {
+public class DMXHandlerService {
     private Byte[] dmxData = new Byte[512+3];/*3 na zakonczenie tablicy ZAWSZE!!*/
 
     private final DMXService theDMXService;

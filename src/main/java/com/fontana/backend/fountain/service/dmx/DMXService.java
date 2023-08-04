@@ -1,4 +1,4 @@
-package com.fontana.backend.dmx.service;
+package com.fontana.backend.fountain.service.dmx;
 
 
 import jakarta.annotation.PostConstruct;
