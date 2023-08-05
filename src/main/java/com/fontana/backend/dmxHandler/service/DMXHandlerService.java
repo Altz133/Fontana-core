@@ -61,6 +61,9 @@ public class DMXHandlerService {
         snapshot.setId(led.getColorBID());
         snapshot.setValue(led.getColorBValue());
         DMXService.setDMXDataField(snapshot);
+        snapshot.setId(led.getColorWID());
+        snapshot.setValue(led.getColorWValue());
+        DMXService.setDMXDataField(snapshot);
 
         snapshot.setId(led.getStrobeEnabledID());
         snapshot.setValue(led.getStrobeEnabledValue());

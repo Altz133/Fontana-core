@@ -72,11 +72,9 @@ public class DMXService {
 
     public void setDMXDataField(Snapshot snapshot){
         dmxData[snapshot.getId()]=snapshot.getValue();
-        //TODO to kiedys chyba pojdzie do logow?
     }
 
     public byte[] getDMXDataArray() {
-        //TODO
         return dmxData;
     }
 

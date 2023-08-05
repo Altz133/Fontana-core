@@ -13,6 +13,8 @@ public class Led {
         private byte ColorGValue;
         private int ColorBID;
         private byte ColorBValue;
+        private int ColorWID;
+        private byte ColorWValue;
 
         private int StrobeEnabledID;
         private byte StrobeEnabledValue;

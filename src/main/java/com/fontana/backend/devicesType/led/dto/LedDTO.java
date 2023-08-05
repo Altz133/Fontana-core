@@ -11,6 +11,7 @@ public class LedDTO {
     private int colorR;
     private int colorG;
     private int colorB;
+    private int colorW;
     private int power;
     private boolean stroboscopeEnabled;
     private int stroboscopeFrequency;
