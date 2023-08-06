@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class Led {
+        private String name;
 
         private int ColorRID;
         private byte ColorRValue;
@@ -21,4 +22,22 @@ public class Led {
 
         private int StrobeFreqID;
         private byte StrobeFreqValue;
+
+        public Led(){
+        }
+
+        Led(int ColorRID, byte ColorRValue, int ColorGID, byte ColorGValue, int ColorBID, byte ColorBValue, int ColorWID, byte ColorWValue, int StrobeEnabledID, byte StrobeEnabledValue, int StrobeFreqID, byte StrobeFreqValue){
+            this.ColorRID = ColorRID;
+            this.ColorRValue = ColorRValue;
+            this.ColorGID = ColorGID;
+            this.ColorGValue = ColorGValue;
+            this.ColorBID = ColorBID;
+            this.ColorBValue = ColorBValue;
+            this.ColorWID = ColorWID;
+            this.ColorWValue = ColorWValue;
+            this.StrobeEnabledID = StrobeEnabledID;
+            this.StrobeEnabledValue = StrobeEnabledValue;
+            this.StrobeFreqID = StrobeFreqID;
+            this.StrobeFreqValue = StrobeFreqValue;
+        }
 }

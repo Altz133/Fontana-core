@@ -12,4 +12,16 @@ public class Light {
     private int ColorBID;
     private byte ColorBValue;
 
+    public Light() {
+    }
+
+    public Light(int ColorRID, byte ColorRValue, int ColorGID, byte ColorGValue, int ColorBID, byte ColorBValue) {
+        this.ColorRID = ColorRID;
+        this.ColorRValue = ColorRValue;
+        this.ColorGID = ColorGID;
+        this.ColorGValue = ColorGValue;
+        this.ColorBID = ColorBID;
+        this.ColorBValue = ColorBValue;
+    }
+
 }

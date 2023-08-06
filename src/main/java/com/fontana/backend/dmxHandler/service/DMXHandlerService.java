@@ -21,8 +21,8 @@ public class DMXHandlerService {
         DMXService.setDMXDataField(snapshot);
     }
 
-    public void getDMXDataArray(){
-        DMXService.getDMXDataArray();
+    public byte[] getDMXDataArray(){
+        return DMXService.getDMXDataArray();
     }
 
     public void sendDMXDataJet(Jet jet, Snapshot snapshot){

@@ -7,4 +7,12 @@ public class PumpDTO {
     private String name;
     private byte value;
 
+    public PumpDTO() {
+    }
+
+    public PumpDTO(String name, byte value) {
+        this.name = name;
+        this.value = value;
+    }
+
 }

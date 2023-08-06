@@ -55,9 +55,7 @@ public class DMXHandlerController {
 
     @PostMapping(value ="/getCurrentState")
     public ResponseEntity<Object> getCurrentState(){
-        /*TODO To bedzie to returnowalo do body*/
-        DMXHandlerService.getDMXDataArray();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(DMXHandlerService.getDMXDataArray());
     }
 
 }
