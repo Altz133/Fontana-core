@@ -30,25 +30,25 @@ public class DMXHandlerController {
     /*FIXME w poniedzialek sie zobaczy*/
 
     @PostMapping(value ="/update/jet")
-    public ResponseEntity<Object> updateSnapshot(@RequestBody JetDTO jetDTO){
+    public ResponseEntity<Object> updateSnapshotJet(@RequestBody JetDTO jetDTO){
         DMXHandlerService.sendDMXDataJet(JetMapper.DTOToJet(jetDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value ="/update/pump")
-    public ResponseEntity<Object> updateSnapshot(@RequestBody PumpDTO pumpDTO){
+    public ResponseEntity<Object> updateSnapshotPump(@RequestBody PumpDTO pumpDTO){
         DMXHandlerService.sendDMXDataPump(PumpMapper.DTOToPump(pumpDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value ="/update/light")
-    public ResponseEntity<Object> updateSnapshot(@RequestBody LightDTO lightDTO){
+    public ResponseEntity<Object> updateSnapshotLight(@RequestBody LightDTO lightDTO){
         DMXHandlerService.sendDMXDataLight(LightMapper.DTOToLight(lightDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value ="/update/led")
-    public ResponseEntity<Object> updateSnapshot(@RequestBody LedDTO ledDTO){
+    public ResponseEntity<Object> updateSnapshotLed(@RequestBody LedDTO ledDTO){
         DMXHandlerService.sendDMXDataLed(LedMapper.DTOToLed(ledDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
