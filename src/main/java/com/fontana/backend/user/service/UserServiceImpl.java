@@ -1,5 +1,8 @@
 package com.fontana.backend.user.service;
 
+import com.fontana.backend.role.entity.Role;
+import com.fontana.backend.role.entity.RoleType;
+import com.fontana.backend.role.repository.RoleRepository;
 import com.fontana.backend.user.dtos.UserDTO;
 import com.fontana.backend.user.entity.Users;
 import com.fontana.backend.user.mappers.UserDtoMapper;
@@ -14,14 +17,13 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final UserDtoMapper userDtoMapper;
 
     @Override
     public void add(Users user) {
         userRepository.save(user);
     }
-
-    //FIXME modify the way to set role once the database is configured
 
     @Override
     public void extractUserFromLDAP(List<Object> ldapDetails) {
@@ -31,7 +33,7 @@ public class UserServiceImpl implements UserService {
                 .username(ldapDetails.get(7).toString())
                 .firstName(nameParts[0])
                 .lastName(nameParts[1])
-                .role(null)
+                .role(roleRepository.findAllByRoleType(RoleType.VIEWER).get(0))
                 .build();
 
         Users user = userDtoMapper.map(userDto);
