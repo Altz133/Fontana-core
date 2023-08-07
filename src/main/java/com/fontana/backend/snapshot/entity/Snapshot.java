@@ -1,12 +1,7 @@
 package com.fontana.backend.snapshot.entity;
 
-/*import com.fontana.backend.template.entity.Template;*/
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Data
 @Component
