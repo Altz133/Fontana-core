@@ -1,20 +1,22 @@
 package com.fontana.backend.dmxHandler.controler;
 
-import com.fontana.backend.devicesType.jet.dto.JetDTO;
-import com.fontana.backend.devicesType.led.dto.LedDTO;
-import com.fontana.backend.devicesType.light.dto.LightDTO;
+import com.fontana.backend.devices.jet.dto.JetDTO;
+import com.fontana.backend.devices.jet.mapper.JetMapper;
+import com.fontana.backend.devices.led.dto.LedDTO;
+import com.fontana.backend.devices.led.mapper.LedMapper;
+import com.fontana.backend.devices.light.dto.LightDTO;
+import com.fontana.backend.devices.light.mapper.LightMapper;
+import com.fontana.backend.devices.pump.dto.PumpDTO;
+import com.fontana.backend.devices.pump.mapper.PumpMapper;
 import com.fontana.backend.dmxHandler.service.DMXHandlerService;
 import com.fontana.backend.snapshot.entity.Snapshot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import com.fontana.backend.devicesType.pump.dto.PumpDTO;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-/*FIXME to nie powinno sie injectowac?*/
-import com.fontana.backend.devicesType.jet.mapper.JetMapper;
-import com.fontana.backend.devicesType.pump.mapper.PumpMapper;
-import com.fontana.backend.devicesType.light.mapper.LightMapper;
-import com.fontana.backend.devicesType.led.mapper.LedMapper;
 @RestController
 @RequestMapping("/fontana/api/v1/dmx")
 @RequiredArgsConstructor
@@ -29,32 +31,32 @@ public class DMXHandlerController {
 
     /*FIXME w poniedzialek sie zobaczy*/
 
-    @PostMapping(value ="/update/jet")
-    public ResponseEntity<Object> updateSnapshotJet(@RequestBody JetDTO jetDTO){
+    @PostMapping(value = "/update/jet")
+    public ResponseEntity<Object> updateSnapshotJet(@RequestBody JetDTO jetDTO) {
         DMXHandlerService.sendDMXDataJet(JetMapper.DTOToJet(jetDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value ="/update/pump")
-    public ResponseEntity<Object> updateSnapshotPump(@RequestBody PumpDTO pumpDTO){
+    @PostMapping(value = "/update/pump")
+    public ResponseEntity<Object> updateSnapshotPump(@RequestBody PumpDTO pumpDTO) {
         DMXHandlerService.sendDMXDataPump(PumpMapper.DTOToPump(pumpDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value ="/update/light")
-    public ResponseEntity<Object> updateSnapshotLight(@RequestBody LightDTO lightDTO){
+    @PostMapping(value = "/update/light")
+    public ResponseEntity<Object> updateSnapshotLight(@RequestBody LightDTO lightDTO) {
         DMXHandlerService.sendDMXDataLight(LightMapper.DTOToLight(lightDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value ="/update/led")
-    public ResponseEntity<Object> updateSnapshotLed(@RequestBody LedDTO ledDTO){
+    @PostMapping(value = "/update/led")
+    public ResponseEntity<Object> updateSnapshotLed(@RequestBody LedDTO ledDTO) {
         DMXHandlerService.sendDMXDataLed(LedMapper.DTOToLed(ledDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value ="/getCurrentState")
-    public ResponseEntity<Object> getCurrentState(){
+    @PostMapping(value = "/getCurrentState")
+    public ResponseEntity<Object> getCurrentState() {
         return ResponseEntity.ok(DMXHandlerService.getDMXDataArray());
     }
 

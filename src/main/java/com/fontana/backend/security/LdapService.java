@@ -51,7 +51,7 @@ public class LdapService {
 
         Attributes attributes = context.getAttributes(env.get(Context.SECURITY_PRINCIPAL));
         List<Object> ldapDetails = new ArrayList<>();
-        for (NamingEnumeration attributeEnumeration = attributes.getAll(); attributeEnumeration.hasMore();) {
+        for (NamingEnumeration attributeEnumeration = attributes.getAll(); attributeEnumeration.hasMore(); ) {
             Attribute attr = (Attribute) attributeEnumeration.next();
             ldapDetails.add(attr.get());
         }

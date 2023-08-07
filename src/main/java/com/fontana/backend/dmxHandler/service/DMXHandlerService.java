@@ -1,10 +1,10 @@
 package com.fontana.backend.dmxHandler.service;
 
-import com.fontana.backend.devicesType.jet.entity.Jet;
-import com.fontana.backend.devicesType.led.entity.Led;
-import com.fontana.backend.devicesType.light.entity.Light;
-import com.fontana.backend.devicesType.pump.entity.Pump;
-import com.fontana.backend.fountain.service.dmx.DMXService;
+import com.fontana.backend.devices.jet.entity.Jet;
+import com.fontana.backend.devices.led.entity.Led;
+import com.fontana.backend.devices.light.entity.Light;
+import com.fontana.backend.devices.pump.entity.Pump;
+import com.fontana.backend.dmxHandler.DMXService;
 import com.fontana.backend.snapshot.entity.Snapshot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,27 +15,27 @@ public class DMXHandlerService {
 
     private final DMXService DMXService;
 
-    public void sendDMXData(Snapshot snapshot){
+    public void sendDMXData(Snapshot snapshot) {
         DMXService.setDMXDataField(snapshot);
     }
 
-    public byte[] getDMXDataArray(){
+    public byte[] getDMXDataArray() {
         return DMXService.getDMXDataArray();
     }
 
-    public void sendDMXDataJet(Jet jet, Snapshot snapshot){
+    public void sendDMXDataJet(Jet jet, Snapshot snapshot) {
         snapshot.setId(jet.getId());
         snapshot.setValue(jet.getValue());
         DMXService.setDMXDataField(snapshot);
     }
 
-    public void sendDMXDataPump(Pump pump, Snapshot snapshot){
+    public void sendDMXDataPump(Pump pump, Snapshot snapshot) {
         snapshot.setId(pump.getId());
         snapshot.setValue(pump.getValue());
         DMXService.setDMXDataField(snapshot);
     }
 
-    public void sendDMXDataLight(Light light, Snapshot snapshot){
+    public void sendDMXDataLight(Light light, Snapshot snapshot) {
 
         snapshot.setId(light.getColorRID());
         snapshot.setValue(light.getColorRValue());
@@ -48,7 +48,7 @@ public class DMXHandlerService {
         DMXService.setDMXDataField(snapshot);
     }
 
-    public void sendDMXDataLed(Led led, Snapshot snapshot){
+    public void sendDMXDataLed(Led led, Snapshot snapshot) {
 
         snapshot.setId(led.getColorRID());
         snapshot.setValue(led.getColorRValue());
@@ -71,5 +71,5 @@ public class DMXHandlerService {
         DMXService.setDMXDataField(snapshot);
 
     }
-    }
+}
 

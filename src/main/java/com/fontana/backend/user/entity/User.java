@@ -1,9 +1,7 @@
-package com.fontana.backend.user.dtos;
+package com.fontana.backend.user.entity;
 
 import com.fontana.backend.role.entity.Role;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,19 +11,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDTO {
+@Entity
+@Table(name = "users")
+public class User {
 
     @Id
-    @NotNull
-    @NotBlank
     private String username;
-
-    @NotNull
-    @NotBlank
     private String firstName;
-
-    @NotNull
-    @NotBlank
     private String lastName;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
+
+
 }
