@@ -36,7 +36,6 @@ public class DMXHandlerService {
     }
 
     public void sendDMXDataLight(Light light, Snapshot snapshot) {
-
         snapshot.setId(light.getColorRID());
         snapshot.setValue(light.getColorRValue());
         DMXService.setDMXDataField(snapshot);
@@ -49,7 +48,6 @@ public class DMXHandlerService {
     }
 
     public void sendDMXDataLed(Led led, Snapshot snapshot) {
-
         snapshot.setId(led.getColorRID());
         snapshot.setValue(led.getColorRValue());
         DMXService.setDMXDataField(snapshot);
