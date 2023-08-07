@@ -9,6 +9,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -22,9 +23,11 @@ public class DMXService {
     @PostConstruct
     public void init() {
         try {
-            openConnection();
-            initialSetup();
-            startScheduler();
+            //TODO it should stay commented
+            System.out.println(Arrays.toString(dmxData));
+//           openConnection();
+//            initialSetup();
+//            startScheduler();
         } catch (Exception e) {
         }
     }
