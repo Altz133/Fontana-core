@@ -7,15 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.fontana.backend.config.RestEndpoints.*;
+
 @RestController
-@RequestMapping("/fontana/api/v1/auth")
+@RequestMapping(AUTH)
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationController {
 
     private final AuthenticationService authService;
 
-    @PostMapping("/authenticate")
+    @PostMapping(AUTH_AUTHENTICATE)
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Validated AuthenticationRequest request) {
         return authService.authenticate(request);
     }
@@ -24,7 +26,7 @@ public class AuthenticationController {
      * @param token has to contain prefix of "Bearer " in order to validate token properly.
      * @return new access token wit updated expiration time
      */
-    @PostMapping("/refreshtoken")
+    @PostMapping(AUTH_REFRESHTOKEN)
     public ResponseEntity<AuthenticationResponse> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         return authService.refreshToken(token);
     }
