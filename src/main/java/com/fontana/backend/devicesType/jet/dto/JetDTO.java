@@ -6,12 +6,12 @@ import lombok.Data;
 public class JetDTO {
 
         private String name;
-        private byte value;
+        private Boolean value;
 
         public JetDTO() {
         }
 
-        public JetDTO(String name, byte value) {
+        public JetDTO(String name, boolean value) {
             this.name = name;
             this.value = value;
         }
