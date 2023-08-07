@@ -14,7 +14,7 @@ public class JetMapper {
     }
 
     public Jet DTOToJet(JetDTO jetDTO){
-        Device device = deviceRepository.findByname(jetDTO.getName());
+        Device device = deviceRepository.findByName(jetDTO.getName());
         return new Jet(device.getId(), jetDTO.getValue());
     }
 }

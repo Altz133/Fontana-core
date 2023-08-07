@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class LightMapper {
     DeviceRepository deviceRepository;
     public Light DTOToLight(LightDTO lightDTO){
-        Device device = deviceRepository.findByname(lightDTO.getName());
+        Device device = deviceRepository.findByName(lightDTO.getName());
         byte[] addresses = device.getAddresses();
         return new Light(
                 addresses[0],lightDTO.getColorR(),

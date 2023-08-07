@@ -17,7 +17,7 @@ public class LedMapper {
         }
 
         public Led DTOToLed(LedDTO ledDTO) {
-                Device device = deviceRepository.findByname(ledDTO.getName());
+                Device device = deviceRepository.findByName(ledDTO.getName());
                 byte[] addresses = device.getAddresses();
                 /*
                 0 - Red
