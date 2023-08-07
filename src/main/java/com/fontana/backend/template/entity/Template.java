@@ -1,7 +1,6 @@
 package com.fontana.backend.template.entity;
 
 import com.fontana.backend.schedule.entity.Schedule;
-import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.user.entity.Users;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -30,8 +29,6 @@ public class Template {
     @Column
     private int duration;
 
-    @OneToMany(mappedBy = "template")
-    private List<Snapshot> snapshot;
 
     @ManyToMany(mappedBy = "templates")
     private List<Schedule> schedules;
