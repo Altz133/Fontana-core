@@ -50,7 +50,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests ->
                         requests
                                 .requestMatchers(new AntPathRequestMatcher("/fontana/api/v1/auth/*")).permitAll()
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
 //                              //TODO keep adding every endpoint/group of endpoints with proper access level
                 .sessionManagement((sessionManagement) ->
                         sessionManagement
