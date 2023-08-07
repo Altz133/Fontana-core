@@ -1,14 +1,12 @@
 package com.fontana.backend.devices.entity;
 
 import com.fontana.backend.devicesType.entity.DeviceType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
+@Table(name="devices")
 public class Device {
 
     @Id

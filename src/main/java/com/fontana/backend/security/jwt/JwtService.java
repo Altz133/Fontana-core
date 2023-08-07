@@ -23,8 +23,11 @@ public class JwtService {
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    public static final Long ACCESS_EXPIRATION_DELAY = 20000L;
-    public static final Long REFRESH_EXPIRATION_DELAY = 2629800000L;
+    @Value("${jwt.access-expiration-delay}")
+    private String accessExpDelay;
+
+    @Value("${jwt.refresh-expiration-delay}")
+    private String refreshExpDelay;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -36,11 +39,11 @@ public class JwtService {
     }
 
     public String generateAccessToken(String username) {
-        return generateToken(new HashMap<>(), username, ACCESS_EXPIRATION_DELAY);
+        return generateToken(new HashMap<>(), username, Long.parseLong(accessExpDelay));
     }
 
     public String generateRefreshToken(String username) {
-        return generateToken(new HashMap<>(), username, REFRESH_EXPIRATION_DELAY);
+        return generateToken(new HashMap<>(), username, Long.parseLong(refreshExpDelay));
     }
 
     public String generateToken(Map<String, Object> extraClaims, String username, Long expiration) {

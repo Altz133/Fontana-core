@@ -23,6 +23,9 @@ public class AuthenticationService {
     @Value("${jwt.token-type}")
     private String tokenType;
 
+    @Value("${jwt.access-expiration-delay}")
+    private String accessExpDelay;
+
     public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
         if (!ldapService.isLdapRegistered(request.getUsername(), request.getPassword())){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -46,7 +49,7 @@ public class AuthenticationService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .tokenType(tokenType)
-                .expiration(LocalDateTime.now().plus(JwtService.ACCESS_EXPIRATION_DELAY, ChronoUnit.MILLIS))
+                .expiration(LocalDateTime.now().plus(Long.parseLong(accessExpDelay), ChronoUnit.MILLIS))
                 .build();
     }
 }

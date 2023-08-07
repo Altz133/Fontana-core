@@ -10,9 +10,8 @@ import java.util.List;
 
 @Data
 @Component
-@Table(name="snapshots")
 public class Snapshot {
-    @Id
+
     private int id;
     private Byte value;
 
