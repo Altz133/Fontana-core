@@ -1,21 +1,19 @@
 package com.fontana.backend.dmxHandler.service;
+
+import com.fontana.backend.devicesType.jet.entity.Jet;
 import com.fontana.backend.devicesType.led.entity.Led;
 import com.fontana.backend.devicesType.light.entity.Light;
 import com.fontana.backend.devicesType.pump.entity.Pump;
-import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.fountain.service.dmx.DMXService;
+import com.fontana.backend.snapshot.entity.Snapshot;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
-import com.fontana.backend.devicesType.jet.entity.Jet;
 
 @Service
 @RequiredArgsConstructor
 public class DMXHandlerService {
 
     private final DMXService DMXService;
-    private final TaskScheduler taskScheduler;
-
 
     public void sendDMXData(Snapshot snapshot){
         DMXService.setDMXDataField(snapshot);
@@ -65,8 +63,8 @@ public class DMXHandlerService {
         snapshot.setValue(led.getColorWValue());
         DMXService.setDMXDataField(snapshot);
 
-        snapshot.setId(led.getStrobeEnabledID());
-        snapshot.setValue(led.getStrobeEnabledValue());
+        snapshot.setId(led.getDimmID());
+        snapshot.setValue(led.getDimmValue());
         DMXService.setDMXDataField(snapshot);
         snapshot.setId(led.getStrobeFreqID());
         snapshot.setValue(led.getStrobeFreqValue());

@@ -9,10 +9,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class LightMapper {
     DeviceRepository deviceRepository;
-    //FIXME trzeba sie dopytac czy kazdy kanaal ma wlasne id
     public Light DTOToLight(LightDTO lightDTO){
         Device device = deviceRepository.findByname(lightDTO.getName());
-        return new Light();
+        byte[] addresses = device.getAddresses();
+        return new Light(
+                addresses[0],lightDTO.getColorR(),
+                addresses[1],lightDTO.getColorG(),
+                addresses[2],lightDTO.getColorB());
     }
 
     public LightDTO LightToDTO(Light light){

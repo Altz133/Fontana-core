@@ -17,8 +17,8 @@ public class Led {
         private int ColorWID;
         private byte ColorWValue;
 
-        private int StrobeEnabledID;
-        private byte StrobeEnabledValue;
+        private int DimmID;
+        private byte DimmValue;
 
         private int StrobeFreqID;
         private byte StrobeFreqValue;
@@ -26,7 +26,7 @@ public class Led {
         public Led(){
         }
 
-        Led(int ColorRID, byte ColorRValue, int ColorGID, byte ColorGValue, int ColorBID, byte ColorBValue, int ColorWID, byte ColorWValue, int StrobeEnabledID, byte StrobeEnabledValue, int StrobeFreqID, byte StrobeFreqValue){
+        public Led(int ColorRID, byte ColorRValue, int ColorGID, byte ColorGValue, int ColorBID, byte ColorBValue, int ColorWID, byte ColorWValue, int DimmID, byte DimmValue, int StrobeFreqID, byte StrobeFreqValue){
             this.ColorRID = ColorRID;
             this.ColorRValue = ColorRValue;
             this.ColorGID = ColorGID;
@@ -35,8 +35,8 @@ public class Led {
             this.ColorBValue = ColorBValue;
             this.ColorWID = ColorWID;
             this.ColorWValue = ColorWValue;
-            this.StrobeEnabledID = StrobeEnabledID;
-            this.StrobeEnabledValue = StrobeEnabledValue;
+            this.DimmID = DimmID;
+            this.DimmValue = DimmValue;
             this.StrobeFreqID = StrobeFreqID;
             this.StrobeFreqValue = StrobeFreqValue;
         }

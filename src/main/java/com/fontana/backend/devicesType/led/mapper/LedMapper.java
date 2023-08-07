@@ -18,6 +18,21 @@ public class LedMapper {
 
         public Led DTOToLed(LedDTO ledDTO) {
                 Device device = deviceRepository.findByname(ledDTO.getName());
-                //FIXME Trzeba sie dopytac jak to wyglada czy wartosc kazda ma osobny kanal
-                return new Led(); }
+                byte[] addresses = device.getAddresses();
+                /*
+                0 - Red
+                1 - Green
+                2 - Blue
+                3 - White
+                4 - Dimm
+                5 - Strobe
+                 */
+                return new Led(
+                        addresses[0],ledDTO.getColorR(),
+                        addresses[1],ledDTO.getColorG(),
+                        addresses[2],ledDTO.getColorB(),
+                        addresses[3],ledDTO.getColorW(),
+                        addresses[4],ledDTO.getPower(),
+                        addresses[5],ledDTO.getStroboscopeFrequency());
+        }
 }

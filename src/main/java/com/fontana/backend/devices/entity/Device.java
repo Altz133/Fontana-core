@@ -14,6 +14,7 @@ public class Device {
     @Id
     private Integer id;
     private String name;
+    private byte[] addresses;
     @ManyToOne
     @JoinColumn(name = "type_id")
     private DeviceType type;
