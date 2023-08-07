@@ -1,6 +1,5 @@
 package com.fontana.backend.user.service;
 
-import com.fontana.backend.role.entity.Role;
 import com.fontana.backend.role.entity.RoleType;
 import com.fontana.backend.role.repository.RoleRepository;
 import com.fontana.backend.user.dtos.UserDTO;
@@ -25,6 +24,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    /**
+     * This method is responsible for processing LDAP details and extracting user information to create a UserDTO.
+     * Every logged user is assigned to VIEWER role by default.
+     *
+     * @param ldapDetails list of LDAP details. Index 10 contains the full name, and index 7 contains the username.
+     */
     @Override
     public void extractUserFromLDAP(List<Object> ldapDetails) {
         String[] nameParts = ldapDetails.get(10).toString().split("\\s+");

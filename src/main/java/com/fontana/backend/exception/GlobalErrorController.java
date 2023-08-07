@@ -10,8 +10,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class ValidationErrorController {
+public class GlobalErrorController {
 
+    /**
+     * This method is responsible for handling validation errors that occur when processing request parameters
+     * in the controller
+     *
+     * @param exception MethodArgumentNotValidException object representing the validation errors that occurred
+     *                  during request processing.
+     * @return ResponseEntity containing a map of field names and their corresponding error messages.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleBindErrors(MethodArgumentNotValidException exception) {
         Map<String, String> errorList = new HashMap<>();
