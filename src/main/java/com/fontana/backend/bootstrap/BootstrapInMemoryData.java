@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 /**
  * This class allows you to create a bunch of mock data and put them in H2 database on each run, so you always have
  * data to work with.
- *
  */
 @Component
 @RequiredArgsConstructor

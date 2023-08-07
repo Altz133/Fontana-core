@@ -1,13 +1,13 @@
 package com.fontana.backend.user.mappers;
 
 import com.fontana.backend.user.dtos.UserDTO;
-import com.fontana.backend.user.entity.Users;
+import com.fontana.backend.user.entity.User;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserDtoMapper {
 
-    public UserDTO map(Users user) {
+    public UserDTO map(User user) {
         UserDTO userDto = UserDTO.builder()
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
@@ -18,8 +18,8 @@ public class UserDtoMapper {
         return userDto;
     }
 
-    public Users map(UserDTO userDto) {
-        Users user = Users.builder()
+    public User map(UserDTO userDto) {
+        User user = User.builder()
                 .username(userDto.getUsername())
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())

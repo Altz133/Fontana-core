@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthenticationRequest {
 
-    @NotNull @NotBlank
+    @NotNull
+    @NotBlank
     private String username;
 
-    @NotNull @NotBlank
+    @NotNull
+    @NotBlank
     private String password;
 }

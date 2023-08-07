@@ -20,10 +20,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final JwtService jwtService;
     @Value("${jwt.prefix}")
     private String tokenPrefix;
-
-    private final JwtService jwtService;
 
     /**
      * Performs the authentication filter logic for processing incoming HTTP requests.

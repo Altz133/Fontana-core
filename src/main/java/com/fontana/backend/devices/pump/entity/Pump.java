@@ -1,17 +1,17 @@
-package com.fontana.backend.snapshot.entity;
+package com.fontana.backend.devices.pump.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Data
 @Component
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Snapshot {
+public class Pump {
 
     private int id;
-    private Byte value;
+    private byte value;
 
 }

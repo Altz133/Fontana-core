@@ -1,7 +1,7 @@
 package com.fontana.backend.schedule.entity;
 
 import com.fontana.backend.template.entity.Template;
-import com.fontana.backend.user.entity.Users;
+import com.fontana.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name="schedules")
+@Table(name = "schedules")
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class Schedule {
 
     @ManyToOne
     @JoinColumn(name = "user_name")
-    private Users user;
+    private User user;
 
 
     @Column

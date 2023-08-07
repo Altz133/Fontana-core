@@ -1,4 +1,4 @@
-package com.fontana.backend.snapshot.entity;
+package com.fontana.backend.devices.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class Snapshot {
-
-    private int id;
-    private Byte value;
-
+public class DeviceDTO {
+    private String name;
 }

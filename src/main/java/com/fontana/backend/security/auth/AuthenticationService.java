@@ -27,7 +27,7 @@ public class AuthenticationService {
     private String accessExpDelay;
 
     public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
-        if (!ldapService.isLdapRegistered(request.getUsername(), request.getPassword())){
+        if (!ldapService.isLdapRegistered(request.getUsername(), request.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
