@@ -15,8 +15,11 @@ import com.fontana.backend.devicesType.jet.mapper.JetMapper;
 import com.fontana.backend.devicesType.pump.mapper.PumpMapper;
 import com.fontana.backend.devicesType.light.mapper.LightMapper;
 import com.fontana.backend.devicesType.led.mapper.LedMapper;
+
+import static com.fontana.backend.config.RestEndpoints.*;
+
 @RestController
-@RequestMapping("/fontana/api/v1/dmx")
+@RequestMapping(DMX)
 @RequiredArgsConstructor
 public class DMXHandlerController {
 
@@ -27,33 +30,31 @@ public class DMXHandlerController {
     private final LedMapper LedMapper;
     private final Snapshot Snapshot;
 
-    /*FIXME w poniedzialek sie zobaczy*/
-
-    @PostMapping(value ="/update/jet")
+    @PostMapping(value = DMX_UPDATE_JET)
     public ResponseEntity<Object> updateSnapshotJet(@RequestBody JetDTO jetDTO){
         DMXHandlerService.sendDMXDataJet(JetMapper.DTOToJet(jetDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value ="/update/pump")
+    @PostMapping(value =DMX_UPDATE_PUMP)
     public ResponseEntity<Object> updateSnapshotPump(@RequestBody PumpDTO pumpDTO){
         DMXHandlerService.sendDMXDataPump(PumpMapper.DTOToPump(pumpDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value ="/update/light")
+    @PostMapping(value = DMX_UPDATE_LIGHT)
     public ResponseEntity<Object> updateSnapshotLight(@RequestBody LightDTO lightDTO){
         DMXHandlerService.sendDMXDataLight(LightMapper.DTOToLight(lightDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value ="/update/led")
+    @PostMapping(value = DMX_UPDATE_LED)
     public ResponseEntity<Object> updateSnapshotLed(@RequestBody LedDTO ledDTO){
         DMXHandlerService.sendDMXDataLed(LedMapper.DTOToLed(ledDTO), Snapshot);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value ="/getCurrentState")
+    @PostMapping(value = DMX_UPDATE_STATE)
     public ResponseEntity<Object> getCurrentState(){
         return ResponseEntity.ok(DMXHandlerService.getDMXDataArray());
     }
