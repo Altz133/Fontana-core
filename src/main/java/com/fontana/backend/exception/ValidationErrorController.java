@@ -25,3 +25,4 @@ public class ValidationErrorController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
     }
 }
+

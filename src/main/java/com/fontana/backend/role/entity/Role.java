@@ -2,9 +2,7 @@ package com.fontana.backend.role.entity;
 
 import com.fontana.backend.user.entity.Users;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class Role {
 
@@ -19,6 +18,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated
     private RoleType roleType;
 
     @OneToMany(mappedBy = "role")

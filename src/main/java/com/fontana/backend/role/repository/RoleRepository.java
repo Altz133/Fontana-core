@@ -1,7 +1,12 @@
 package com.fontana.backend.role.repository;
 
 import com.fontana.backend.role.entity.Role;
-import org.springframework.data.repository.CrudRepository;
+import com.fontana.backend.role.entity.RoleType;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoleRepository extends CrudRepository<Role, Integer> {
+import java.util.List;
+
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+
+    List<Role> findAllByRoleType(RoleType roleType);
 }
