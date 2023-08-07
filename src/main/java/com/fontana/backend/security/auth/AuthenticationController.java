@@ -21,7 +21,7 @@ public class AuthenticationController {
     }
 
     /**
-     * @param token has to contain prefix of "Bearer " in order to validate token properly
+     * @param token has to contain prefix of "Bearer " in order to validate token properly.
      * @return new access token wit updated expiration time
      */
     @PostMapping("/refreshtoken")

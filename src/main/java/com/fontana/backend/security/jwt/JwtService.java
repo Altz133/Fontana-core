@@ -29,7 +29,6 @@ public class JwtService {
     @Value("${jwt.refresh-expiration-delay}")
     private String refreshExpDelay;
 
-
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

@@ -7,6 +7,9 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
+/**
+ * General application config
+ */
 @Configuration
 public class ApplicationConfig {
 
