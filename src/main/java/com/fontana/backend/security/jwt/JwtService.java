@@ -1,6 +1,7 @@
 package com.fontana.backend.security.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -66,13 +67,25 @@ public class JwtService {
                 .getBody();
     }
 
+    private boolean isTokenValidWithSecretKey(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException exc) {
+            return false;
+        }
+    }
+
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
     public boolean isTokenValid(String token) {
-        return !isTokenExpired(token);
+        return !isTokenExpired(token) && isTokenValidWithSecretKey(token);
     }
 
     private boolean isTokenExpired(String token) {

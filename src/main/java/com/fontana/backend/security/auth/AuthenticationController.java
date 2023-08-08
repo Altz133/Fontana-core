@@ -1,8 +1,10 @@
 package com.fontana.backend.security.auth;
 
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +29,11 @@ public class AuthenticationController {
      * @return new access token wit updated expiration time
      */
     @PostMapping(AUTH_REFRESHTOKEN)
-    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return authService.refreshToken(token);
+    public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        try {
+            return authService.refreshToken(token);
+        } catch (JwtException exception) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error");
+        }
     }
 }
