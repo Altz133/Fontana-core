@@ -10,14 +10,13 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "templates")
 public class Template {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "user_name")
+    @JoinColumn(name = "username")
     private User user;
 
     @Column
