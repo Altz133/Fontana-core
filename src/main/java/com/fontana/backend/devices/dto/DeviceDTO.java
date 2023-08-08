@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 @Data
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
+@Validated
 public class DeviceDTO {
 
     @NotEmpty
