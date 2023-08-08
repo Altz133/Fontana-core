@@ -1,5 +1,6 @@
 package com.fontana.backend.dmxHandler;
 
+import com.fontana.backend.dmxHandler.validator.DMXValidator;
 import com.fontana.backend.snapshot.entity.Snapshot;
 import jakarta.annotation.PostConstruct;
 import jd2xx.JD2XX;
@@ -19,6 +20,7 @@ public class DMXService {
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
     private TaskScheduler taskScheduler;
+    private DMXValidator dmxValidator;
 
     @PostConstruct
     public void init() {
@@ -77,7 +79,12 @@ public class DMXService {
 
 
     public void setDMXDataField(Snapshot snapshot) {
-        dmxData[snapshot.getId()] = snapshot.getValue();
+        if (dmxValidator.validate(dmxData)) {
+            dmxData[snapshot.getId()] = snapshot.getValue();
+        } else {
+            //TODO logera trzeba zrobic
+            System.out.println("Validation failed");
+        }
     }
 
     public byte[] getDMXDataArray() {

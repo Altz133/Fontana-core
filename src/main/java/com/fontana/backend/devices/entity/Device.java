@@ -13,6 +13,7 @@ public class Device {
     @Id
     private Integer id;
     private String name;
-    private byte[] addresses;
+    private int[] addresses;
+    private String type;
 
 }
