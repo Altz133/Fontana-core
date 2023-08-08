@@ -44,7 +44,8 @@ public class AuthenticationController {
     @ExceptionHandler(JwtExpiredOrUntrustedException.class)
     public ResponseEntity<Map<String, Object>> handleJwtException(JwtExpiredOrUntrustedException exc) {
         Map<String, Object> response = new HashMap<>();
-        response.put("message", exc.getMessage());
+
+        response.put("message", exc.getMessage().substring(exc.getMessage().indexOf(":") + 1).trim());
         response.put("timestamp", Instant.now().toEpochMilli());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
