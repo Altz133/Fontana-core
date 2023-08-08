@@ -4,12 +4,13 @@ import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.led.dto.LedDTO;
 import com.fontana.backend.devices.led.entity.Led;
 import com.fontana.backend.devices.repository.DeviceRepository;
+import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LedMapper {
     DeviceRepository deviceRepository;
-
+    private Validator validator;
     public LedMapper() {
     }
 
