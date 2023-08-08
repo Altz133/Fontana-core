@@ -1,7 +1,7 @@
 package com.fontana.backend.dmxHandler;
 
 import com.fontana.backend.dmxHandler.validator.DMXValidator;
-import com.fontana.backend.snapshot.entity.Snapshot;
+import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
@@ -80,9 +80,9 @@ public class DMXService {
     }
 
 
-    public void setDMXDataField(Snapshot snapshot) {
+    public void setDMXDataField(Frame frame) {
         if (dmxValidator.validate(dmxData)) {
-            dmxData[snapshot.getId()] = snapshot.getValue();
+            dmxData[frame.getId()] = frame.getValue();
         } else {
             //TODO logera trzeba zrobic
             System.out.println("Validation failed");

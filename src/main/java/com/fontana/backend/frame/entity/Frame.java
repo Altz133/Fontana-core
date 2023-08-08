@@ -1,4 +1,4 @@
-package com.fontana.backend.snapshot.entity;
+package com.fontana.backend.frame.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class Snapshot {
+public class Frame {
 
     private int id;
     private Byte value;

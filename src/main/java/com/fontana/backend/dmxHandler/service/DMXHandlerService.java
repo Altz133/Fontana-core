@@ -5,7 +5,7 @@ import com.fontana.backend.devices.led.entity.Led;
 import com.fontana.backend.devices.light.entity.Light;
 import com.fontana.backend.devices.pump.entity.Pump;
 import com.fontana.backend.dmxHandler.DMXService;
-import com.fontana.backend.snapshot.entity.Snapshot;
+import com.fontana.backend.frame.entity.Frame;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,58 +17,58 @@ public class DMXHandlerService {
 
     private final DMXService DMXService;
 
-    public void sendDMXData(Snapshot snapshot) {
-        DMXService.setDMXDataField(snapshot);
+    public void sendDMXData(Frame frame) {
+        DMXService.setDMXDataField(frame);
     }
 
     public byte[] getDMXDataArray() {
         return DMXService.getDMXDataArray();
     }
 
-    public void sendDMXDataJet(Jet jet, Snapshot snapshot) {
-        snapshot.setId(jet.getId());
-        snapshot.setValue(jet.getValue());
-        DMXService.setDMXDataField(snapshot);
+    public void sendDMXDataJet(Jet jet, Frame frame) {
+        frame.setId(jet.getId());
+        frame.setValue(jet.getValue());
+        DMXService.setDMXDataField(frame);
     }
 
-    public void sendDMXDataPump(Pump pump, Snapshot snapshot) {
-        snapshot.setId(pump.getId());
-        snapshot.setValue(pump.getValue());
-        DMXService.setDMXDataField(snapshot);
+    public void sendDMXDataPump(Pump pump, Frame frame) {
+        frame.setId(pump.getId());
+        frame.setValue(pump.getValue());
+        DMXService.setDMXDataField(frame);
     }
 
-    public void sendDMXDataLight(Light light, Snapshot snapshot) {
-        snapshot.setId(light.getColorRID());
-        snapshot.setValue(light.getColorRValue());
-        DMXService.setDMXDataField(snapshot);
-        snapshot.setId(light.getColorGID());
-        snapshot.setValue(light.getColorGValue());
-        DMXService.setDMXDataField(snapshot);
-        snapshot.setId(light.getColorBID());
-        snapshot.setValue(light.getColorBValue());
-        DMXService.setDMXDataField(snapshot);
+    public void sendDMXDataLight(Light light, Frame frame) {
+        frame.setId(light.getColorRID());
+        frame.setValue(light.getColorRValue());
+        DMXService.setDMXDataField(frame);
+        frame.setId(light.getColorGID());
+        frame.setValue(light.getColorGValue());
+        DMXService.setDMXDataField(frame);
+        frame.setId(light.getColorBID());
+        frame.setValue(light.getColorBValue());
+        DMXService.setDMXDataField(frame);
     }
 
-    public void sendDMXDataLed(Led led, Snapshot snapshot) {
-        snapshot.setId(led.getColorRID());
-        snapshot.setValue(led.getColorRValue());
-        DMXService.setDMXDataField(snapshot);
-        snapshot.setId(led.getColorGID());
-        snapshot.setValue(led.getColorGValue());
-        DMXService.setDMXDataField(snapshot);
-        snapshot.setId(led.getColorBID());
-        snapshot.setValue(led.getColorBValue());
-        DMXService.setDMXDataField(snapshot);
-        snapshot.setId(led.getColorWID());
-        snapshot.setValue(led.getColorWValue());
-        DMXService.setDMXDataField(snapshot);
+    public void sendDMXDataLed(Led led, Frame frame) {
+        frame.setId(led.getColorRID());
+        frame.setValue(led.getColorRValue());
+        DMXService.setDMXDataField(frame);
+        frame.setId(led.getColorGID());
+        frame.setValue(led.getColorGValue());
+        DMXService.setDMXDataField(frame);
+        frame.setId(led.getColorBID());
+        frame.setValue(led.getColorBValue());
+        DMXService.setDMXDataField(frame);
+        frame.setId(led.getColorWID());
+        frame.setValue(led.getColorWValue());
+        DMXService.setDMXDataField(frame);
 
-        snapshot.setId(led.getDimmID());
-        snapshot.setValue(led.getDimmValue());
-        DMXService.setDMXDataField(snapshot);
-        snapshot.setId(led.getStrobeFreqID());
-        snapshot.setValue(led.getStrobeFreqValue());
-        DMXService.setDMXDataField(snapshot);
+        frame.setId(led.getDimmID());
+        frame.setValue(led.getDimmValue());
+        DMXService.setDMXDataField(frame);
+        frame.setId(led.getStrobeFreqID());
+        frame.setValue(led.getStrobeFreqValue());
+        DMXService.setDMXDataField(frame);
 
     }
 

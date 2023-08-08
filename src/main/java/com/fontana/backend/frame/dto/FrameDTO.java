@@ -1,4 +1,4 @@
-package com.fontana.backend.snapshot.dto;
+package com.fontana.backend.frame.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SnapshotDTO {
+public class FrameDTO {
 
     private Integer value;
 }
