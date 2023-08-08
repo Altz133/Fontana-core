@@ -37,7 +37,7 @@ public class AuthenticationService {
         return ResponseEntity.ok(generateAuthResponse(jwtAccessToken, jwtRefreshToken));
     }
 
-    public ResponseEntity<AuthenticationResponse> refreshToken(String refreshToken) {
+    public ResponseEntity<?> refreshToken(String refreshToken) {
         String username = jwtService.extractUsername(refreshToken);
         jwtAccessToken = jwtService.generateAccessToken(username);
 
