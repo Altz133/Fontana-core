@@ -108,8 +108,6 @@ public class DMXService {
         connectionOpened = true;
     }
 
-
-
     private void refreshConnection() throws IOException {
         closeConnection();
         openConnection();

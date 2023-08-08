@@ -54,7 +54,7 @@ public class DMXHandlerController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = DMX_UPDATE_STATE)
+    @GetMapping(value = DMX_GET_STATE)
     public ResponseEntity<Object> getCurrentState() {
         return ResponseEntity.ok(DMXHandlerService.getDMXDataArray());
     }
