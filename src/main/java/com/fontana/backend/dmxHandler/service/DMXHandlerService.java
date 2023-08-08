@@ -9,6 +9,8 @@ import com.fontana.backend.snapshot.entity.Snapshot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 public class DMXHandlerService {
@@ -68,6 +70,14 @@ public class DMXHandlerService {
         snapshot.setValue(led.getStrobeFreqValue());
         DMXService.setDMXDataField(snapshot);
 
+    }
+
+    public void closeConnection() throws IOException {
+        DMXService.closeConnection();
+    }
+
+    public void openConnection() throws IOException {
+        DMXService.openConnection();
     }
 }
 

@@ -12,10 +12,9 @@ import com.fontana.backend.dmxHandler.service.DMXHandlerService;
 import com.fontana.backend.snapshot.entity.Snapshot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 import static com.fontana.backend.config.RestEndpoints.*;
 
@@ -55,9 +54,21 @@ public class DMXHandlerController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = DMX_UPDATE_STATE)
+    @GetMapping(value = DMX_UPDATE_STATE)
     public ResponseEntity<Object> getCurrentState() {
         return ResponseEntity.ok(DMXHandlerService.getDMXDataArray());
+    }
+
+    @GetMapping(value = DMX_CLOSE_CONNECTION)
+    public ResponseEntity<Object> closeConnection() throws IOException {
+        DMXHandlerService.closeConnection();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = DMX_OPEN_CONNECTION)
+    public ResponseEntity<Object> openConnection() throws IOException {
+        DMXHandlerService.openConnection();
+        return ResponseEntity.ok().build();
     }
 
 }

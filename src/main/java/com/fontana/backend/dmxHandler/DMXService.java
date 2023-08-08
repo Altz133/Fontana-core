@@ -16,6 +16,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class DMXService {
 
+    private boolean connectionOpened = false;
     private JD2XX jd;
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
@@ -37,6 +38,7 @@ public class DMXService {
     private void startScheduler() {
         taskScheduler.scheduleAtFixedRate(() -> {
             try {
+                if (connectionOpened){
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
                 jd.setBaudRate(250000);
@@ -44,7 +46,7 @@ public class DMXService {
                 jd.setFlowControl(JD2XX.FLOW_NONE, 11, 13);
                 jd.setBreakOn();
                 jd.setBreakOff();
-                ostream.write(dmxData);
+                ostream.write(dmxData);}
             } catch (IOException e) {
                 try {
                     refreshConnection();
@@ -91,18 +93,22 @@ public class DMXService {
         return dmxData;
     }
 
-    private void closeConnection() throws IOException {
+    public void closeConnection() throws IOException {
         ostream.jd2xx.close();
         ostream.close();
         jd.close();
+        connectionOpened = false;
     }
 
-    private void openConnection() throws IOException {
+    public void openConnection() throws IOException {
         jd = new JD2XX();
         String serial = new JD2XX().listDevicesBySerialNumber()[0].toString();
         jd.openBySerialNumber(serial);
         ostream = new JD2XXOutputStream(jd);
+        connectionOpened = true;
     }
+
+
 
     private void refreshConnection() throws IOException {
         closeConnection();
