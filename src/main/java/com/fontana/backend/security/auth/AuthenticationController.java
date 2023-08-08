@@ -36,7 +36,7 @@ public class AuthenticationController {
     public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         try {
             return authService.refreshToken(token);
-        } catch(Exception exc) {
+        } catch (Exception exc) {
 
             log.error(exc.getMessage());
             throw new JwtExpiredOrUntrustedException(exc.getMessage());
@@ -46,10 +46,8 @@ public class AuthenticationController {
     @ExceptionHandler(JwtExpiredOrUntrustedException.class)
     public ResponseEntity<Map<String, Object>> handleJwtException(JwtExpiredOrUntrustedException exc) {
         Map<String, Object> response = new HashMap<>();
-
         response.put("message", exc.getMessage());
         response.put("timestamp", Instant.now().toEpochMilli());
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 }
