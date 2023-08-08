@@ -1,4 +1,4 @@
-/*package com.fontana.backend.bootstrap;
+package com.fontana.backend.bootstrap;
 
 import com.fontana.backend.role.entity.Role;
 import com.fontana.backend.role.entity.RoleType;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * This class allows you to create a bunch of mock data and put them in H2 database on each run, so you always have
  * data to work with.
  */
-/*
+
 @Component
 @RequiredArgsConstructor
 @Profile("h2")
@@ -50,4 +50,3 @@ public class BootstrapInMemoryData implements CommandLineRunner {
         }
     }
 }
-*/
