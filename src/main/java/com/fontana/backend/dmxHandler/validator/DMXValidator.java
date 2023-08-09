@@ -2,19 +2,21 @@ package com.fontana.backend.dmxHandler.validator;
 
 import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.repository.DeviceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class DMXValidator {
-    DeviceRepository deviceRepository;
+    @Autowired
+    private DeviceRepository deviceRepository;
 
     public boolean validate(byte[] dmxData) {
         List<Device> pumps = deviceRepository.findByType("Pump");
         for (Device pump : pumps) {
 
-            int[] singlePumpAddresses = pump.getAddresses();
+            int[] singlePumpAddresses = pump.getAddress();
             int pumpId = pump.getId();
             byte pumpPower = dmxData[pumpId];
             int closedValveCounter = 0;

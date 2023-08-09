@@ -5,11 +5,13 @@ import com.fontana.backend.devices.led.dto.LedDTO;
 import com.fontana.backend.devices.led.entity.Led;
 import com.fontana.backend.devices.repository.DeviceRepository;
 import jakarta.validation.Validator;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class LedMapper {
-    DeviceRepository deviceRepository;
+    private DeviceRepository deviceRepository;
     private Validator validator;
     public LedMapper() {
     }
@@ -21,7 +23,7 @@ public class LedMapper {
 
     public Led DTOToLed(LedDTO ledDTO) {
         Device device = deviceRepository.findByName(ledDTO.getName());
-        int[] addresses = device.getAddresses();
+        int[] addresses = device.getAddress();
                 /*
                 0 - Red
                 1 - Green

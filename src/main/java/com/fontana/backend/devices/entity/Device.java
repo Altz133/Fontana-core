@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "devices")
+@Table(name = "device")
 public class Device {
 
     @Id
@@ -21,7 +21,7 @@ public class Device {
     private Integer id;
     @NotEmpty
     private String name;
-    private int[] addresses;
+    private int[] address;
     @NotEmpty
     private String type;
 
