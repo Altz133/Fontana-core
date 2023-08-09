@@ -1,4 +1,4 @@
-package com.fontana.backend.liveControlSession;
+package com.fontana.backend.session;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "live_control_session")
+@Table(name = "session")
 public class Session {
 
     @Id
