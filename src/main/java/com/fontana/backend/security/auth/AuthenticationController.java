@@ -21,12 +21,19 @@ public class AuthenticationController {
         return authService.authenticate(request);
     }
 
-    /**
-     * @param token has to contain prefix of "Bearer " in order to validate token properly.
-     * @return new access token wit updated expiration time
-     */
     @PostMapping(AUTH_REFRESHTOKEN)
     public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         return authService.refreshToken(token);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody String refreshToken) {
+        authService.blacklistToken(refreshToken);
+        return ResponseEntity.ok().build();
+    }
 }
+    /**
+     * @param token has to contain prefix of "Bearer " in order to validate token properly.
+     * @return new access token wit updated expiration time
+     */
+

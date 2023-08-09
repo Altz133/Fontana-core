@@ -41,6 +41,9 @@ public class AuthenticationService {
         String username = jwtService.extractUsername(refreshToken);
         jwtAccessToken = jwtService.generateAccessToken(username);
 
+        // Blacklist the provided refresh token after use
+        jwtService.blacklistToken(refreshToken);
+
         return ResponseEntity.ok(generateAuthResponse(jwtAccessToken, refreshToken));
     }
 
@@ -51,5 +54,9 @@ public class AuthenticationService {
                 .tokenType(tokenType)
                 .expiration(LocalDateTime.now().plus(Long.parseLong(accessExpDelay), ChronoUnit.MILLIS))
                 .build();
+    }
+
+    public void blacklistToken(String refreshToken) {
+        jwtService.blacklistToken(refreshToken);
     }
 }
