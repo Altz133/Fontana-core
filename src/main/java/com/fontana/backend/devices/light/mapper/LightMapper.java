@@ -4,15 +4,17 @@ import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.light.dto.LightDTO;
 import com.fontana.backend.devices.light.entity.Light;
 import com.fontana.backend.devices.repository.DeviceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LightMapper {
-    DeviceRepository deviceRepository;
+    @Autowired
+    private DeviceRepository deviceRepository;
 
     public Light DTOToLight(LightDTO lightDTO) {
         Device device = deviceRepository.findByName(lightDTO.getName());
-        int[] addresses = device.getAddresses();
+        int[] addresses = device.getAddress();
         return new Light(
                 addresses[0], lightDTO.getColorR(),
                 addresses[1], lightDTO.getColorG(),

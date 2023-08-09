@@ -1,17 +1,24 @@
 package com.fontana.backend.devices.pump.entity;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
-@Component
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Validated
+@Component
 public class Pump {
-
+    @Min(value = 1)
+    @Max(value = 512)
     private int id;
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte value;
 
 }

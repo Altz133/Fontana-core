@@ -10,6 +10,7 @@ import com.fontana.backend.devices.pump.dto.PumpDTO;
 import com.fontana.backend.devices.pump.mapper.PumpMapper;
 import com.fontana.backend.dmxHandler.service.DMXHandlerService;
 import com.fontana.backend.frame.entity.Frame;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,25 +32,25 @@ public class DMXHandlerController {
     private final Frame frame;
 
     @PostMapping(value = DMX_UPDATE_JET)
-    public ResponseEntity<Object> updateFrameJet(@RequestBody JetDTO jetDTO) {
+    public ResponseEntity<Object> updateFrameJet(@Valid @RequestBody JetDTO jetDTO) {
         DMXHandlerService.sendDMXDataJet(jetMapper.DTOToJet(jetDTO), frame);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = DMX_UPDATE_PUMP)
-    public ResponseEntity<Object> updateFramePump(@RequestBody PumpDTO pumpDTO) {
+    public ResponseEntity<Object> updateFramePump(@Valid @RequestBody PumpDTO pumpDTO) {
         DMXHandlerService.sendDMXDataPump(pumpMapper.DTOToPump(pumpDTO), frame);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = DMX_UPDATE_LIGHT)
-    public ResponseEntity<Object> updateFrameLight(@RequestBody LightDTO lightDTO) {
+    public ResponseEntity<Object> updateFrameLight(@Valid @RequestBody LightDTO lightDTO) {
         DMXHandlerService.sendDMXDataLight(lightMapper.DTOToLight(lightDTO), frame);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = DMX_UPDATE_LED)
-    public ResponseEntity<Object> updateFrameLed(@RequestBody LedDTO ledDTO) {
+    public ResponseEntity<Object> updateFrameLed(@Valid @RequestBody LedDTO ledDTO) {
         DMXHandlerService.sendDMXDataLed(ledMapper.DTOToLed(ledDTO), frame);
         return ResponseEntity.ok().build();
     }

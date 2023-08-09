@@ -5,7 +5,7 @@ import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Service
-@RequiredArgsConstructor
 public class DMXService {
 
     private boolean connectionOpened = false;
@@ -21,23 +20,24 @@ public class DMXService {
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
     private TaskScheduler taskScheduler;
+    @Autowired
     private DMXValidator dmxValidator;
 
     @PostConstruct
     public void init() {
         try {
-            //TODO it should stay commented
-            System.out.println(Arrays.toString(dmxData));
-//           openConnection();
-//            initialSetup();
-//            startScheduler();
+//            openConnection();
+            initialSetup();
+            startScheduler();
         } catch (Exception e) {
         }
     }
 
     private void startScheduler() {
         taskScheduler.scheduleAtFixedRate(() -> {
-            try {
+            System.out.println(Arrays.toString(dmxData));
+            /*try {
+
                 if (connectionOpened){
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
@@ -52,11 +52,12 @@ public class DMXService {
                     refreshConnection();
                 } catch (IOException ex) {
                 }
-            }
+            }*/
         }, 250L);
     }
 
     void initialSetup() throws IOException {
+        dmxData = new byte[515];
         for (int j = 0; j < 512; j++) {
             dmxData[j] = 0;
         }
@@ -76,7 +77,7 @@ public class DMXService {
         dmxData[dmxData.length - 3] = 33;
         dmxData[dmxData.length - 2] = 22;
         dmxData[dmxData.length - 1] = 11;
-        ostream.write(dmxData);
+        //ostream.write(dmxData);
     }
 
 
