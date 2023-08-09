@@ -1,6 +1,5 @@
 package com.fontana.backend.role;
 
-import com.fontana.backend.role.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
