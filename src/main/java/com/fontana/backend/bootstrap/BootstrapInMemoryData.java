@@ -1,8 +1,8 @@
 package com.fontana.backend.bootstrap;
 
-import com.fontana.backend.role.entity.Role;
-import com.fontana.backend.role.entity.RoleType;
-import com.fontana.backend.role.repository.RoleRepository;
+import com.fontana.backend.role.Role;
+import com.fontana.backend.role.RoleRepository;
+import com.fontana.backend.role.RoleType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -30,17 +30,17 @@ public class BootstrapInMemoryData implements CommandLineRunner {
     private void loadTestRoles() {
         if (roleRepository.findAll().size() == 0) {
             Role admin = Role.builder()
-                    .roleType(RoleType.ADMIN)
+                    .name(RoleType.ADMIN.name())
                     .users(null)
                     .build();
 
             Role operator = Role.builder()
-                    .roleType(RoleType.OPERATOR)
+                    .name(RoleType.OPERATOR.name())
                     .users(null)
                     .build();
 
             Role viewer = Role.builder()
-                    .roleType(RoleType.VIEWER)
+                    .name(RoleType.VIEWER.name())
                     .users(null)
                     .build();
 
