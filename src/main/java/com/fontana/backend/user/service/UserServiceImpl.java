@@ -1,7 +1,7 @@
 package com.fontana.backend.user.service;
 
-import com.fontana.backend.role.entity.RoleType;
-import com.fontana.backend.role.repository.RoleRepository;
+import com.fontana.backend.role.RoleRepository;
+import com.fontana.backend.role.RoleType;
 import com.fontana.backend.user.dtos.UserDTO;
 import com.fontana.backend.user.entity.User;
 import com.fontana.backend.user.mappers.UserDtoMapper;
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
                 .username(ldapDetails.get(7).toString())
                 .firstName(nameParts[0])
                 .lastName(nameParts[1])
-                .role(roleRepository.findAllByRoleType(RoleType.VIEWER).get(0))
+                .role(roleRepository.findAllByName(RoleType.VIEWER.name()).get(0))
                 .build();
 
         User user = userDtoMapper.map(userDto);
