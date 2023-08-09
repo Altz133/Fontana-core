@@ -1,5 +1,6 @@
 package com.fontana.backend.exception;
 
+import com.fontana.backend.security.jwt.JwtExpiredOrUntrustedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +34,15 @@ public class GlobalErrorController {
         });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String, Object>> handleJwtException(JwtExpiredOrUntrustedException exc) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", exc.getMessage());
+        response.put("timestamp", System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 }
 

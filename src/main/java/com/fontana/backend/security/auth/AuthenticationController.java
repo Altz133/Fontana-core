@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import static com.fontana.backend.config.RestEndpoints.*;
 
 @RestController
@@ -27,7 +26,7 @@ public class AuthenticationController {
      * @return new access token wit updated expiration time
      */
     @PostMapping(AUTH_REFRESHTOKEN)
-    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         return authService.refreshToken(token);
     }
 }
