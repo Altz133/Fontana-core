@@ -3,12 +3,12 @@ package com.fontana.backend.exception;
 import com.fontana.backend.security.jwt.JwtExpiredOrUntrustedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +32,6 @@ public class GlobalErrorController {
             String errorMessage = error.getDefaultMessage();
             errorList.put(fieldName, errorMessage);
         });
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
     }
 
@@ -44,5 +43,25 @@ public class GlobalErrorController {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
+
+    //handler for HttpMessageNotReadableException, allows fronted to see the error message
+    @ExceptionHandler
+    public ResponseEntity<Map<String,Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException exc) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", exc.getMessage());
+        response.put("timestamp", System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String,Object>> handleIllegalArgumentException(IllegalArgumentException exc) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", exc.getMessage());
+        response.put("timestamp", System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
 }
 
