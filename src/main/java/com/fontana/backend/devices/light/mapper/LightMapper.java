@@ -12,7 +12,7 @@ public class LightMapper {
 
     public Light DTOToLight(LightDTO lightDTO) {
         Device device = deviceRepository.findByName(lightDTO.getName());
-        int[] addresses = device.getAddresses();
+        int[] addresses = device.getAddress();
         return new Light(
                 addresses[0], lightDTO.getColorR(),
                 addresses[1], lightDTO.getColorG(),

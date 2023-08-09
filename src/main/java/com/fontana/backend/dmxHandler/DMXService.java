@@ -5,6 +5,7 @@ import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Arrays;
 
+@AllArgsConstructor
 @Service
 @RequiredArgsConstructor
 public class DMXService {
@@ -26,10 +28,11 @@ public class DMXService {
     @PostConstruct
     public void init() {
         try {
+            initialSetup();
             //TODO it should stay commented
             System.out.println(Arrays.toString(dmxData));
 //           openConnection();
-//            initialSetup();
+
 //            startScheduler();
         } catch (Exception e) {
         }
@@ -76,7 +79,7 @@ public class DMXService {
         dmxData[dmxData.length - 3] = 33;
         dmxData[dmxData.length - 2] = 22;
         dmxData[dmxData.length - 1] = 11;
-        ostream.write(dmxData);
+        //ostream.write(dmxData);
     }
 
 
