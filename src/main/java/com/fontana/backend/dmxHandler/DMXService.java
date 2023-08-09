@@ -83,8 +83,8 @@ public class DMXService {
     }
 
 
-    public void setDMXDataField(Frame frame) {
-        if (dmxValidator.validate(dmxData)) {
+    public void setDMXDataField(Frame frame) throws IOException {
+        if (dmxValidator.validateArray(dmxData) && dmxValidator.validateWaterLevel()) {
             dmxData[frame.getId()] = frame.getValue();
         } else {
             //TODO logera trzeba zrobic

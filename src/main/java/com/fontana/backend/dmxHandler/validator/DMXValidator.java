@@ -2,17 +2,20 @@ package com.fontana.backend.dmxHandler.validator;
 
 import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.repository.DeviceRepository;
+import com.fontana.backend.sensorsHandler.entity.Sensors;
+import com.fontana.backend.sensorsHandler.service.SensorsHandlerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class DMXValidator {
     private final DeviceRepository deviceRepository;
-
-    public boolean validate(byte[] dmxData) {
+    private final SensorsHandlerService sensorsHandlerService;
+    public boolean validateArray(byte[] dmxData) {
         List<Device> pumps = deviceRepository.findByType("Pump");
         for (Device pump : pumps) {
 
@@ -34,5 +37,10 @@ public class DMXValidator {
 
         }
         return true;
+    }
+
+    public boolean validateWaterLevel() throws IOException {
+        Sensors sensors = sensorsHandlerService.getSensors();
+        return !sensors.getWaterBottom() && !sensors.getWaterTop();
     }
 }
