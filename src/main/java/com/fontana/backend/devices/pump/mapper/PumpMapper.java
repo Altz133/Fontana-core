@@ -4,11 +4,13 @@ import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.pump.dto.PumpDTO;
 import com.fontana.backend.devices.pump.entity.Pump;
 import com.fontana.backend.devices.repository.DeviceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PumpMapper {
-    DeviceRepository deviceRepository;
+    @Autowired
+    private DeviceRepository deviceRepository;
 
     public Pump DTOToPump(PumpDTO pumpDTO) {
         Device device = deviceRepository.findByName(pumpDTO.getName());

@@ -5,18 +5,14 @@ import com.fontana.backend.devices.led.dto.LedDTO;
 import com.fontana.backend.devices.led.entity.Led;
 import com.fontana.backend.devices.repository.DeviceRepository;
 import jakarta.validation.Validator;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class LedMapper {
-    private DeviceRepository deviceRepository;
     private Validator validator;
-    public LedMapper() {
-    }
-
-    //FIXME - Mapper potrzebny
+    @Autowired
+    private DeviceRepository deviceRepository;
     public LedDTO LedToDTO(Led led) {
         return new LedDTO();
     }

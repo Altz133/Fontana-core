@@ -8,11 +8,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class PumpDTO extends DeviceDTO {
-    @Min(value = 0)
-    @Max(value = 255)
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte value;
 
 }

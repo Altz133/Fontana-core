@@ -17,10 +17,6 @@ public class DMXHandlerService {
 
     private final DMXService DMXService;
 
-    public void sendDMXData(Frame frame) {
-        DMXService.setDMXDataField(frame);
-    }
-
     public byte[] getDMXDataArray() {
         return DMXService.getDMXDataArray();
     }

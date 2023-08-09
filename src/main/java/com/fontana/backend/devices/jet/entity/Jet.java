@@ -17,8 +17,8 @@ public class Jet {
     @Min(value = 1)
     @Max(value = 512)
     private int id;
-    @Min(value = 0)
-    @Max(value = 255)
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte value;
 
 }

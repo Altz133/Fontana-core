@@ -7,27 +7,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class LedDTO extends DeviceDTO {
-    @Min(value = 0)
-    @Max(value = 255)
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte colorR;
-    @Min(value = 0)
-    @Max(value = 255)
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte colorG;
-    @Min(value = 0)
-    @Max(value = 255)
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte colorB;
-    @Min(value = 0)
-    @Max(value = 255)
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte colorW;
-    @Min(value = 0)
-    @Max(value = 255)
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte power;
-    @Min(value = 0)
-    @Max(value = 255)
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte stroboscopeFrequency;
 
 }

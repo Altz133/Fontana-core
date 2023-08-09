@@ -26,19 +26,18 @@ public class DMXService {
     @PostConstruct
     public void init() {
         try {
+//            openConnection();
             initialSetup();
-            //TODO it should stay commented
-            System.out.println(Arrays.toString(dmxData));
-//           openConnection();
-//            initialSetup();
-//            startScheduler();
+            startScheduler();
         } catch (Exception e) {
         }
     }
 
     private void startScheduler() {
         taskScheduler.scheduleAtFixedRate(() -> {
-            try {
+            System.out.println(Arrays.toString(dmxData));
+            /*try {
+
                 if (connectionOpened){
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
@@ -53,7 +52,7 @@ public class DMXService {
                     refreshConnection();
                 } catch (IOException ex) {
                 }
-            }
+            }*/
         }, 250L);
     }
 
