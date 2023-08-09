@@ -1,4 +1,4 @@
-package com.fontana.backend.sensorsHandler.sensors.entity;
+package com.fontana.backend.sensorsHandler.weather.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,9 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
-public class Sensors {
+public class Weather {
 
-        private Boolean waterTop;
-        private Boolean waterBottom;
-
-
+    private int temperature;
+    private int humidity;
+    private int light;
 }
