@@ -19,7 +19,6 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class JwtService {
 
     @Value("${jwt.secret-key}")
@@ -68,7 +67,6 @@ public class JwtService {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception exc) {
-            log.error(exc.getMessage());
             throw new JwtExpiredOrUntrustedException(exc.getMessage());
         }
     }
