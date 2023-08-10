@@ -2,6 +2,7 @@ package com.fontana.backend.dmxHandler.validator;
 
 import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.repository.DeviceRepository;
+import com.fontana.backend.frame.entity.Frame;
 import com.fontana.backend.sensorsHandler.entity.Sensors;
 import com.fontana.backend.sensorsHandler.service.SensorsHandlerService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -18,11 +20,17 @@ public class DMXValidator {
     private DeviceRepository deviceRepository;
     private final SensorsHandlerService sensorsHandlerService;
 
-    public boolean validateDmxData(byte[] dmxData) throws IOException {
-        return validateArray(dmxData) && validateWaterLevel();
+    public boolean validateDmxData(byte[] dmxData, Frame frame) throws IOException {
+        //FIXME na razie nie ma dostępu do serwera
+        //return validateArray(dmxData) && validateWaterLevel();
+        byte[] data = Arrays.copyOf(dmxData,dmxData.length);
+        data[frame.getId()] = frame.getValue();
+        return validateArray(data);
     }
+
     public boolean validateArray(byte[] dmxData) {
-        List<Device> pumps = deviceRepository.findByType("Pump");
+        String type = "pump";
+        List<Device> pumps = deviceRepository.findByType(type);
         for (Device pump : pumps) {
 
             int[] singlePumpAddresses = pump.getAddress();
@@ -36,9 +44,8 @@ public class DMXValidator {
                     closedValveCounter++;
                 }
             }
-
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
-                throw new IllegalArgumentException("Pump " + pumpId + " is on, but all valves are closed");
+                throw new IllegalArgumentException(type +" "+ pumpId + " is on, but all valves are closed");
             }
 
         }
