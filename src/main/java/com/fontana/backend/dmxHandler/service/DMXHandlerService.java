@@ -17,23 +17,27 @@ public class DMXHandlerService {
 
     private final DMXService DMXService;
 
+    public void sendDMXData(Frame frame) throws IOException {
+        DMXService.setDMXDataField(frame);
+    }
+
     public byte[] getDMXDataArray() {
         return DMXService.getDMXDataArray();
     }
 
-    public void sendDMXDataJet(Jet jet, Frame frame) {
+    public void sendDMXDataJet(Jet jet, Frame frame) throws IOException {
         frame.setId(jet.getId());
         frame.setValue(jet.getValue());
         DMXService.setDMXDataField(frame);
     }
 
-    public void sendDMXDataPump(Pump pump, Frame frame) {
+    public void sendDMXDataPump(Pump pump, Frame frame) throws IOException {
         frame.setId(pump.getId());
         frame.setValue(pump.getValue());
         DMXService.setDMXDataField(frame);
     }
 
-    public void sendDMXDataLight(Light light, Frame frame) {
+    public void sendDMXDataLight(Light light, Frame frame) throws IOException {
         frame.setId(light.getColorRID());
         frame.setValue(light.getColorRValue());
         DMXService.setDMXDataField(frame);
@@ -45,7 +49,7 @@ public class DMXHandlerService {
         DMXService.setDMXDataField(frame);
     }
 
-    public void sendDMXDataLed(Led led, Frame frame) {
+    public void sendDMXDataLed(Led led, Frame frame) throws IOException {
         frame.setId(led.getColorRID());
         frame.setValue(led.getColorRValue());
         DMXService.setDMXDataField(frame);

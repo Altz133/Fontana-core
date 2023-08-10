@@ -3,9 +3,10 @@ package com.fontana.backend.dmxHandler;
 import com.fontana.backend.dmxHandler.validator.DMXValidator;
 import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -81,8 +82,8 @@ public class DMXService {
     }
 
 
-    public void setDMXDataField(Frame frame) {
-        if (dmxValidator.validateArray(dmxData)) {
+    public void setDMXDataField(Frame frame) throws IOException {
+        if (dmxValidator.validateDmxData(dmxData)) {
             dmxData[frame.getId()] = frame.getValue();
         }
     }
