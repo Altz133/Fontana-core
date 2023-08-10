@@ -16,4 +16,6 @@ public class RestEndpoints {
     public static final String DMX_GET_STATE = "/state";
     public static final String DMX_CLOSE_CONNECTION = "/close";
     public static final String DMX_OPEN_CONNECTION = "/open";
+    public static final String TEMPLATE = BASE + "/template";
+    public static final String TEMPLATE_GET_PAGING = "/get/paging";
 }
