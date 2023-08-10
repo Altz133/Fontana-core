@@ -25,7 +25,7 @@ public class LedMapper {
                 1 - Green
                 2 - Blue
                 3 - White
-                4 - Dimm
+                4 - Dimm.../.
                 5 - Strobe
                  */
         return new Led(

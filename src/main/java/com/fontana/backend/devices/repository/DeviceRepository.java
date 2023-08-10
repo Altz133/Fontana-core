@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Integer> {
     Device findByName(String name);

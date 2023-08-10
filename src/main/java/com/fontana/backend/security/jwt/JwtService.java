@@ -1,5 +1,7 @@
 package com.fontana.backend.security.jwt;
 
+import com.fontana.backend.security.blacklist.entity.BlacklistedToken;
+import com.fontana.backend.security.blacklist.repository.BlacklistedTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -30,6 +32,8 @@ public class JwtService {
 
     @Value("${jwt.refresh-expiration-delay}")
     private String refreshExpDelay;
+
+    private final BlacklistedTokenRepository blacklistedTokenRepository;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -82,10 +86,6 @@ public class JwtService {
         }
     }
 
-    public boolean isTokenValid(String token) {
-        return !isTokenExpired(token) && isTokenValidWithSecretKey(token);
-    }
-
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
@@ -97,5 +97,24 @@ public class JwtService {
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public boolean isTokenValid(String token) {
+        return !isTokenExpired(token)
+                && isTokenValidWithSecretKey(token)
+                && !isTokenBlacklisted(token);
+    }
+
+    private boolean isTokenBlacklisted(String token) {
+        return blacklistedTokenRepository.existsByToken(token);
+    }
+
+    public void blacklistToken(String token) {
+        BlacklistedToken blacklistedToken = BlacklistedToken.builder()
+                .token(token)
+                .dateAdded(new Date())
+                .build();
+
+        blacklistedTokenRepository.save(blacklistedToken);
     }
 }
