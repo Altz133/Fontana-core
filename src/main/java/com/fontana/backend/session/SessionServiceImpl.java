@@ -85,7 +85,7 @@ public class SessionServiceImpl implements SessionService {
                 .openedTime(activeSession.getOpenedTime())
                 .closedTime(sessionCloseRequest.getClosedTime())
                 .build();
-        log.info(String.valueOf(updated));
+        log.info("Updated:" + updated);
 
         sessionRepository.save(updated);
         return ResponseEntity.ok().build();
