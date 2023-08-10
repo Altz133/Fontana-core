@@ -15,10 +15,10 @@ public class DMXValidator {
         return validateArray(dmxData);
     }
 
-
+    private final String type = "Pump";
 
     public boolean validateArray(byte[] dmxData) {
-        List<Device> pumps = deviceRepository.findByType("Pump");
+        List<Device> pumps = deviceRepository.findByType(type);
         for (Device pump : pumps) {
 
             int[] singlePumpAddresses = pump.getAddress();
