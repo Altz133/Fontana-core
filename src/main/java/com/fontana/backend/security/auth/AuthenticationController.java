@@ -1,11 +1,15 @@
 package com.fontana.backend.security.auth;
 
+import com.fontana.backend.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
 import static com.fontana.backend.config.RestEndpoints.*;
 
 @RestController
@@ -15,6 +19,7 @@ import static com.fontana.backend.config.RestEndpoints.*;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
+    private final JwtService jwtService;
 
     @PostMapping(AUTH_AUTHENTICATE)
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Validated AuthenticationRequest request) {
@@ -27,13 +32,20 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody String refreshToken) {
+    public ResponseEntity<Void> logout(@RequestBody String refreshToken) {
         authService.blacklistToken(refreshToken);
         return ResponseEntity.ok().build();
     }
-}
-    /**
-     * @param token has to contain prefix of "Bearer " in order to validate token properly.
-     * @return new access token wit updated expiration time
-     */
 
+
+    @PostMapping("/blacklist")
+    public ResponseEntity<Void> addToBlacklist(@RequestBody Map<String, String> tokenBody) {
+        String token = tokenBody.get("token");
+        if (token != null && !token.isEmpty()) {
+            jwtService.blacklistToken(token, "refresh");
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+}

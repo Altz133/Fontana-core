@@ -18,8 +18,6 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final LdapService ldapService;
 
-    private String jwtAccessToken;
-
     @Value("${jwt.token-type}")
     private String tokenType;
 
@@ -31,7 +29,7 @@ public class AuthenticationService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        jwtAccessToken = jwtService.generateAccessToken(request.getUsername());
+        String jwtAccessToken = jwtService.generateAccessToken(request.getUsername());
         String jwtRefreshToken = jwtService.generateRefreshToken(request.getUsername());
 
         return ResponseEntity.ok(generateAuthResponse(jwtAccessToken, jwtRefreshToken));
@@ -39,11 +37,8 @@ public class AuthenticationService {
 
     public ResponseEntity<?> refreshToken(String refreshToken) {
         String username = jwtService.extractUsername(refreshToken);
-        jwtAccessToken = jwtService.generateAccessToken(username);
-
-        jwtService.blacklistToken(refreshToken);
-
-        return ResponseEntity.ok(generateAuthResponse(jwtAccessToken, refreshToken));
+        String newJwtAccessToken = jwtService.generateAccessToken(username);
+        return ResponseEntity.ok(generateAuthResponse(newJwtAccessToken, refreshToken));
     }
 
     private AuthenticationResponse generateAuthResponse(String accessToken, String refreshToken) {
@@ -56,6 +51,7 @@ public class AuthenticationService {
     }
 
     public void blacklistToken(String refreshToken) {
-        jwtService.blacklistToken(refreshToken);
+        jwtService.blacklistToken(refreshToken, "refresh");
     }
 }
+

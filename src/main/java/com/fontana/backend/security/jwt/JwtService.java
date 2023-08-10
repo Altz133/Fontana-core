@@ -45,16 +45,15 @@ public class JwtService {
     }
 
     public String generateAccessToken(String username) {
-        return generateToken(new HashMap<>(), username, Long.parseLong(accessExpDelay));
+        return generateToken(new HashMap<>(), username, Long.parseLong(accessExpDelay), "access");
     }
 
     public String generateRefreshToken(String username) {
-        return generateToken(new HashMap<>(), username, Long.parseLong(refreshExpDelay));
+        return generateToken(new HashMap<>(), username, Long.parseLong(refreshExpDelay), "refresh");
     }
 
-    public String generateToken(Map<String, Object> extraClaims, String username, Long expiration) {
-        return Jwts
-                .builder()
+    private String generateToken(Map<String, Object> extraClaims, String username, Long expiration, String tokenType) {
+        return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -65,8 +64,7 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         try {
-            return Jwts
-                    .parserBuilder()
+            return Jwts.parserBuilder()
                     .setSigningKey(getSignInKey())
                     .build()
                     .parseClaimsJws(token)
@@ -109,12 +107,14 @@ public class JwtService {
         return blacklistedTokenRepository.existsByToken(token);
     }
 
-    public void blacklistToken(String token) {
+    public void blacklistToken(String token, String tokenType) {
         BlacklistedToken blacklistedToken = BlacklistedToken.builder()
                 .token(token)
+                .tokenType(tokenType)
                 .dateAdded(new Date())
                 .build();
 
         blacklistedTokenRepository.save(blacklistedToken);
     }
+
 }
