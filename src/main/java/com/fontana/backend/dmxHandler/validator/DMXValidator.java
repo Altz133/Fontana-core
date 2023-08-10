@@ -15,6 +15,10 @@ import java.util.List;
 public class DMXValidator {
     private final DeviceRepository deviceRepository;
     private final SensorsHandlerService sensorsHandlerService;
+
+public boolean validateDmxData(byte[] dmxData) throws IOException {
+        return validateArray(dmxData) && validateWaterLevel();
+    }
     public boolean validateArray(byte[] dmxData) {
         List<Device> pumps = deviceRepository.findByType("Pump");
         for (Device pump : pumps) {
@@ -32,7 +36,7 @@ public class DMXValidator {
             }
 
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
-                return false;
+                throw new IllegalArgumentException("Pump " + pumpId + " is on, but all valves are closed");
             }
 
         }
@@ -41,6 +45,11 @@ public class DMXValidator {
 
     public boolean validateWaterLevel() throws IOException {
         Sensors sensors = sensorsHandlerService.getSensors();
-        return !sensors.getWaterBottom() && !sensors.getWaterTop();
+        if(!sensors.getWaterBottom() || !sensors.getWaterTop()){
+            return true;
+        }
+        else{
+            throw new IOException("Water level is too high or too low");
+        }
     }
 }
