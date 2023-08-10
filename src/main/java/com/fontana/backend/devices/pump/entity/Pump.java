@@ -14,8 +14,8 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @Component
 public class Pump {
-    @Min(value = 1)
-    @Max(value = 512)
+    @Min(value = 0)
+    @Max(value = 511)
     private int id;
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)

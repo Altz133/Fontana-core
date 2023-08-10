@@ -20,8 +20,8 @@ public class Device {
 
     @Id
     @NotNull
-    @Min(value = 1)
-    @Max(value = 512)
+    @Min(value = 0)
+    @Max(value = 511)
     private Integer id;
     @NotEmpty
     private String name;
