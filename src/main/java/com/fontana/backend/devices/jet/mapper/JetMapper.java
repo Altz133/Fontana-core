@@ -6,6 +6,7 @@ import com.fontana.backend.devices.repository.DeviceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.fontana.backend.devices.jet.entity.Jet;
 
 @RequiredArgsConstructor
 @Service
