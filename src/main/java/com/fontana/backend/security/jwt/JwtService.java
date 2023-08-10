@@ -106,7 +106,7 @@ public class JwtService {
     }
 
     private boolean isTokenBlacklisted(String token) {
-        return blacklistedTokenRepository.isTokenBlacklisted(token);
+        return blacklistedTokenRepository.existsByToken(token);
     }
 
     public void blacklistToken(String token) {
