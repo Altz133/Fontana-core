@@ -7,14 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Arrays;
-
 
 @Service
 public class DMXService {

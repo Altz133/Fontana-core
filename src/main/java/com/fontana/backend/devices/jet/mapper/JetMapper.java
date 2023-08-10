@@ -2,7 +2,6 @@ package com.fontana.backend.devices.jet.mapper;
 
 import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.jet.dto.JetDTO;
-import com.fontana.backend.devices.jet.entity.Jet;
 import com.fontana.backend.devices.repository.DeviceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

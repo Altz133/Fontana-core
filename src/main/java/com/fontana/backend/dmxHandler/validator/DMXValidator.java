@@ -18,7 +18,7 @@ public class DMXValidator {
     private DeviceRepository deviceRepository;
     private final SensorsHandlerService sensorsHandlerService;
 
-public boolean validateDmxData(byte[] dmxData) throws IOException {
+    public boolean validateDmxData(byte[] dmxData) throws IOException {
         return validateArray(dmxData) && validateWaterLevel();
     }
     public boolean validateArray(byte[] dmxData) {
