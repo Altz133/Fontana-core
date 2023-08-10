@@ -37,6 +37,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public ResponseEntity<?> add(SessionDTO sessionDTO) {
         Session saved = sessionRepository.save(sessionMapper.map(sessionDTO));
+        log.info(saved.toString());
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, SESSION.concat("/").concat(saved.getId().toString()));
