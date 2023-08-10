@@ -3,6 +3,8 @@ package com.fontana.backend.dmxHandler;
 import com.fontana.backend.dmxHandler.validator.DMXValidator;
 import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
 import lombok.AllArgsConstructor;
@@ -13,9 +15,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Arrays;
 
-@AllArgsConstructor
+
 @Service
-@RequiredArgsConstructor
 public class DMXService {
 
     private boolean connectionOpened = false;
@@ -23,24 +24,24 @@ public class DMXService {
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
     private TaskScheduler taskScheduler;
+    @Autowired
     private DMXValidator dmxValidator;
 
     @PostConstruct
     public void init() {
         try {
+//            openConnection();
             initialSetup();
-            //TODO it should stay commented
-            System.out.println(Arrays.toString(dmxData));
-//           openConnection();
-
-//            startScheduler();
+            startScheduler();
         } catch (Exception e) {
         }
     }
 
     private void startScheduler() {
         taskScheduler.scheduleAtFixedRate(() -> {
-            try {
+            System.out.println(Arrays.toString(dmxData));
+            /*try {
+
                 if (connectionOpened){
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
@@ -55,11 +56,12 @@ public class DMXService {
                     refreshConnection();
                 } catch (IOException ex) {
                 }
-            }
+            }*/
         }, 250L);
     }
 
     void initialSetup() throws IOException {
+        dmxData = new byte[515];
         for (int j = 0; j < 512; j++) {
             dmxData[j] = 0;
         }

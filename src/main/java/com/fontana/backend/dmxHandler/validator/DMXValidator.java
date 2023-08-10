@@ -5,6 +5,7 @@ import com.fontana.backend.devices.repository.DeviceRepository;
 import com.fontana.backend.sensorsHandler.entity.Sensors;
 import com.fontana.backend.sensorsHandler.service.SensorsHandlerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,7 +14,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DMXValidator {
-    private final DeviceRepository deviceRepository;
+    @Autowired
+    private DeviceRepository deviceRepository;
     private final SensorsHandlerService sensorsHandlerService;
 
 public boolean validateDmxData(byte[] dmxData) throws IOException {
