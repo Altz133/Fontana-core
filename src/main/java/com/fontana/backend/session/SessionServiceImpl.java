@@ -5,11 +5,10 @@ import com.fontana.backend.exception.customExceptions.SessionNotModifiedExceptio
 import com.fontana.backend.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,10 +21,17 @@ import static com.fontana.backend.config.RestEndpoints.SESSION;
 @Slf4j
 public class SessionServiceImpl implements SessionService {
 
-    private static final String notFoundMsg = "Cannot found session with id:";
-    private static final String sessionBusyMsg = "Live control is busy";
-    private static final String notAllowedToCloseMsg = "Not allowed to close session.";
-    private static final String sessionAlreadyClosedMsg = "Session is already closed.";
+    @Value("${session.not-found-msg}")
+    private String notFoundMsg;
+
+    @Value("${session.busy-msg}")
+    private String sessionBusyMsg;
+
+    @Value("${session.not-allowed-to-close-msg}")
+    private String notAllowedToCloseMsg;
+
+    @Value("${session.already-closed}")
+    private String sessionAlreadyClosedMsg;
 
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
