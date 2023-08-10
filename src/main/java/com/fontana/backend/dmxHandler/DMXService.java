@@ -82,11 +82,8 @@ public class DMXService {
 
 
     public void setDMXDataField(Frame frame) {
-        if (dmxValidator.validate(dmxData)) {
+        if (dmxValidator.validateArray(dmxData)) {
             dmxData[frame.getId()] = frame.getValue();
-        } else {
-            //TODO logera trzeba zrobic
-            System.out.println("Validation failed");
         }
     }
 

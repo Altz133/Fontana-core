@@ -11,8 +11,13 @@ import java.util.List;
 public class DMXValidator {
     @Autowired
     private DeviceRepository deviceRepository;
+    public boolean validate(byte[] dmxData){
+        return validateArray(dmxData);
+    }
 
-    public boolean validate(byte[] dmxData) {
+
+
+    public boolean validateArray(byte[] dmxData) {
         List<Device> pumps = deviceRepository.findByType("Pump");
         for (Device pump : pumps) {
 
@@ -29,7 +34,7 @@ public class DMXValidator {
             }
 
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
-                return false;
+                throw new IllegalArgumentException("Pump " + pumpId + " is on but all valves are closed");
             }
 
         }
