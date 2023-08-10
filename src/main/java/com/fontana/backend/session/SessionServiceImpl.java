@@ -2,6 +2,7 @@ package com.fontana.backend.session;
 
 import com.fontana.backend.exception.customExceptions.NotFoundException;
 import com.fontana.backend.exception.customExceptions.SessionNotModifiedException;
+import com.fontana.backend.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ public class SessionServiceImpl implements SessionService {
 
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
+    private final AppUtils appUtils;
 
     @Override
     public List<Session> findAll() {
@@ -72,8 +74,7 @@ public class SessionServiceImpl implements SessionService {
             throw new SessionNotModifiedException(sessionAlreadyClosedMsg);
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getPrincipal().toString();
+        String currentPrincipalName = appUtils.getCurrentPrincipalName();
 
         if (!activeSession.getUsername().equals(currentPrincipalName)) {
             throw new SessionNotModifiedException(notAllowedToCloseMsg);

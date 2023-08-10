@@ -2,7 +2,6 @@ package com.fontana.backend.session;
 
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface SessionService {
