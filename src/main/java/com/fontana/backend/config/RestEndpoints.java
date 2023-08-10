@@ -14,7 +14,7 @@ public class RestEndpoints {
     public static final String DMX_UPDATE_LIGHT = "/update/light";
     public static final String DMX_UPDATE_LED = "/update/led";
     public static final String DMX_GET_STATE = "/state";
-    public static final String SENSORS_URL = "192.168.253.108:8080/api";
     public static final String DMX_CLOSE_CONNECTION = "/close";
     public static final String DMX_OPEN_CONNECTION = "/open";
+    public static final String SENSORS_URL = "192.168.253.108:8080/api";
 }

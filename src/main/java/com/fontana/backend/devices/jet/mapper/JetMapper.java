@@ -19,11 +19,11 @@ public class JetMapper {
     public Jet DTOToJet(JetDTO jetDTO) {
         System.out.println(deviceRepository.findByName(jetDTO.getName()));
         Device device = deviceRepository.findByName(jetDTO.getName());
-        return new Jet(device.getId(), isEnabled(jetDTO.getValue()));
+        return new Jet(device.getId(), checkIfEnabled(jetDTO.getValue()));
     }
 
-    public byte isEnabled(boolean enabler) {
-        if (enabler) {
+    public byte checkIfEnabled(boolean isEnabled) {
+        if (isEnabled) {
             return (byte) 255;
         }
         return (byte) 0;
