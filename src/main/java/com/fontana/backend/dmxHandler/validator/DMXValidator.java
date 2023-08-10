@@ -2,6 +2,7 @@ package com.fontana.backend.dmxHandler.validator;
 
 import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.repository.DeviceRepository;
+import com.fontana.backend.frame.entity.Frame;
 import com.fontana.backend.sensorsHandler.entity.Sensors;
 import com.fontana.backend.sensorsHandler.service.SensorsHandlerService;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +20,17 @@ public class DMXValidator {
     private DeviceRepository deviceRepository;
     private final SensorsHandlerService sensorsHandlerService;
 
-    public boolean validateDmxData(byte[] dmxData) throws IOException {
+    public boolean validateDmxData(byte[] dmxData, Frame frame) throws IOException {
         //FIXME na razie nie ma dostępu do serwera
         //return validateArray(dmxData) && validateWaterLevel();
-        return validateArray(dmxData);
+        byte[] data = Arrays.copyOf(dmxData,dmxData.length);
+        data[frame.getId()] = frame.getValue();
+        return validateArray(data);
     }
+
     public boolean validateArray(byte[] dmxData) {
-        List<Device> pumps = deviceRepository.findByType("pump");
+        String type = "pump";
+        List<Device> pumps = deviceRepository.findByType(type);
         for (Device pump : pumps) {
 
             int[] singlePumpAddresses = pump.getAddress();
@@ -40,7 +45,7 @@ public class DMXValidator {
                 }
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
-                throw new IllegalArgumentException("pump " + pumpId + " is on, but all valves are closed");
+                throw new IllegalArgumentException(type +" "+ pumpId + " is on, but all valves are closed");
             }
 
         }
