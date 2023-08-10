@@ -10,7 +10,7 @@ import java.util.Date;
 @Repository
 public interface BlacklistedTokenRepository extends JpaRepository<BlacklistedToken, Long> {
 
-    boolean existsByToken(String token);
+    boolean isTokenBlacklisted(String token);
     void deleteByDateAddedBefore(Date expiryDate);
 
 }

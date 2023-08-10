@@ -106,13 +106,14 @@ public class JwtService {
     }
 
     private boolean isTokenBlacklisted(String token) {
-        return blacklistedTokenRepository.existsByToken(token);
+        return blacklistedTokenRepository.isTokenBlacklisted(token);
     }
 
     public void blacklistToken(String token) {
-        BlacklistedToken blacklistedToken = new BlacklistedToken();
-        blacklistedToken.setToken(token);
-        blacklistedToken.setDateAdded(new Date());
+        BlacklistedToken blacklistedToken = BlacklistedToken.builder()
+                .token(token)
+                .dateAdded(new Date())
+                .build();
 
         blacklistedTokenRepository.save(blacklistedToken);
     }

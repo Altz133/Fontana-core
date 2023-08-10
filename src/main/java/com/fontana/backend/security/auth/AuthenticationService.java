@@ -41,7 +41,6 @@ public class AuthenticationService {
         String username = jwtService.extractUsername(refreshToken);
         jwtAccessToken = jwtService.generateAccessToken(username);
 
-        // Blacklist the provided refresh token after use
         jwtService.blacklistToken(refreshToken);
 
         return ResponseEntity.ok(generateAuthResponse(jwtAccessToken, refreshToken));
