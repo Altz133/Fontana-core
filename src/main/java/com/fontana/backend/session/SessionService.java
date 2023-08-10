@@ -13,5 +13,5 @@ public interface SessionService {
 
     ResponseEntity<?> add(SessionDTO sessionDTO);
 
-    ResponseEntity<?> updateCloseSession(Integer sessionId, LocalDateTime closedTime);
+    ResponseEntity<?> updateCloseSession(SessionCloseRequest sessionCloseRequest);
 }

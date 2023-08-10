@@ -33,9 +33,9 @@ public class SessionController {
         return sessionService.add(sessionDTO);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateCloseSession(@PathVariable("id") Integer id, @NotNull LocalDateTime closedTime) {
-        return sessionService.updateCloseSession(id, closedTime);
+    @PutMapping(value = "/close")
+    public ResponseEntity<?> updateCloseSession(@RequestBody SessionCloseRequest sessionCloseRequest) {
+        return sessionService.updateCloseSession(sessionCloseRequest);
     }
 
 }
