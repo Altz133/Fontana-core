@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -19,10 +20,12 @@ public class DMXValidator {
     private final SensorsHandlerService sensorsHandlerService;
 
     public boolean validateDmxData(byte[] dmxData) throws IOException {
-        return validateArray(dmxData) && validateWaterLevel();
+        //FIXME na razie nie ma dostępu do serwera
+        //return validateArray(dmxData) && validateWaterLevel();
+        return validateArray(dmxData);
     }
     public boolean validateArray(byte[] dmxData) {
-        List<Device> pumps = deviceRepository.findByType("Pump");
+        List<Device> pumps = deviceRepository.findByType("pump");
         for (Device pump : pumps) {
 
             int[] singlePumpAddresses = pump.getAddress();
@@ -36,9 +39,8 @@ public class DMXValidator {
                     closedValveCounter++;
                 }
             }
-
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
-                throw new IllegalArgumentException("Pump " + pumpId + " is on, but all valves are closed");
+                throw new IllegalArgumentException("pump " + pumpId + " is on, but all valves are closed");
             }
 
         }
