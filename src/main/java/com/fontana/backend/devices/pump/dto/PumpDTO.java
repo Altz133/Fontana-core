@@ -1,15 +1,18 @@
 package com.fontana.backend.devices.pump.dto;
 
 import com.fontana.backend.devices.dto.DeviceDTO;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class PumpDTO extends DeviceDTO {
-
+    @Min(value = Byte.MIN_VALUE)
+    @Max(value = Byte.MAX_VALUE)
     private byte value;
 
 }

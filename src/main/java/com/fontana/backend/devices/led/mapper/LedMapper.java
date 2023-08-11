@@ -4,29 +4,28 @@ import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.led.dto.LedDTO;
 import com.fontana.backend.devices.led.entity.Led;
 import com.fontana.backend.devices.repository.DeviceRepository;
+import jakarta.validation.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LedMapper {
-    DeviceRepository deviceRepository;
-
-    public LedMapper() {
-    }
-
-    //FIXME - Mapper potrzebny
+    private Validator validator;
+    @Autowired
+    private DeviceRepository deviceRepository;
     public LedDTO LedToDTO(Led led) {
         return new LedDTO();
     }
 
     public Led DTOToLed(LedDTO ledDTO) {
         Device device = deviceRepository.findByName(ledDTO.getName());
-        int[] addresses = device.getAddresses();
+        int[] addresses = device.getAddress();
                 /*
                 0 - Red
                 1 - Green
                 2 - Blue
                 3 - White
-                4 - Dimm
+                4 - Dimm.../.
                 5 - Strobe
                  */
         return new Led(

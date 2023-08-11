@@ -6,6 +6,7 @@ import com.fontana.backend.security.jwt.JwtExpiredOrUntrustedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -64,5 +65,25 @@ public class GlobalErrorController {
         log.error(message);
         return response;
     }
+
+    //handler for HttpMessageNotReadableException, allows fronted to see the error message
+    @ExceptionHandler
+    public ResponseEntity<Map<String,Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException exc) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", exc.getMessage());
+        response.put("timestamp", System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String,Object>> handleIllegalArgumentException(IllegalArgumentException exc) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", exc.getMessage());
+        response.put("timestamp", System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
 }
 

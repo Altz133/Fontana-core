@@ -31,25 +31,25 @@ public class DMXHandlerController {
     private final Frame frame;
 
     @PostMapping(value = DMX_UPDATE_JET)
-    public ResponseEntity<Object> updateFrameJet(@RequestBody JetDTO jetDTO) {
+    public ResponseEntity<Object> updateFrameJet(@RequestBody JetDTO jetDTO) throws IOException {
         DMXHandlerService.sendDMXDataJet(jetMapper.DTOToJet(jetDTO), frame);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = DMX_UPDATE_PUMP)
-    public ResponseEntity<Object> updateFramePump(@RequestBody PumpDTO pumpDTO) {
+    public ResponseEntity<Object> updateFramePump(@RequestBody PumpDTO pumpDTO) throws IOException {
         DMXHandlerService.sendDMXDataPump(pumpMapper.DTOToPump(pumpDTO), frame);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = DMX_UPDATE_LIGHT)
-    public ResponseEntity<Object> updateFrameLight(@RequestBody LightDTO lightDTO) {
+    public ResponseEntity<Object> updateFrameLight(@RequestBody LightDTO lightDTO) throws IOException {
         DMXHandlerService.sendDMXDataLight(lightMapper.DTOToLight(lightDTO), frame);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = DMX_UPDATE_LED)
-    public ResponseEntity<Object> updateFrameLed(@RequestBody LedDTO ledDTO) {
+    public ResponseEntity<Object> updateFrameLed(@RequestBody LedDTO ledDTO) throws IOException {
         DMXHandlerService.sendDMXDataLed(ledMapper.DTOToLed(ledDTO), frame);
         return ResponseEntity.ok().build();
     }

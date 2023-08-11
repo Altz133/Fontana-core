@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JetDTO extends DeviceDTO {
+
     private Boolean value;
 }

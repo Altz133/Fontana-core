@@ -3,9 +3,10 @@ package com.fontana.backend.dmxHandler;
 import com.fontana.backend.dmxHandler.validator.DMXValidator;
 import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
-import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Service
-@RequiredArgsConstructor
 public class DMXService {
 
     private boolean connectionOpened = false;
@@ -21,23 +21,24 @@ public class DMXService {
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
     private TaskScheduler taskScheduler;
+    @Autowired
     private DMXValidator dmxValidator;
 
     @PostConstruct
     public void init() {
         try {
-            //TODO it should stay commented
-            System.out.println(Arrays.toString(dmxData));
-//           openConnection();
-//            initialSetup();
-//            startScheduler();
+//            openConnection();
+            initialSetup();
+            startScheduler();
         } catch (Exception e) {
         }
     }
 
     private void startScheduler() {
         taskScheduler.scheduleAtFixedRate(() -> {
-            try {
+            System.out.println(Arrays.toString(dmxData));
+            /*try {
+
                 if (connectionOpened){
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
@@ -52,14 +53,16 @@ public class DMXService {
                     refreshConnection();
                 } catch (IOException ex) {
                 }
-            }
+            }*/
         }, 250L);
     }
 
     void initialSetup() throws IOException {
+        dmxData = new byte[515];
         for (int j = 0; j < 512; j++) {
             dmxData[j] = 0;
         }
+        /*
         dmxData[3] = (byte) 255;
         dmxData[6] = (byte) 255;
         dmxData[9] = (byte) 255;
@@ -72,20 +75,18 @@ public class DMXService {
         dmxData[30] = (byte) 255;
         dmxData[49] = (byte) 150;
         dmxData[50] = (byte) 150;
-
+        */
         dmxData[dmxData.length - 3] = 33;
         dmxData[dmxData.length - 2] = 22;
         dmxData[dmxData.length - 1] = 11;
-        ostream.write(dmxData);
+        //ostream.write(dmxData);
     }
 
 
-    public void setDMXDataField(Frame frame) {
-        if (dmxValidator.validate(dmxData)) {
+    public void setDMXDataField(Frame frame) throws IOException {
+
+        if (dmxValidator.validateDmxData(dmxData, frame)) {
             dmxData[frame.getId()] = frame.getValue();
-        } else {
-            //TODO logera trzeba zrobic
-            System.out.println("Validation failed");
         }
     }
 
