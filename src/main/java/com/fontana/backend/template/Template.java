@@ -16,8 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "template")
-public class TemplateEntity {
+public class Template {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,22 +24,22 @@ public class TemplateEntity {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_name")
+    @JoinColumn(name = "username")
     private User user;
 
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
-    private Timestamp updates_at;
+    private Timestamp updatesAt;
 
-    private int[] snapshots_sequence;
+    private int[] snapshotsSequence;
 
     @Enumerated
     private TemplateStatus status;
 
     @ManyToMany
     @JoinTable(name = "favourite_templates",
-            joinColumns = @JoinColumn(name = "template_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_name", referencedColumnName = "username")
+            joinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "username", referencedColumnName = "username")
     )
     private List<User> users = new ArrayList<>();
 }

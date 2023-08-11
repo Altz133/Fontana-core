@@ -2,7 +2,6 @@ package com.fontana.backend.devices.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -12,10 +11,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
-@Table(name = "device")
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Device {
 
     @Id
