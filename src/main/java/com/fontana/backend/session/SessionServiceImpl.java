@@ -2,6 +2,7 @@ package com.fontana.backend.session;
 
 import com.fontana.backend.exception.customExceptions.NotFoundException;
 import com.fontana.backend.exception.customExceptions.SessionNotModifiedException;
+import com.fontana.backend.role.RoleType;
 import com.fontana.backend.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,15 +52,24 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public ResponseEntity<?> add(SessionDTO sessionDTO) {
         Session activeSession = getActiveSession();
+        String authority = appUtils.extractAuthenticatedAuthority();
+        log.info("Authority: " + authority);
+
+        if (authority.equals(RoleType.VIEWER.name())) {
+            //TODO create custom SessionNotAllowedSession
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed as a viewer.");
+        }
+
+        if (activeSession != null && !authority.equals(RoleType.ADMIN.name())) {
+            SessionBusyResponse response = buildSessionBusyResponse(sessionBusyMsg, activeSession);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
 
         if (activeSession != null) {
-            SessionBusyResponse response = SessionBusyResponse.builder()
-                    .message(sessionBusyMsg)
-                    .activeUserName(activeSession.getUsername())
-                    .activeSessionStartTime(activeSession.getOpenedTime())
-                    .intercepted(LocalDateTime.now())
-                    .build();
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            Session updated = buildUpdatedSession(activeSession, null, true);
+            log.info("Updated:" + updated);
+
+            sessionRepository.save(updated);
         }
 
         Session saved = sessionRepository.save(sessionMapper.map(sessionDTO));
@@ -74,28 +84,24 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public ResponseEntity<?> updateCloseSession(SessionCloseRequest sessionCloseRequest) {
         Session activeSession = getActiveSession();
+        String authority = appUtils.extractAuthenticatedAuthority();
         log.info("Request:" + sessionCloseRequest);
 
         if (activeSession == null) {
             throw new SessionNotModifiedException(sessionAlreadyClosedMsg);
         }
 
-        String currentPrincipalName = appUtils.getCurrentPrincipalName();
+        String currentPrincipalName = appUtils.getAuthentication().getPrincipal().toString();
 
-        if (!activeSession.getUsername().equals(currentPrincipalName)) {
+        if (activeSession.getUsername().equals(currentPrincipalName) || authority.equals(RoleType.ADMIN.name())) {
+            Session updated = buildUpdatedSession(activeSession, sessionCloseRequest, false);
+            log.info("Updated:" + updated);
+
+            sessionRepository.save(updated);
+            return ResponseEntity.ok().build();
+        } else {
             throw new SessionNotModifiedException(notAllowedToCloseMsg);
         }
-
-        Session updated = Session.builder()
-                .id(activeSession.getId())
-                .username(activeSession.getUsername())
-                .openedTime(activeSession.getOpenedTime())
-                .closedTime(sessionCloseRequest.getClosedTime())
-                .build();
-        log.info("Updated:" + updated);
-
-        sessionRepository.save(updated);
-        return ResponseEntity.ok().build();
     }
 
     private Session getActiveSession() {
@@ -107,5 +113,25 @@ public class SessionServiceImpl implements SessionService {
             return activeSessions.get(0);
         }
         return null;
+    }
+
+    private Session buildUpdatedSession(Session activeSession, SessionCloseRequest request, boolean isForcedToClose) {
+        return Session.builder()
+                .id(activeSession.getId())
+                .username(activeSession.getUsername())
+                .openedTime(activeSession.getOpenedTime())
+                .closedTime(request != null ? request.getClosedTime() : LocalDateTime.now())
+                //TODO this field has to be created as users table column in postgres, valid part of the code
+//                .isForcedToClose(isForcedToClose)
+                .build();
+    }
+
+    private SessionBusyResponse buildSessionBusyResponse(String message, Session activeSession) {
+        return SessionBusyResponse.builder()
+                .message(message)
+                .activeUserName(activeSession.getUsername())
+                .activeSessionStartTime(activeSession.getOpenedTime())
+                .intercepted(LocalDateTime.now())
+                .build();
     }
 }

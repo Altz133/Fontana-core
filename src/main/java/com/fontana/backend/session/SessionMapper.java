@@ -13,7 +13,7 @@ public class SessionMapper {
     private final AppUtils appUtils;
 
     public Session map(SessionDTO sessionDTO) {
-        String currentPrincipalName = appUtils.getCurrentPrincipalName();
+        String currentPrincipalName = appUtils.getAuthentication().getPrincipal().toString();
 
         Session session = Session.builder()
                 .username(currentPrincipalName)

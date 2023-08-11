@@ -1,7 +1,5 @@
 package com.fontana.backend.security.jwt;
 
-import com.fontana.backend.exception.customExceptions.NotFoundException;
-import com.fontana.backend.role.RoleType;
 import com.fontana.backend.user.entity.User;
 import com.fontana.backend.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -78,7 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     username, null, Collections.singleton(new SimpleGrantedAuthority(authority))
             );
 
-            log.info("AuthToken: " + authToken);
+            log.info(authToken.toString());
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
