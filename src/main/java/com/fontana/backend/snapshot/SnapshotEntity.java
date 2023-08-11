@@ -24,5 +24,5 @@ public class SnapshotEntity {
     @JoinColumn(name = "user_name")
     private User user;
 
-    private Byte[] data = new Byte[512];
+    private byte[] data;
 }
