@@ -12,13 +12,15 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static com.fontana.backend.config.RestEndpoints.*;
+import static com.fontana.backend.config.RestEndpoints.AUTH;
+import static com.fontana.backend.config.RestEndpoints.SESSION;
 
 @Configuration
 @EnableWebSecurity
@@ -51,8 +53,8 @@ public class WebSecurityConfig {
                 }))
                 .authorizeHttpRequests(requests ->
                         requests
-                                .requestMatchers(AUTH + "/*").permitAll()
-                                .requestMatchers(SESSION, SESSION.concat("/*")).hasAnyAuthority(
+                                .requestMatchers(new AntPathRequestMatcher(AUTH + "/*")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher(SESSION + "/*")).hasAnyAuthority(
                                         RoleType.ADMIN.name(), RoleType.OPERATOR.name())
                                 .anyRequest().authenticated())
 //                              //TODO keep adding every endpoint/group of endpoints with proper access level

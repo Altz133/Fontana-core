@@ -13,4 +13,6 @@ public interface SessionService {
     ResponseEntity<?> add(SessionDTO sessionDTO);
 
     ResponseEntity<?> updateCloseSession(SessionCloseRequest sessionCloseRequest);
+
+    ResponseEntity<?> checkIsActive(String username);
 }

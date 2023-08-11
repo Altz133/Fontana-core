@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.fontana.backend.config.RestEndpoints.SESSION;
 
@@ -99,6 +101,26 @@ public class SessionServiceImpl implements SessionService {
         }
     }
 
+    @Override
+    public ResponseEntity<?> checkIsActive(String username) {
+        //TODO add session auto-close if no activity for some period of time
+        Session session = getActiveSession();
+        Map<String, Boolean> response = new HashMap<>();
+        log.info(String.valueOf(session));
+
+        if (session == null) {
+            throw new NotFoundException(notFoundMsg);
+        }
+
+        if (session.getClosedTime() == null) {
+            response.put("active", true);
+        } else {
+            response.put("active", false);
+        }
+
+        return ResponseEntity.ok().body(response);
+    }
+
     private Session getActiveSession() {
         List<Session> activeSessions = sessionRepository.findAll().stream()
                 .filter(session -> session.getClosedTime() == null)
@@ -116,8 +138,7 @@ public class SessionServiceImpl implements SessionService {
                 .username(activeSession.getUsername())
                 .openedTime(activeSession.getOpenedTime())
                 .closedTime(request != null ? request.getClosedTime() : LocalDateTime.now())
-                //TODO this field has to be created as users table column in postgres, valid part of the code
-//                .isForcedToClose(isForcedToClose)
+                .isForcedToClose(isForcedToClose)
                 .build();
     }
 
