@@ -55,11 +55,6 @@ public class SessionServiceImpl implements SessionService {
         String authority = appUtils.extractAuthenticatedAuthority();
         log.info("Authority: " + authority);
 
-        if (authority.equals(RoleType.VIEWER.name())) {
-            //TODO create custom SessionNotAllowedSession
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed as a viewer.");
-        }
-
         if (activeSession != null && !authority.equals(RoleType.ADMIN.name())) {
             SessionBusyResponse response = buildSessionBusyResponse(sessionBusyMsg, activeSession);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
