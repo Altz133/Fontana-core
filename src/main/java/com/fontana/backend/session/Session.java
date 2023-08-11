@@ -1,29 +1,28 @@
-package com.fontana.backend.role.entity;
+package com.fontana.backend.session;
 
-import com.fontana.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-public class Role {
+@Table(name = "session")
+public class Session {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated
-    private RoleType roleType;
+    private String username;
+    private LocalDateTime openedTime;
+    private LocalDateTime closedTime;
 
-    @OneToMany(mappedBy = "role")
-    private List<User> users = new ArrayList<>();
-
+    //TODO list of logs as OneToMany relationship
 }
