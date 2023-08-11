@@ -66,7 +66,6 @@ public class GlobalErrorController {
         return response;
     }
 
-    //handler for HttpMessageNotReadableException, allows fronted to see the error message
     @ExceptionHandler
     public ResponseEntity<Map<String,Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException exc) {
         Map<String, Object> response = new HashMap<>();
