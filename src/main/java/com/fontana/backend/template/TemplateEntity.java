@@ -35,7 +35,7 @@ public class TemplateEntity {
     private int[] snapshots_sequence;
 
     @Enumerated
-    private TemplateStatus templateStatus;
+    private TemplateStatus status;
 
     @ManyToMany
     @JoinTable(name = "favourite_templates",
