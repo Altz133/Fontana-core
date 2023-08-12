@@ -1,7 +1,8 @@
 package com.fontana.backend.config;
 
 import com.fontana.backend.role.RoleType;
-import com.fontana.backend.security.jwt.JwtAuthenticationFilter;
+import com.fontana.backend.security.filters.JwtAuthenticationFilter;
+import com.fontana.backend.security.filters.SessionStatusFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,7 @@ import static com.fontana.backend.config.RestEndpoints.SESSION;
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final SessionStatusFilter sessionStatusFilter;
 
     /**
      * This method provides various security configuration solutions, including protection against CSRF attacks, CORS
@@ -62,6 +64,7 @@ public class WebSecurityConfig {
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(sessionStatusFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults());
 

@@ -23,7 +23,9 @@ public class Session {
     private String username;
     private LocalDateTime openedTime;
     private LocalDateTime closedTime;
+    private LocalDateTime expirationTime;
     private boolean isForcedToClose;
+    private boolean isAutoClosed;
 
     //TODO list of logs as OneToMany relationship
 }

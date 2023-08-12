@@ -14,5 +14,7 @@ public interface SessionService {
 
     ResponseEntity<?> updateCloseSession(SessionCloseRequest sessionCloseRequest);
 
-    ResponseEntity<?> checkIsActive(String username);
+    boolean checkIsActive(String username);
+
+    void updateExpirationTime();
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,9 +37,23 @@ public class SessionServiceImpl implements SessionService {
     @Value("${session.already-closed}")
     private String sessionAlreadyClosedMsg;
 
+    @Value("${session.expiration-delay}")
+    private String expirationDelay;
+
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
     private final AppUtils appUtils;
+
+    @Scheduled(fixedRate = 30000)
+    public void autoCloseSession() {
+        Session session = getActiveSession();
+
+        if (session != null && session.getExpirationTime().isBefore(LocalDateTime.now())) {
+            Session updated = buildUpdatedSession(session, null, false, true);
+            sessionRepository.save(updated);
+            log.info("Auto closed session due to no activity: " + session);
+        }
+    }
 
     @Override
     public List<Session> findAll() {
@@ -55,18 +70,20 @@ public class SessionServiceImpl implements SessionService {
     public ResponseEntity<?> add(SessionDTO sessionDTO) {
         Session activeSession = getActiveSession();
         String authority = appUtils.extractAuthenticatedAuthority();
-        log.info("Authority: " + authority);
+
+        if (authority.equals(RoleType.VIEWER.name())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if (activeSession != null && authority.equals(RoleType.ADMIN.name())) {
+            Session updated = buildUpdatedSession(activeSession, null, true, false);
+            log.info("Session force-closed by admin: " + updated);
+            sessionRepository.save(updated);
+        }
 
         if (activeSession != null && !authority.equals(RoleType.ADMIN.name())) {
             SessionBusyResponse response = buildSessionBusyResponse(sessionBusyMsg, activeSession);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-        }
-
-        if (activeSession != null) {
-            Session updated = buildUpdatedSession(activeSession, null, true);
-            log.info("Updated:" + updated);
-
-            sessionRepository.save(updated);
         }
 
         Session saved = sessionRepository.save(sessionMapper.map(sessionDTO));
@@ -75,7 +92,11 @@ public class SessionServiceImpl implements SessionService {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, SESSION.concat("/").concat(saved.getId().toString()));
 
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).build();
+        Map<String, LocalDateTime> response = new HashMap<>();
+        response.put("expirationTime", saved.getExpirationTime());
+        log.info("Session expiration time:" + response);
+
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
     }
 
     @Override
@@ -91,7 +112,8 @@ public class SessionServiceImpl implements SessionService {
         String currentPrincipalName = appUtils.getAuthentication().getPrincipal().toString();
 
         if (activeSession.getUsername().equals(currentPrincipalName) || authority.equals(RoleType.ADMIN.name())) {
-            Session updated = buildUpdatedSession(activeSession, sessionCloseRequest, false);
+            Session updated = buildUpdatedSession(
+                    activeSession, sessionCloseRequest, false, false);
             log.info("Updated:" + updated);
 
             sessionRepository.save(updated);
@@ -102,23 +124,24 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public ResponseEntity<?> checkIsActive(String username) {
-        //TODO add session auto-close if no activity for some period of time
+    public boolean checkIsActive(String username) {
         Session session = getActiveSession();
-        Map<String, Boolean> response = new HashMap<>();
         log.info(String.valueOf(session));
 
         if (session == null) {
             throw new NotFoundException(notFoundMsg);
         }
 
-        if (session.getClosedTime() == null) {
-            response.put("active", true);
-        } else {
-            response.put("active", false);
-        }
+        return session.getClosedTime() == null;
+    }
 
-        return ResponseEntity.ok().body(response);
+    public void updateExpirationTime() {
+        Session session = getActiveSession();
+
+        if (session != null) {
+            session.setExpirationTime(LocalDateTime.now().plusMinutes(Integer.parseInt(expirationDelay)));
+            sessionRepository.save(session);
+        }
     }
 
     private Session getActiveSession() {
@@ -132,13 +155,19 @@ public class SessionServiceImpl implements SessionService {
         return null;
     }
 
-    private Session buildUpdatedSession(Session activeSession, SessionCloseRequest request, boolean isForcedToClose) {
+    private Session buildUpdatedSession(
+            Session activeSession,
+            SessionCloseRequest request,
+            boolean isForcedToClose,
+            boolean isAutoClosed) {
         return Session.builder()
                 .id(activeSession.getId())
                 .username(activeSession.getUsername())
                 .openedTime(activeSession.getOpenedTime())
                 .closedTime(request != null ? request.getClosedTime() : LocalDateTime.now())
+                .expirationTime(request != null ? request.getClosedTime() : LocalDateTime.now())
                 .isForcedToClose(isForcedToClose)
+                .isAutoClosed(isAutoClosed)
                 .build();
     }
 

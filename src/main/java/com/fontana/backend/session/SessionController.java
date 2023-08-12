@@ -26,10 +26,10 @@ public class SessionController {
         return sessionService.findById(id);
     }
 
-    @GetMapping(SESSION_CHECK)
-    public ResponseEntity<?> checkIsActive(@PathVariable("username") String username) {
-        return sessionService.checkIsActive(username);
-    }
+//    @GetMapping(SESSION_CHECK)
+//    public ResponseEntity<?> checkIsActive(@PathVariable("username") String username) {
+//        return sessionService.checkIsActive(username);
+//    }
 
     @PostMapping()
     public ResponseEntity<?> add(@RequestBody @Validated SessionDTO sessionDTO) {
