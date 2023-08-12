@@ -20,15 +20,17 @@ public class DMXValidator {
     private DeviceRepository deviceRepository;
     private final SensorsHandlerService sensorsHandlerService;
 
-    public boolean validateDmxData(byte[] dmxData, Frame frame) throws IOException {
+    public byte[] validateDmxData(byte[] dmxData, Frame frame) throws IOException {
         //FIXME na razie nie ma dostępu do serwera
-        //return validateArray(dmxData) && validateWaterLevel();
         byte[] data = Arrays.copyOf(dmxData,dmxData.length);
         data[frame.getId()] = frame.getValue();
-        return validateArray(data);
+        if (validateWaterLevel()){
+            return validateArray(data);
+        }
+        return dmxData;
     }
 
-    public boolean validateArray(byte[] dmxData) {
+    public byte[] validateArray(byte[] dmxData) {
         String type = "pump";
         List<Device> pumps = deviceRepository.findByType(type);
         for (Device pump : pumps) {
@@ -47,9 +49,12 @@ public class DMXValidator {
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 throw new IllegalArgumentException(type +" "+ pumpId + " is on, but all valves are closed");
             }
+            if(closedValveCounter >0 && pumpPower > 255 * (1 - (0.1 * closedValveCounter))){
+                dmxData[pumpId] = (byte) (255 * (1 - (0.1 * closedValveCounter)));
+            }
 
         }
-        return true;
+        return dmxData;
     }
 
     public boolean validateWaterLevel() throws IOException {

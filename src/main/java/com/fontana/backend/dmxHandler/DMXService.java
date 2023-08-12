@@ -88,10 +88,8 @@ public class DMXService {
 
 
     public void setDMXDataField(Frame frame) throws IOException {
-
-        if (dmxValidator.validateDmxData(dmxData, frame)) {
-            dmxData[frame.getId()] = frame.getValue();
-        }
+        //FIXME zobaczyc czy to dziala
+        dmxData = dmxValidator.validateDmxData(dmxData,frame);
     }
 
     public byte[] getDMXDataArray() {
