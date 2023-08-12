@@ -36,6 +36,12 @@ public class DMXHandlerController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping(value = DMX_UPDATE_ARRAY)
+    public ResponseEntity<Object> updateFrameArray(@RequestBody byte[] DMXDataArray) throws IOException {
+        DMXHandlerService.sendDMXDataArray(DMXDataArray);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping(value = DMX_UPDATE_PUMP)
     public ResponseEntity<Object> updateFramePump(@RequestBody PumpDTO pumpDTO) throws IOException {
         DMXHandlerService.sendDMXDataPump(pumpMapper.DTOToPump(pumpDTO), frame);
