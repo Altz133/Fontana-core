@@ -81,7 +81,7 @@ public class SessionServiceImpl implements SessionService {
             sessionRepository.save(updated);
         }
 
-        if (activeSession != null && !authority.equals(RoleType.ADMIN.name())) {
+        if (activeSession != null) {
             SessionBusyResponse response = buildSessionBusyResponse(sessionBusyMsg, activeSession);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
@@ -89,14 +89,7 @@ public class SessionServiceImpl implements SessionService {
         Session saved = sessionRepository.save(sessionMapper.map(sessionDTO));
         log.info(saved.toString());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.LOCATION, SESSION.concat("/").concat(saved.getId().toString()));
-
-        Map<String, LocalDateTime> response = new HashMap<>();
-        response.put("expirationTime", saved.getExpirationTime());
-        log.info("Session expiration time:" + response);
-
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
+        return buildAddSessionResponse(saved);
     }
 
     @Override
@@ -153,6 +146,16 @@ public class SessionServiceImpl implements SessionService {
             return activeSessions.get(0);
         }
         return null;
+    }
+
+    private ResponseEntity<?> buildAddSessionResponse(Session saved) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.LOCATION, SESSION.concat("/").concat(saved.getId().toString()));
+
+        Map<String, LocalDateTime> response = new HashMap<>();
+        response.put("expirationTime", saved.getExpirationTime());
+
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
     }
 
     private Session buildUpdatedSession(

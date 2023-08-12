@@ -1,6 +1,5 @@
 package com.fontana.backend.security.filters;
 
-import com.fontana.backend.role.RoleType;
 import com.fontana.backend.session.SessionService;
 import com.fontana.backend.utils.AppUtils;
 import jakarta.servlet.FilterChain;
@@ -30,6 +29,16 @@ public class SessionStatusFilter extends OncePerRequestFilter {
     private final AppUtils appUtils;
     private final SessionService sessionService;
 
+    /**
+     * Filters incoming requests if "X-Live-Control" header with value of "active" can be found. If a valid
+     * session header is present, it updates session expiration time.
+     *
+     * @param request     incoming HttpServletRequest object containing the request information.
+     * @param response    HttpServletResponse object for building and sending the response.
+     * @param filterChain FilterChain object used for invoking the next filters in the chain.
+     * @throws ServletException if any servlet-specific error occurs during the filter processing.
+     * @throws IOException      if an I/O error occurs during the filter processing.
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -50,9 +59,8 @@ public class SessionStatusFilter extends OncePerRequestFilter {
 
         if (sessionService.checkIsActive(username)) {
             sessionService.updateExpirationTime();
-            filterChain.doFilter(request, response);
         }
 
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }
