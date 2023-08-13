@@ -1,12 +1,16 @@
 package com.fontana.backend.snapshot;
 
 import com.fontana.backend.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
+@Service
+@RequiredArgsConstructor
 public class SnapshotServiceImpl implements SnapshotService {
-    private SnapshotRepository snapshotRepository;
-    private UserRepository userRepository;
+    private final SnapshotRepository snapshotRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void addSnapshot(Snapshot snapshot) {
