@@ -21,7 +21,6 @@ public class DMXValidator {
     private final SensorsHandlerService sensorsHandlerService;
 
     public byte[] validateDmxData(byte[] dmxData, Frame frame) throws IOException {
-        //FIXME na razie nie ma dostępu do serwera
         byte[] data = Arrays.copyOf(dmxData,dmxData.length);
         data[frame.getId()] = frame.getValue();
         if (validateWaterLevel()){

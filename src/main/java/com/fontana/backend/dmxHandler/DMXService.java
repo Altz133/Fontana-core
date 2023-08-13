@@ -88,7 +88,6 @@ public class DMXService {
 
 
     public void setDMXDataField(Frame frame) throws IOException {
-        //FIXME zobaczyc czy to dziala
         dmxData = dmxValidator.validateDmxData(dmxData,frame);
     }
 
