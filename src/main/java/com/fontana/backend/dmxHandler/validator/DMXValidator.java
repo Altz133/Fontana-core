@@ -36,7 +36,7 @@ public class DMXValidator {
         if (validateWaterLevel()){
             return validateArray(data);
         }
-        return dmxData;
+        return dmxDataZero;
     }
 
     public byte[] validateArray(byte[] dmxData) {
