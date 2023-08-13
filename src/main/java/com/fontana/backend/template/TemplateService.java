@@ -15,4 +15,6 @@ public interface TemplateService {
     int getFavouriteCount(Template template);
 
     boolean isFavouritedByOwner(Template template);
+
+    Template getTemplateById(Integer templateId);
 }
