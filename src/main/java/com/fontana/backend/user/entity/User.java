@@ -2,14 +2,18 @@ package com.fontana.backend.user.entity;
 
 import com.fontana.backend.role.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
+//tabela MUSI nazywac sie users zamiast user, ponieważ według moich (Adama) testów postgres nie lubi nazwy user, ponieważ gdzieś tam w swoim systemie się ta nazwa gryzie
+@Table(name = "users")
 public class User {
 
     @Id
@@ -18,6 +22,6 @@ public class User {
     private String lastName;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "roleId")
     private Role role;
 }
