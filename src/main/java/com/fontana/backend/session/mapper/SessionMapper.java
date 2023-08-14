@@ -1,6 +1,7 @@
 package com.fontana.backend.session.mapper;
 
-import com.fontana.backend.session.dto.SessionDTO;
+import com.fontana.backend.session.dto.SessionRequestDTO;
+import com.fontana.backend.session.dto.SessionResponseDTO;
 import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +19,35 @@ public class SessionMapper {
 
     private final AuthUtils appUtils;
 
-    public Session map(SessionDTO sessionDTO) {
+    public Session map(SessionRequestDTO sessionRequestDTO) {
         String currentPrincipalName = appUtils.getAuthentication().getPrincipal().toString();
 
         Session session = Session.builder()
                 .username(currentPrincipalName)
-                .openedTime(sessionDTO.getOpenedTime())
+                .openedTime(sessionRequestDTO.getOpenedTime())
                 .closedTime(null)
-                .expirationTime(sessionDTO.getOpenedTime().plusMinutes(Integer.parseInt(expirationDelay)))
+                .expirationTime(sessionRequestDTO.getOpenedTime().plusMinutes(Integer.parseInt(expirationDelay)))
                 .build();
 
         log.info("Mapped session: " + session);
         return session;
+    }
+
+    public SessionResponseDTO map(Session session) {
+        int logsAmount = session.getLogs().size();
+
+        SessionResponseDTO sessionResponseDTO = SessionResponseDTO.builder()
+                .id(session.getId())
+                .username(session.getUsername())
+                .openedTime(session.getOpenedTime())
+                .closedTime(session.getClosedTime())
+                .expirationTime(session.getExpirationTime())
+                .isForcedToClose(session.isForcedToClose())
+                .isAutoClosed(session.isAutoClosed())
+                .logsAmount(logsAmount)
+                .build();
+
+        log.info("Mapped SessionResponseDTO: " + sessionResponseDTO);
+        return sessionResponseDTO;
     }
 }
