@@ -61,7 +61,7 @@ public class DMXService {
         }, 250L);
     }
 
-    void initialSetup() throws IOException {
+    private void initialSetup() throws IOException {
         dmxData = new byte[515];
         for (int j = 0; j < 512; j++) {
             dmxData[j] = 0;

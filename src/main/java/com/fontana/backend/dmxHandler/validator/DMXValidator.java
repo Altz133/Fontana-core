@@ -23,7 +23,7 @@ public class DMXValidator {
     byte[] dmxDataZero = new byte[515];
 
     @PostConstruct
-    public void init() {
+    private void init() {
         try {
             initialSetup();
         } catch (IOException e) {
@@ -76,7 +76,7 @@ public class DMXValidator {
         }
     }
 
-    void initialSetup() throws IOException {
+    private void initialSetup() throws IOException {
         dmxDataZero = new byte[515];
         for (int j = 0; j < 512; j++) {
             dmxDataZero[j] = 0;
