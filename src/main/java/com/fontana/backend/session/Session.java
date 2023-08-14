@@ -1,20 +1,19 @@
 package com.fontana.backend.session;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "session")
 public class Session {
 
     @Id
@@ -29,4 +28,5 @@ public class Session {
     private boolean isAutoClosed;
 
     //TODO list of logs as OneToMany relationship
+<<<<<<< HEAD
 }
