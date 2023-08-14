@@ -1,6 +1,6 @@
 package com.fontana.backend.template;
 
-import com.fontana.backend.user.repository.UserRepository;
+import com.fontana.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

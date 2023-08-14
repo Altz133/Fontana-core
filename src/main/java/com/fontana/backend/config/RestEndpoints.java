@@ -23,4 +23,7 @@ public class RestEndpoints {
     public static final String SESSION_UPDATE_CLOSE = "/close";
 
     public static final String SENSORS_URL = "192.168.253.108:8080/api";
+
+    public static final String USER = BASE + "/user";
+    public static final String USER_FIND_BY_USERNAME = "/logged";
 }

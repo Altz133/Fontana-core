@@ -1,6 +1,7 @@
 package com.fontana.backend.role;
 
-import com.fontana.backend.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fontana.backend.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class Role {
     private String name;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<User> users = new ArrayList<>();
 
 }

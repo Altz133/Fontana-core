@@ -1,7 +1,7 @@
 package com.fontana.backend.security;
 
 import com.fontana.backend.config.LdapConfig;
-import com.fontana.backend.user.service.UserService;
+import com.fontana.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
