@@ -31,4 +31,5 @@ public class RestEndpoints {
     public static final String REMOVE_TOKEN_IMMEDIATELY = "/remove-token-immediately";
 
     public static final String LOG = BASE + "/log";
+    public static final String LOG_FIND_BY_ID = "/{id}";
 }

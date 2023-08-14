@@ -7,4 +7,6 @@ import java.util.List;
 public interface LogService {
 
     List<LogResponseDTO> findAll(String username, Integer sessionId);
+
+    LogResponseDTO findById(int id);
 }
