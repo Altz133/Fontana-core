@@ -19,5 +19,5 @@ public interface BlacklistedTokenRepository extends JpaRepository<BlacklistedTok
 
     void deleteByDateAddedBefore(Date expiryDate);
 
-    void deleteByDateAddedBeforeAndTokenType(Date date, String tokenType);
+
 }

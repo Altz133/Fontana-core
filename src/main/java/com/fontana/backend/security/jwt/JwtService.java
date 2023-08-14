@@ -98,9 +98,12 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token) {
-        return !isTokenExpired(token)
-                && isTokenValidWithSecretKey(token)
-                && !isTokenBlacklisted(token);
+        try {
+            return !isTokenExpired(token) && isTokenValidWithSecretKey(token) && !isTokenBlacklisted(token);
+        } catch (JwtException exc) {
+            log.error("Invalid token: " + exc.getMessage());
+            return false;
+        }
     }
 
     private boolean isTokenBlacklisted(String token) {

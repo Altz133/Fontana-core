@@ -38,8 +38,13 @@ public class AuthenticationService {
     public ResponseEntity<?> refreshToken(String refreshToken) {
         String username = jwtService.extractUsername(refreshToken);
         String newJwtAccessToken = jwtService.generateAccessToken(username);
+
+        // Dodaj stary refresh token do blacklisty
+        jwtService.blacklistToken(refreshToken, "refresh");
+
         return ResponseEntity.ok(generateAuthResponse(newJwtAccessToken, refreshToken));
     }
+
 
     private AuthenticationResponse generateAuthResponse(String accessToken, String refreshToken) {
         return AuthenticationResponse.builder()

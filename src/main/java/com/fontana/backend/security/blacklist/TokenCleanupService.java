@@ -22,8 +22,7 @@ public class TokenCleanupService {
         Date twoHoursAgo = Date.from(Instant.now().minus(Duration.ofHours(2)));
         blacklistedTokenRepository.deleteByDateAddedBefore(twoHoursAgo);
     }
-
-    public void removeFromBlacklist(String token) {
+    public void removeFromBlacklistImmediately(String token) {
         blacklistedTokenRepository.deleteByToken(token);
     }
 }

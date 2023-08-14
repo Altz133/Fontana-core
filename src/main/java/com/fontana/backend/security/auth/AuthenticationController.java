@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import com.fontana.backend.security.blacklist.TokenCleanupService;
 
 import java.util.Map;
 
@@ -20,6 +21,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authService;
     private final JwtService jwtService;
+    private final TokenCleanupService tokenCleanupService;
 
     @PostMapping(AUTH_AUTHENTICATE)
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Validated AuthenticationRequest request) {
@@ -34,6 +36,12 @@ public class AuthenticationController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody String refreshToken) {
         authService.blacklistToken(refreshToken);
+        tokenCleanupService.removeFromBlacklistImmediately(refreshToken);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/remove-token-immediately")
+    public ResponseEntity<Void> removeTokenImmediately(@RequestBody String token) {
+        tokenCleanupService.removeFromBlacklistImmediately(token);
         return ResponseEntity.ok().build();
     }
 
@@ -42,7 +50,7 @@ public class AuthenticationController {
     public ResponseEntity<Void> addToBlacklist(@RequestBody Map<String, String> tokenBody) {
         String token = tokenBody.get("token");
         if (token != null && !token.isEmpty()) {
-            jwtService.blacklistToken(token, "refresh");
+            authService.blacklistToken(token);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();
