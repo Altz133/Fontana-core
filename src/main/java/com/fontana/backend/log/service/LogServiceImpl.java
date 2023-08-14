@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +17,7 @@ public class LogServiceImpl implements LogService {
 
     private final LogRepository logRepository;
     private final LogDtoMapper logDtoMapper;
+
     @Override
     public List<LogResponseDTO> findAll() {
         List<Log> logs = logRepository.findAll();

@@ -29,5 +29,4 @@ public class Device {
 
     @NotEmpty
     private String type;
-
 }

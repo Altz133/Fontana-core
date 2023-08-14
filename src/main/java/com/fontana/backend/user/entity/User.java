@@ -1,6 +1,5 @@
 package com.fontana.backend.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fontana.backend.log.entity.Log;
 import com.fontana.backend.role.entity.Role;
 import jakarta.persistence.*;
@@ -25,15 +24,15 @@ public class User {
 
     @Id
     private String username;
+
     private String firstName;
     private String lastName;
 
     @ManyToOne
     @JoinColumn(name = "roleId")
-    @JsonIgnore
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
+    @OneToMany
+    @JoinColumn(name = "username")
     private List<Log> logs = new ArrayList<>();
 }

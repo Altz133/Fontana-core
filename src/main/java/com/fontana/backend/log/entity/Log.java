@@ -1,8 +1,10 @@
 package com.fontana.backend.log.entity;
 
 import com.fontana.backend.devices.entity.Device;
-import com.fontana.backend.user.entity.User;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,12 +23,7 @@ public class Log {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    private User user;
-
-    @ManyToOne
-    private Device device;
-
+    private String username;
     private int sessionId;
     private LocalDateTime executedAt;
     private short deviceValue;

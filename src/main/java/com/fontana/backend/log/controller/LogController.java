@@ -1,7 +1,6 @@
 package com.fontana.backend.log.controller;
 
 import com.fontana.backend.log.dto.LogResponseDTO;
-import com.fontana.backend.log.entity.Log;
 import com.fontana.backend.log.service.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

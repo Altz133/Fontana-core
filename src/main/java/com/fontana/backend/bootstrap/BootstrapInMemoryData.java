@@ -1,5 +1,6 @@
 package com.fontana.backend.bootstrap;
 
+import com.fontana.backend.devices.repository.DeviceRepository;
 import com.fontana.backend.log.entity.Log;
 import com.fontana.backend.log.repository.LogRepository;
 import com.fontana.backend.role.entity.Role;
@@ -31,6 +32,7 @@ public class BootstrapInMemoryData implements CommandLineRunner {
     private final UserRepository userRepository;
     private final LogRepository logRepository;
     private final SessionRepository sessionRepository;
+    private final DeviceRepository deviceRepository;
 
     @Transactional
     @Override
@@ -101,7 +103,7 @@ public class BootstrapInMemoryData implements CommandLineRunner {
         Log first = Log.builder()
                 .deviceValue((short) 48)
                 .executedAt(LocalDateTime.now())
-                .user(userRepository.findAll().get(0))
+                .username(userRepository.findAll().get(0).getUsername())
                 .sessionId(sessionRepository.findAll().get(0).getId())
                 .build();
 
