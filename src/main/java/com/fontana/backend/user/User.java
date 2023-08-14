@@ -1,4 +1,4 @@
-package com.fontana.backend.user.entity;
+package com.fontana.backend.user;
 
 import com.fontana.backend.role.Role;
 import jakarta.persistence.*;

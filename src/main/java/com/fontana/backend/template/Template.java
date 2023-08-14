@@ -1,6 +1,6 @@
 package com.fontana.backend.template;
 
-import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

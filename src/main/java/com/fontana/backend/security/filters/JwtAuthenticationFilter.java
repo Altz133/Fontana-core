@@ -1,8 +1,8 @@
 package com.fontana.backend.security.filters;
 
 import com.fontana.backend.security.jwt.JwtService;
-import com.fontana.backend.user.entity.User;
-import com.fontana.backend.user.repository.UserRepository;
+import com.fontana.backend.user.User;
+import com.fontana.backend.user.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
