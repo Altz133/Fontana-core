@@ -1,6 +1,9 @@
 package com.fontana.backend.exception;
 
+import com.fontana.backend.exception.customExceptions.NotFoundException;
+import com.fontana.backend.exception.customExceptions.SessionNotModifiedException;
 import com.fontana.backend.security.jwt.JwtExpiredOrUntrustedException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalErrorController {
 
     /**
@@ -32,19 +36,36 @@ public class GlobalErrorController {
             String errorMessage = error.getDefaultMessage();
             errorList.put(fieldName, errorMessage);
         });
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
     }
 
     @ExceptionHandler
     public ResponseEntity<Map<String, Object>> handleJwtException(JwtExpiredOrUntrustedException exc) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", exc.getMessage());
-        response.put("timestamp", System.currentTimeMillis());
-
+        Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
-    //handler for HttpMessageNotReadableException, allows fronted to see the error message
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFoundException(NotFoundException exc) {
+        Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(SessionNotModifiedException.class)
+    public ResponseEntity<Map<String, Object>> handleSessionNotModifiedException(SessionNotModifiedException exc) {
+        Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    private Map<String, Object> generateDefaultExcResponseBody(String message) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", message);
+        response.put("timestamp", System.currentTimeMillis());
+        log.error(message);
+        return response;
+    }
+
     @ExceptionHandler
     public ResponseEntity<Map<String,Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException exc) {
         Map<String, Object> response = new HashMap<>();
