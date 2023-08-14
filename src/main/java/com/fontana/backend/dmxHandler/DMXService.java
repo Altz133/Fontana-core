@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Service
 @EnableScheduling
@@ -28,7 +29,7 @@ public class DMXService {
         try {
             //openConnection();
             initialSetup();
-            //startScheduler();
+            startScheduler();
         } catch (Exception e) {
             refreshConnection();
         }
@@ -36,7 +37,7 @@ public class DMXService {
 
     @Scheduled(fixedRate = 250L)
     private void startScheduler() throws IOException {
-        try {
+        try {/*
             jd.resetDevice();
             jd.setTimeouts(16, 50);
             jd.setBaudRate(250000);
@@ -44,9 +45,11 @@ public class DMXService {
             jd.setFlowControl(JD2XX.FLOW_NONE, 11, 13);
             jd.setBreakOn();
             jd.setBreakOff();
-            ostream.write(dmxData);
-        } catch (IOException e) {
+            ostream.write(dmxData);*/
+        } /*catch (IOException e) {
             refreshConnection();
+        }*/ finally {
+
         }
     }
 

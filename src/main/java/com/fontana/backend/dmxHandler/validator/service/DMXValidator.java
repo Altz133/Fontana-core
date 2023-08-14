@@ -63,8 +63,9 @@ public class DMXValidator {
                     closedValveCounter++;
                 }
             }
-            if (closedValveCounter > 0 && pumpPower > 255 * (1 - (pumpPowerMultiplier * closedValveCounter))) {
+            if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
+                throw new RuntimeException("Pump " + pumpId + " is running on too much power relative to closed valves");
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
@@ -89,7 +90,7 @@ public class DMXValidator {
                     closedValveCounter++;
                 }
             }
-            if (closedValveCounter > 0 && pumpPower > 255 * (1 - (pumpPowerMultiplier * closedValveCounter))) {
+            if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
                 throw new RuntimeException("Pump " + pumpId + " is running on too much power relative to closed valves");
             }
@@ -101,7 +102,7 @@ public class DMXValidator {
             //wyłączenie pomp jeśli poziom wody jest za niski
             if (sensors.getWaterBottom()) {
                 dmxData[pumpId] = 0;
-                throw new RuntimeException("Pump " + pumpId + " is on but water level is too low");
+                throw new RuntimeException("Water level is too low");
             }
         }
         //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
