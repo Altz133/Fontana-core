@@ -15,9 +15,9 @@ public class RestEndpoints {
     public static final String DMX_UPDATE_LED = "/update/led";
     public static final String DMX_UPDATE_ARRAY = "/update/array";
     public static final String DMX_GET_STATE = "/state";
-    public static final String DMX_CLOSE_CONNECTION = "/close";
-    public static final String DMX_OPEN_CONNECTION = "/open";
-
+    public static final String DMX_PANIC = "/panic";
+    public static final String DMX_CHANGE_API_STATUS = "/enableApiValidation";
+    public static final String DMX_CHANGE_PUMP_POWER_MULTIPLIER = "/changePumpPowerMultiplier";
     public static final String SESSION = BASE + "/session";
     public static final String SESSION_FIND_BY_ID = "/{id}";
     public static final String SESSION_UPDATE_CLOSE = "/close";

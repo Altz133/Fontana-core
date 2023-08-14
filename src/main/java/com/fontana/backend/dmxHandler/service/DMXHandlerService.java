@@ -5,6 +5,7 @@ import com.fontana.backend.devices.led.entity.Led;
 import com.fontana.backend.devices.light.entity.Light;
 import com.fontana.backend.devices.pump.entity.Pump;
 import com.fontana.backend.dmxHandler.DMXService;
+import com.fontana.backend.dmxHandler.validator.service.DMXValidator;
 import com.fontana.backend.frame.entity.Frame;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -76,12 +77,15 @@ public class DMXHandlerService {
 
     }
 
-    public void closeConnection() throws IOException {
-        DMXService.closeConnection();
+    public void panic() throws IOException {
+        DMXService.panic();
     }
 
-    public void openConnection() throws IOException {
-        DMXService.openConnection();
+    public void changeApiValidationStatus(boolean status) {
+        DMXValidator.enableApiValidation = status;
     }
+
+
+
 }
 

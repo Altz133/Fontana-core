@@ -1,19 +1,17 @@
 package com.fontana.backend.dmxHandler;
 
-import com.fontana.backend.dmxHandler.validator.DMXValidator;
+import com.fontana.backend.dmxHandler.validator.service.DMXValidator;
 import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Service
 @EnableScheduling
@@ -23,26 +21,21 @@ public class DMXService {
     private JD2XX jd;
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
-    //@Autowired
-    //private TaskScheduler taskScheduler;
     @Autowired
     private DMXValidator dmxValidator;
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
         try {
-//            openConnection();
+            //openConnection();
             initialSetup();
-            startScheduler();
+            //startScheduler();
         } catch (Exception e) {
-
+            refreshConnection();
         }
     }
     @Scheduled(fixedRate = 250L)
-    private void startScheduler() {
-//        System.out.println(Arrays.toString(dmxData));
-            /*try {
-
-                if (connectionOpened){
+    private void startScheduler() throws IOException {
+            try {
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
                 jd.setBaudRate(250000);
@@ -50,13 +43,10 @@ public class DMXService {
                 jd.setFlowControl(JD2XX.FLOW_NONE, 11, 13);
                 jd.setBreakOn();
                 jd.setBreakOff();
-                ostream.write(dmxData);}
+                ostream.write(dmxData);
             } catch (IOException e) {
-                try {
-                    refreshConnection();
-                } catch (IOException ex) {
-                }
-            }*/
+                refreshConnection();
+            }
     }
 
     private void initialSetup() throws IOException {
@@ -111,6 +101,12 @@ public class DMXService {
     private void refreshConnection() throws IOException {
         closeConnection();
         openConnection();
+    }
+
+    public void panic() throws IOException {
+        for (int j = 0; j < 512; j++) {
+            dmxData[j] = 0;
+        }
     }
 
     public void setDMXDataArray(byte[] dmxDataArray) {

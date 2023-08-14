@@ -65,15 +65,15 @@ public class DMXHandlerController {
         return ResponseEntity.ok(DMXHandlerService.getDMXDataArray());
     }
 
-    @GetMapping(value = DMX_CLOSE_CONNECTION)
-    public ResponseEntity<Object> closeConnection() throws IOException {
-        DMXHandlerService.closeConnection();
+    @PostMapping(value = DMX_PANIC)
+    public ResponseEntity<Object> panic() throws IOException {
+        DMXHandlerService.panic();
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = DMX_OPEN_CONNECTION)
-    public ResponseEntity<Object> openConnection() throws IOException {
-        DMXHandlerService.openConnection();
+    @PostMapping(value = DMX_CHANGE_API_STATUS)
+    public ResponseEntity<Object> changeApiStatus(@RequestBody boolean status) {
+        DMXHandlerService.changeApiValidationStatus(status);
         return ResponseEntity.ok().build();
     }
 
