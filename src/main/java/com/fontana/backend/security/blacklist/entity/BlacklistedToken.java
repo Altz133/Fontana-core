@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
+import com.fontana.backend.security.TokenType;
 
 @Data
 @NoArgsConstructor
@@ -25,6 +26,7 @@ public class BlacklistedToken {
     @Column(name = "date_added")
     private Date dateAdded;
 
-    @Column(name = "token_type")
-    private String tokenType;
+    @Column(name = "token_type", nullable = false, length = 10)
+    @Enumerated(EnumType.STRING)
+    private TokenType tokenType;
 }

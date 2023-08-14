@@ -1,5 +1,6 @@
 package com.fontana.backend.security.jwt;
 
+import com.fontana.backend.security.TokenType;
 import com.fontana.backend.security.blacklist.entity.BlacklistedToken;
 import com.fontana.backend.security.blacklist.repository.BlacklistedTokenRepository;
 import io.jsonwebtoken.Claims;
@@ -45,14 +46,14 @@ public class JwtService {
     }
 
     public String generateAccessToken(String username) {
-        return generateToken(new HashMap<>(), username, Long.parseLong(accessExpDelay), "access");
+        return generateToken(new HashMap<>(), username, Long.parseLong(accessExpDelay), TokenType.ACCESS);
     }
 
     public String generateRefreshToken(String username) {
-        return generateToken(new HashMap<>(), username, Long.parseLong(refreshExpDelay), "refresh");
+        return generateToken(new HashMap<>(), username, Long.parseLong(refreshExpDelay), TokenType.REFRESH);
     }
 
-    private String generateToken(Map<String, Object> extraClaims, String username, Long expiration, String tokenType) {
+    private String generateToken(Map<String, Object> extraClaims, String username, Long expiration, TokenType tokenType) {
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(username)
@@ -110,7 +111,7 @@ public class JwtService {
         return blacklistedTokenRepository.existsByToken(token);
     }
 
-    public void blacklistToken(String token, String tokenType) {
+    public void blacklistToken(String token, TokenType tokenType) {
         BlacklistedToken blacklistedToken = BlacklistedToken.builder()
                 .token(token)
                 .tokenType(tokenType)
@@ -119,5 +120,6 @@ public class JwtService {
 
         blacklistedTokenRepository.save(blacklistedToken);
     }
+
 
 }

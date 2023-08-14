@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import com.fontana.backend.security.TokenType;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -35,14 +36,12 @@ public class AuthenticationService {
         return ResponseEntity.ok(generateAuthResponse(jwtAccessToken, jwtRefreshToken));
     }
 
-    public ResponseEntity<?> refreshToken(String refreshToken) {
-        String username = jwtService.extractUsername(refreshToken);
+    public ResponseEntity<?> refreshToken(String oldRefreshToken) {
+        String username = jwtService.extractUsername(oldRefreshToken);
         String newJwtAccessToken = jwtService.generateAccessToken(username);
 
-        // Dodaj stary refresh token do blacklisty
-        jwtService.blacklistToken(refreshToken, "refresh");
-
-        return ResponseEntity.ok(generateAuthResponse(newJwtAccessToken, refreshToken));
+        jwtService.blacklistToken(oldRefreshToken, TokenType.REFRESH);
+        return ResponseEntity.ok(generateAuthResponse(newJwtAccessToken, oldRefreshToken));
     }
 
 
@@ -56,7 +55,6 @@ public class AuthenticationService {
     }
 
     public void blacklistToken(String refreshToken) {
-        jwtService.blacklistToken(refreshToken, "refresh");
+        jwtService.blacklistToken(refreshToken, TokenType.REFRESH);
     }
 }
-
