@@ -8,22 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 @Service
+@EnableScheduling
 public class DMXService {
 
     private boolean connectionOpened = false;
     private JD2XX jd;
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
-    private TaskScheduler taskScheduler;
+    //@Autowired
+    //private TaskScheduler taskScheduler;
     @Autowired
     private DMXValidator dmxValidator;
-
     @PostConstruct
     public void init() {
         try {
@@ -31,12 +34,12 @@ public class DMXService {
             initialSetup();
             startScheduler();
         } catch (Exception e) {
+
         }
     }
-
+    @Scheduled(fixedRate = 250L)
     private void startScheduler() {
-        taskScheduler.scheduleAtFixedRate(() -> {
-            System.out.println(Arrays.toString(dmxData));
+        System.out.println(Arrays.toString(dmxData));
             /*try {
 
                 if (connectionOpened){
@@ -54,10 +57,9 @@ public class DMXService {
                 } catch (IOException ex) {
                 }
             }*/
-        }, 250L);
     }
 
-    void initialSetup() throws IOException {
+    private void initialSetup() throws IOException {
         dmxData = new byte[515];
         for (int j = 0; j < 512; j++) {
             dmxData[j] = 0;
@@ -84,10 +86,7 @@ public class DMXService {
 
 
     public void setDMXDataField(Frame frame) throws IOException {
-
-        if (dmxValidator.validateDmxData(dmxData, frame)) {
-            dmxData[frame.getId()] = frame.getValue();
-        }
+        dmxData = dmxValidator.validateDmxData(dmxData,frame);
     }
 
     public byte[] getDMXDataArray() {
@@ -112,5 +111,9 @@ public class DMXService {
     private void refreshConnection() throws IOException {
         closeConnection();
         openConnection();
+    }
+
+    public void setDMXDataArray(byte[] dmxDataArray) {
+        this.dmxData = dmxDataArray;
     }
 }
