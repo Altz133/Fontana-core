@@ -23,8 +23,4 @@ public class SensorsHandlerService {
         return objectMapper.readValue(response.returnContent().asString(), Sensors.class);
 
     }
-
-
-
-
 }

@@ -1,6 +1,6 @@
 package com.fontana.backend.config;
 
-import com.fontana.backend.role.RoleType;
+import com.fontana.backend.role.entity.RoleType;
 import com.fontana.backend.security.filters.JwtAuthenticationFilter;
 import com.fontana.backend.security.filters.SessionStatusFilter;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(new AntPathRequestMatcher(SESSION + "/*")).hasAnyAuthority(
                                         RoleType.ADMIN.name(), RoleType.OPERATOR.name())
                                 .anyRequest().permitAll())
-//                              //TODO keep adding every endpoint/group of endpoints with proper access level
+                                //TODO keep adding every endpoint/group of endpoints with proper access level
                 .sessionManagement((sessionManagement) ->
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
