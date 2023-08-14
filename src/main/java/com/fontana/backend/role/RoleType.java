@@ -1,4 +1,4 @@
-package com.fontana.backend.role.entity;
+package com.fontana.backend.role;
 
 public enum RoleType {
     ADMIN,

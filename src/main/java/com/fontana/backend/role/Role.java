@@ -1,6 +1,7 @@
-package com.fontana.backend.role.entity;
+package com.fontana.backend.role;
 
-import com.fontana.backend.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fontana.backend.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,10 +21,10 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated
-    private RoleType roleType;
+    private String name;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<User> users = new ArrayList<>();
 
 }

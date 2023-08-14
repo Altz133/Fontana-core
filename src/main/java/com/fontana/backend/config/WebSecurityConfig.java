@@ -1,6 +1,8 @@
 package com.fontana.backend.config;
 
-import com.fontana.backend.security.jwt.JwtAuthenticationFilter;
+import com.fontana.backend.role.RoleType;
+import com.fontana.backend.security.filters.JwtAuthenticationFilter;
+import com.fontana.backend.security.filters.SessionStatusFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,12 +20,16 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static com.fontana.backend.config.RestEndpoints.AUTH;
+import static com.fontana.backend.config.RestEndpoints.SESSION;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final SessionStatusFilter sessionStatusFilter;
 
     /**
      * This method provides various security configuration solutions, including protection against CSRF attacks, CORS
@@ -49,13 +55,16 @@ public class WebSecurityConfig {
                 }))
                 .authorizeHttpRequests(requests ->
                         requests
-                                .requestMatchers(new AntPathRequestMatcher("/fontana/api/v1/auth/*")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher(AUTH + "/*")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher(SESSION + "/*")).hasAnyAuthority(
+                                        RoleType.ADMIN.name(), RoleType.OPERATOR.name())
                                 .anyRequest().permitAll())
 //                              //TODO keep adding every endpoint/group of endpoints with proper access level
                 .sessionManagement((sessionManagement) ->
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(sessionStatusFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults());
 

@@ -21,6 +21,10 @@ public class DMXHandlerService {
         DMXService.setDMXDataField(frame);
     }
 
+    public void sendDMXDataArray(byte[] DMXDataArray) throws IOException {
+        DMXService.setDMXDataArray(DMXDataArray);
+    }
+
     public byte[] getDMXDataArray() {
         return DMXService.getDMXDataArray();
     }
