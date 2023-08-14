@@ -23,8 +23,8 @@ public class DMXService {
     private JD2XX jd;
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
-    @Autowired
-    private TaskScheduler taskScheduler;
+    //@Autowired
+    //private TaskScheduler taskScheduler;
     @Autowired
     private DMXValidator dmxValidator;
     @PostConstruct
@@ -39,8 +39,7 @@ public class DMXService {
     }
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
-        taskScheduler.scheduleAtFixedRate(() -> {
-            System.out.println(Arrays.toString(dmxData));
+        System.out.println(Arrays.toString(dmxData));
             /*try {
 
                 if (connectionOpened){
@@ -58,7 +57,6 @@ public class DMXService {
                 } catch (IOException ex) {
                 }
             }*/
-        }, 250L);
     }
 
     private void initialSetup() throws IOException {
