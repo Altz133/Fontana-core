@@ -21,9 +21,12 @@ public class Device {
     @Min(value = 0)
     @Max(value = 511)
     private Integer id;
+
     @NotEmpty
     private String name;
+
     private int[] address;
+
     @NotEmpty
     private String type;
 
