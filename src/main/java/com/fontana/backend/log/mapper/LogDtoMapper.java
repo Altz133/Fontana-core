@@ -2,6 +2,8 @@ package com.fontana.backend.log.mapper;
 
 import com.fontana.backend.log.dto.LogResponseDTO;
 import com.fontana.backend.log.entity.Log;
+import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,11 +11,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogDtoMapper {
 
+    private final UserRepository userRepository;
+
     public LogResponseDTO map(Log log) {
+
+        User user = userRepository.findByUsername(log.getUsername()).orElse(null);
+
+        String fullName = user.getFirstName().concat(" " + user.getLastName());
 
         return LogResponseDTO.builder()
                 .id(log.getId())
                 .sessionId(log.getSessionId())
+                .userFullName(fullName)
                 .executedAt(log.getExecutedAt())
                 .deviceValue(log.getDeviceValue())
                 .build();

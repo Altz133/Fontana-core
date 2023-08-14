@@ -17,6 +17,5 @@ public class LogResponseDTO {
     private String userFullName;
     private int sessionId;
     private LocalDateTime executedAt;
-    private String deviceType;
     private short deviceValue;
 }

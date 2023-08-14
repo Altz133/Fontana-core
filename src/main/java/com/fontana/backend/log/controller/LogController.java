@@ -5,6 +5,7 @@ import com.fontana.backend.log.service.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +20,9 @@ public class LogController {
     private final LogService logService;
 
     @GetMapping()
-    public List<LogResponseDTO> findAll() {
-        return logService.findAll();
+    public List<LogResponseDTO> findAll(
+            @RequestParam(name = "username", required = false) String username,
+            @RequestParam(name = "sessionId", required = false) Integer sessionId) {
+        return logService.findAll(username, sessionId);
     }
 }

@@ -1,6 +1,5 @@
 package com.fontana.backend.log.entity;
 
-import com.fontana.backend.devices.entity.Device;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,10 +20,10 @@ public class Log {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String username;
-    private int sessionId;
+    private Integer sessionId;
     private LocalDateTime executedAt;
     private short deviceValue;
 }
