@@ -72,7 +72,7 @@ public class SessionServiceImpl implements SessionService {
         String authority = appUtils.extractAuthenticatedAuthority();
 
         if (authority.equals(RoleType.VIEWER.name())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         if (activeSession != null && authority.equals(RoleType.ADMIN.name())) {

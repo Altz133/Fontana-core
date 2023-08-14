@@ -39,7 +39,7 @@ public class DMXService {
     }
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
-        System.out.println(Arrays.toString(dmxData));
+//        System.out.println(Arrays.toString(dmxData));
             /*try {
 
                 if (connectionOpened){
