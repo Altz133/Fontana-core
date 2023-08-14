@@ -1,34 +1,33 @@
 package com.fontana.backend.security.auth;
 
-import com.fontana.backend.security.jwt.JwtService;
+import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
+import com.fontana.backend.security.blacklist.TokenCleanupService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import javax.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-import com.fontana.backend.security.blacklist.TokenCleanupService;
-import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
-import java.util.Map;
+
+import javax.validation.Valid;
 
 import static com.fontana.backend.config.RestEndpoints.*;
 
 @RestController
 @RequestMapping(AUTH)
 @RequiredArgsConstructor
-@Slf4j
 public class AuthenticationController {
 
     private final AuthenticationService authService;
-    private final JwtService jwtService;
     private final TokenCleanupService tokenCleanupService;
 
     @PostMapping(AUTH_AUTHENTICATE)
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request) {
-        log.info("Authenticating user: {}", request.getUsername());
         return authService.authenticate(request);
     }
 
+    /**
+     * @param token has to contain prefix of "Bearer " in order to validate token properly.
+     * @return new access token wit updated expiration time
+     */
     @PostMapping(AUTH_REFRESHTOKEN)
     public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         return authService.refreshToken(token);
@@ -40,6 +39,7 @@ public class AuthenticationController {
         tokenCleanupService.removeFromBlacklistImmediately(refreshToken);
         return ResponseEntity.ok().build();
     }
+
     @PostMapping(REMOVE_TOKEN_IMMEDIATELY)
     public ResponseEntity<Void> removeTokenImmediately(@RequestBody String token) {
         tokenCleanupService.removeFromBlacklistImmediately(token);

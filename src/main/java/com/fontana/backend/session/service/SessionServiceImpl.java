@@ -50,7 +50,7 @@ public class SessionServiceImpl implements SessionService {
     private final SessionMapper sessionMapper;
     private final AuthUtils appUtils;
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 15000)
     public void autoCloseSession() {
         Session session = getActiveSession();
 
