@@ -30,7 +30,6 @@ public class DMXValidator {
     private static float pumpPowerMultiplier = 0.1f;
 
     @PostConstruct
-    //fixme zobacz czy dziala api czy nie sa rozdzielone endpointy
     public void init() throws IOException {
         sensors = sensorsHandlerService.getSensors();
     }
@@ -124,8 +123,7 @@ public class DMXValidator {
         }
         return dmxData;
     }
-    //co 30 sekund pobieranie danych z api jesli wlaczona walidacja
-    //FIXME - mozemy zrobic strzal poza kolejka przy rozpoczeciu sesji live editora
+    //co 30 sekund pobiera dane z sensorow
     @Scheduled(fixedRate = 30000L)
     public void getSensorData() throws IOException {
         sensors = sensorsHandlerService.getSensors();
