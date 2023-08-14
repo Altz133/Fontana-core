@@ -35,5 +35,4 @@ public class SessionController {
     public ResponseEntity<?> updateCloseSession(@RequestBody @Validated SessionCloseRequest sessionCloseRequest) {
         return sessionService.updateCloseSession(sessionCloseRequest);
     }
-
 }

@@ -1,5 +1,8 @@
-package com.fontana.backend.security.jwt;
+package com.fontana.backend.security.filters;
 
+import com.fontana.backend.security.jwt.JwtService;
+import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,20 +13,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
     @Value("${jwt.prefix}")
     private String tokenPrefix;
+
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
 
     /**
      * Performs the authentication filter logic for processing incoming HTTP requests.
@@ -54,12 +63,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         jwt = authHeader.substring(tokenPrefix.length());
         username = jwtService.extractUsername(jwt);
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty()) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String authority = user.get().getRole().getName();
 
         if (SecurityContextHolder.getContext().getAuthentication() == null && jwtService.isTokenValid(jwt)) {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    username, null, null
+                    username, null, Collections.singleton(new SimpleGrantedAuthority(authority))
             );
 
+            log.info("Jwt filter: " + authToken);
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }

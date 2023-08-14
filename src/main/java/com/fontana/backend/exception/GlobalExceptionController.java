@@ -17,7 +17,7 @@ import java.util.Map;
 
 @ControllerAdvice
 @Slf4j
-public class GlobalErrorController {
+public class GlobalExceptionController {
 
     /**
      * This method is responsible for handling validation errors that occur when processing request parameters
@@ -40,7 +40,15 @@ public class GlobalErrorController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
     }
 
-    @ExceptionHandler
+    private Map<String, Object> generateDefaultExcResponseBody(String message) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", message);
+        response.put("timestamp", System.currentTimeMillis());
+        log.error(message);
+        return response;
+    }
+
+    @ExceptionHandler(JwtExpiredOrUntrustedException.class)
     public ResponseEntity<Map<String, Object>> handleJwtException(JwtExpiredOrUntrustedException exc) {
         Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -58,31 +66,16 @@ public class GlobalErrorController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
-    private Map<String, Object> generateDefaultExcResponseBody(String message) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", message);
-        response.put("timestamp", System.currentTimeMillis());
-        log.error(message);
-        return response;
-    }
-
-    @ExceptionHandler
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String,Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException exc) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", exc.getMessage());
-        response.put("timestamp", System.currentTimeMillis());
-
+        Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String,Object>> handleIllegalArgumentException(IllegalArgumentException exc) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", exc.getMessage());
-        response.put("timestamp", System.currentTimeMillis());
-
+        Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-
 }
 
