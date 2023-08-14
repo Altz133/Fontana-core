@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Sensors {
 
-        @JsonProperty("water_top")
-        private Boolean waterTop;
-        @JsonProperty("water_bottom")
-        private Boolean waterBottom;
+    @JsonProperty("water_top")
+    private Boolean waterTop;
+    @JsonProperty("water_bottom")
+    private Boolean waterBottom;
 }

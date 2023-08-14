@@ -20,14 +20,18 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableScheduling
 public class DMXValidator {
-    @Autowired
-    private DeviceRepository deviceRepository;
+    public static boolean enableApiValidation = true;
+    private static float pumpPowerMultiplier = 0.1f;
     @Autowired
     private final SensorsHandlerService sensorsHandlerService;
-    public static boolean enableApiValidation = true;
-    private String type = "pump";
+    @Autowired
+    private DeviceRepository deviceRepository;
+    private final String type = "pump";
     private Sensors sensors;
-    private static float pumpPowerMultiplier = 0.1f;
+
+    public static void changePumpMultiplier(float multiplier) {
+        pumpPowerMultiplier = multiplier;
+    }
 
     @PostConstruct
     public void init() throws IOException {
@@ -35,9 +39,9 @@ public class DMXValidator {
     }
 
     public byte[] validateDmxData(byte[] dmxData, Frame frame) throws IOException {
-        byte[] data = Arrays.copyOf(dmxData,dmxData.length);
+        byte[] data = Arrays.copyOf(dmxData, dmxData.length);
         data[frame.getId()] = frame.getValue();
-        if(enableApiValidation){
+        if (enableApiValidation) {
             return validateArray(data, sensors);
         }
         return validateArray(data);
@@ -59,7 +63,7 @@ public class DMXValidator {
                     closedValveCounter++;
                 }
             }
-            if(closedValveCounter >0 && pumpPower > 255 * (1 - (pumpPowerMultiplier * closedValveCounter))){
+            if (closedValveCounter > 0 && pumpPower > 255 * (1 - (pumpPowerMultiplier * closedValveCounter))) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
@@ -85,7 +89,7 @@ public class DMXValidator {
                     closedValveCounter++;
                 }
             }
-            if(closedValveCounter >0 && pumpPower > 255 * (1 - (pumpPowerMultiplier * closedValveCounter))){
+            if (closedValveCounter > 0 && pumpPower > 255 * (1 - (pumpPowerMultiplier * closedValveCounter))) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
                 throw new RuntimeException("Pump " + pumpId + " is running on too much power relative to closed valves");
             }
@@ -95,13 +99,13 @@ public class DMXValidator {
                 throw new RuntimeException("Pump " + pumpId + " is on but all valves are closed");
             }
             //wyłączenie pomp jeśli poziom wody jest za niski
-            if(sensors.getWaterBottom()){
+            if (sensors.getWaterBottom()) {
                 dmxData[pumpId] = 0;
                 throw new RuntimeException("Pump " + pumpId + " is on but water level is too low");
             }
         }
         //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
-        if(sensors.getWaterTop()){
+        if (sensors.getWaterTop()) {
             List<Device> leds = deviceRepository.findByType("led");
             List<Device> lights = deviceRepository.findByType("lights");
             //konkatenacja zmniejszy wydajnosc
@@ -123,13 +127,10 @@ public class DMXValidator {
         }
         return dmxData;
     }
+
     //co 30 sekund pobiera dane z sensorow
     @Scheduled(fixedRate = 30000L)
     public void getSensorData() throws IOException {
         sensors = sensorsHandlerService.getSensors();
-    }
-
-    public static void changePumpMultiplier(float multiplier) {
-        pumpPowerMultiplier = multiplier;
     }
 }
