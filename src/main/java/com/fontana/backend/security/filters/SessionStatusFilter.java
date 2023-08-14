@@ -1,7 +1,7 @@
 package com.fontana.backend.security.filters;
 
-import com.fontana.backend.session.SessionService;
-import com.fontana.backend.utils.AppUtils;
+import com.fontana.backend.session.service.SessionService;
+import com.fontana.backend.utils.AuthUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ public class SessionStatusFilter extends OncePerRequestFilter {
     @Value("${session.header-prefix}")
     private String sessionPrefix;
 
-    private final AppUtils appUtils;
+    private final AuthUtils appUtils;
     private final SessionService sessionService;
 
     /**

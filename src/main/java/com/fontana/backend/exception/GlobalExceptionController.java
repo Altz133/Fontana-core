@@ -67,13 +67,13 @@ public class GlobalExceptionController {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String,Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException exc) {
+    public ResponseEntity<Map<String, Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException exc) {
         Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String,Object>> handleIllegalArgumentException(IllegalArgumentException exc) {
+    public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException exc) {
         Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
