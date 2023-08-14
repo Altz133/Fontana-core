@@ -35,7 +35,7 @@ public class SnapshotServiceImpl implements SnapshotService {
     @Override
     public byte[] getDmxDataArray(Snapshot snapshot) {
         byte[] temp = Arrays.copyOf(snapshot.getData(), 515);
-        temp[511] = 33;
+        temp[512] = 33;
         temp[513] = 22;
         temp[514] = 11;
 
@@ -45,7 +45,7 @@ public class SnapshotServiceImpl implements SnapshotService {
     @Override
     public byte[] getDmxDataArrayBySnapshotId(Integer snapshotId) {
         byte[] temp = Arrays.copyOf(snapshotRepository.getReferenceById(snapshotId).getData(), 515);
-        temp[511] = 33;
+        temp[512] = 33;
         temp[513] = 22;
         temp[514] = 11;
 
