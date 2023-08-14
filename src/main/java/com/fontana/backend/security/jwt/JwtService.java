@@ -1,5 +1,6 @@
 package com.fontana.backend.security.jwt;
 
+import com.fontana.backend.security.TokenType;
 import com.fontana.backend.security.blacklist.entity.BlacklistedToken;
 import com.fontana.backend.security.blacklist.repository.BlacklistedTokenRepository;
 import io.jsonwebtoken.Claims;
@@ -44,16 +45,15 @@ public class JwtService {
     }
 
     public String generateAccessToken(String username) {
-        return generateToken(new HashMap<>(), username, Long.parseLong(accessExpDelay));
+        return generateToken(new HashMap<>(), username, Long.parseLong(accessExpDelay), TokenType.ACCESS);
     }
 
     public String generateRefreshToken(String username) {
-        return generateToken(new HashMap<>(), username, Long.parseLong(refreshExpDelay));
+        return generateToken(new HashMap<>(), username, Long.parseLong(refreshExpDelay), TokenType.REFRESH);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, String username, Long expiration) {
-        return Jwts
-                .builder()
+    private String generateToken(Map<String, Object> extraClaims, String username, Long expiration, TokenType tokenType) {
+        return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -64,8 +64,7 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         try {
-            return Jwts
-                    .parserBuilder()
+            return Jwts.parserBuilder()
                     .setSigningKey(getSignInKey())
                     .build()
                     .parseClaimsJws(token)
@@ -98,21 +97,27 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token) {
-        return !isTokenExpired(token)
-                && isTokenValidWithSecretKey(token)
-                && !isTokenBlacklisted(token);
+        try {
+            return !isTokenExpired(token) && isTokenValidWithSecretKey(token) && !isTokenBlacklisted(token);
+        } catch (JwtException exc) {
+            log.error("Invalid token: " + exc.getMessage());
+            return false;
+        }
     }
 
     private boolean isTokenBlacklisted(String token) {
         return blacklistedTokenRepository.existsByToken(token);
     }
 
-    public void blacklistToken(String token) {
+    public void blacklistToken(String token, TokenType tokenType) {
         BlacklistedToken blacklistedToken = BlacklistedToken.builder()
                 .token(token)
+                .tokenType(tokenType)
                 .dateAdded(new Date())
                 .build();
 
         blacklistedTokenRepository.save(blacklistedToken);
     }
+
+
 }

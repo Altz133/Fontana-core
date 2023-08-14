@@ -5,6 +5,7 @@ import com.fontana.backend.devices.repository.DeviceRepository;
 import com.fontana.backend.frame.entity.Frame;
 import com.fontana.backend.sensorsHandler.entity.Sensors;
 import com.fontana.backend.sensorsHandler.service.SensorsHandlerService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,16 +20,26 @@ public class DMXValidator {
     @Autowired
     private DeviceRepository deviceRepository;
     private final SensorsHandlerService sensorsHandlerService;
+    byte[] dmxDataZero = new byte[515];
 
-    public boolean validateDmxData(byte[] dmxData, Frame frame) throws IOException {
-        //FIXME na razie nie ma dostępu do serwera
-        //return validateArray(dmxData) && validateWaterLevel();
+    @PostConstruct
+    private void init() {
+        try {
+            initialSetup();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public byte[] validateDmxData(byte[] dmxData, Frame frame) throws IOException {
         byte[] data = Arrays.copyOf(dmxData,dmxData.length);
         data[frame.getId()] = frame.getValue();
-        return validateArray(data);
+        if (validateWaterLevel()){
+            return validateArray(data);
+        }
+        return dmxDataZero;
     }
 
-    public boolean validateArray(byte[] dmxData) {
+    public byte[] validateArray(byte[] dmxData) {
         String type = "pump";
         List<Device> pumps = deviceRepository.findByType(type);
         for (Device pump : pumps) {
@@ -47,9 +58,12 @@ public class DMXValidator {
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 throw new IllegalArgumentException(type +" "+ pumpId + " is on, but all valves are closed");
             }
+            if(closedValveCounter >0 && pumpPower > 255 * (1 - (0.1 * closedValveCounter))){
+                dmxData[pumpId] = (byte) (255 * (1 - (0.1 * closedValveCounter)));
+            }
 
         }
-        return true;
+        return dmxData;
     }
 
     public boolean validateWaterLevel() throws IOException {
@@ -60,5 +74,15 @@ public class DMXValidator {
         else{
             throw new IOException("Water level is too high or too low");
         }
+    }
+
+    private void initialSetup() throws IOException {
+        dmxDataZero = new byte[515];
+        for (int j = 0; j < 512; j++) {
+            dmxDataZero[j] = 0;
+        }
+        dmxDataZero[dmxDataZero.length - 3] = 33;
+        dmxDataZero[dmxDataZero.length - 2] = 22;
+        dmxDataZero[dmxDataZero.length - 1] = 11;
     }
 }

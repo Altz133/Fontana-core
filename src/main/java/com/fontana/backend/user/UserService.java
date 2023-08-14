@@ -1,10 +1,13 @@
-package com.fontana.backend.user.service;
+package com.fontana.backend.user;
 
-import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
+
+    UserDTO findByUsername();
 
     void add(User user);
 

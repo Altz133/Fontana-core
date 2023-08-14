@@ -1,11 +1,13 @@
 package com.fontana.backend.template;
 
-import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -27,8 +29,10 @@ public class Template {
     @JoinColumn(name = "username")
     private User user;
 
+    @CreationTimestamp
     private Timestamp createdAt;
 
+    @UpdateTimestamp
     private Timestamp updatesAt;
 
     private int[] snapshotsSequence;

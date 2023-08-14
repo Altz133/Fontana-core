@@ -1,23 +1,41 @@
-package com.fontana.backend.user.service;
+package com.fontana.backend.user;
 
+import com.fontana.backend.exception.customExceptions.NotFoundException;
 import com.fontana.backend.role.RoleRepository;
 import com.fontana.backend.role.RoleType;
-import com.fontana.backend.user.dtos.UserDTO;
-import com.fontana.backend.user.entity.User;
-import com.fontana.backend.user.mappers.UserDtoMapper;
-import com.fontana.backend.user.repository.UserRepository;
+import com.fontana.backend.user.*;
+import com.fontana.backend.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
+
+    @Value("${user.not-found-msg}")
+    private String notFoundMsg;
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserDtoMapper userDtoMapper;
+    private final AppUtils appUtils;
+
+    @Override
+    public UserDTO findByUsername() {
+        String username = appUtils.getAuthentication().getPrincipal().toString();
+        log.info(username);
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new NotFoundException(notFoundMsg));
+
+        return userDtoMapper.map(user);
+    }
 
     @Override
     public void add(User user) {
@@ -47,4 +65,6 @@ public class UserServiceImpl implements UserService {
             add(user);
         }
     }
+
+
 }
