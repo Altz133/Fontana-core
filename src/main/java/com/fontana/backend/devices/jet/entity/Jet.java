@@ -14,9 +14,11 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @Component
 public class Jet {
+
     @Min(value = 0)
     @Max(value = 511)
     private int id;
+
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
     private byte value;

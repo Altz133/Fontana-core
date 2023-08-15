@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SessionDTO {
+public class SessionRequestDTO {
 
     @NotNull
     @PastOrPresent

@@ -5,7 +5,8 @@ import com.fontana.backend.exception.customExceptions.SessionNotModifiedExceptio
 import com.fontana.backend.role.entity.RoleType;
 import com.fontana.backend.session.dto.SessionBusyResponse;
 import com.fontana.backend.session.dto.SessionCloseRequest;
-import com.fontana.backend.session.dto.SessionDTO;
+import com.fontana.backend.session.dto.SessionRequestDTO;
+import com.fontana.backend.session.dto.SessionResponseDTO;
 import com.fontana.backend.session.mapper.SessionMapper;
 import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.session.repository.SessionRepository;
@@ -50,9 +51,10 @@ public class SessionServiceImpl implements SessionService {
     private final SessionMapper sessionMapper;
     private final AuthUtils appUtils;
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 15000)
     public void autoCloseSession() {
         Session session = getActiveSession();
+        log.info("AutoCloseSession scheduler invoked with no action.");
 
         if (session != null && session.getExpirationTime().isBefore(LocalDateTime.now())) {
             Session updated = buildUpdatedSession(session, null, false, true);
@@ -62,18 +64,24 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public List<Session> findAll() {
-        return sessionRepository.findAll();
+    public List<SessionResponseDTO> findAll() {
+        List<Session> sessions = sessionRepository.findAll();
+
+        return sessions.stream()
+                .map(sessionMapper::map)
+                .toList();
     }
 
     @Override
-    public Session findById(Integer id) {
-        return sessionRepository.findById(id).orElseThrow(
+    public SessionResponseDTO findById(Integer id) {
+        Session session = sessionRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(notFoundMsg.concat(" " + id)));
+
+        return sessionMapper.map(session);
     }
 
     @Override
-    public ResponseEntity<?> add(SessionDTO sessionDTO) {
+    public ResponseEntity<?> add(SessionRequestDTO sessionRequestDTO) {
         Session activeSession = getActiveSession();
         String authority = appUtils.extractAuthenticatedAuthority();
 
@@ -92,7 +100,7 @@ public class SessionServiceImpl implements SessionService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
 
-        Session saved = sessionRepository.save(sessionMapper.map(sessionDTO));
+        Session saved = sessionRepository.save(sessionMapper.map(sessionRequestDTO));
         log.info(saved.toString());
 
         return buildAddSessionResponse(saved);
@@ -175,6 +183,7 @@ public class SessionServiceImpl implements SessionService {
                 .openedTime(activeSession.getOpenedTime())
                 .closedTime(request != null ? request.getClosedTime() : LocalDateTime.now())
                 .expirationTime(request != null ? request.getClosedTime() : LocalDateTime.now())
+                .logs(activeSession.getLogs())
                 .isForcedToClose(isForcedToClose)
                 .isAutoClosed(isAutoClosed)
                 .build();
