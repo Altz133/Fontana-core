@@ -1,8 +1,10 @@
 package com.fontana.backend.log.controller;
 
+import com.fontana.backend.log.dto.LogRequestDTO;
 import com.fontana.backend.log.dto.LogResponseDTO;
 import com.fontana.backend.log.service.LogService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,5 +32,10 @@ public class LogController {
     @GetMapping(LOG_FIND_BY_ID)
     public LogResponseDTO findById(@PathVariable("id") int id) {
         return logService.findById(id);
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> add(@RequestBody LogRequestDTO logRequestDTO) {
+        return logService.add(logRequestDTO);
     }
 }

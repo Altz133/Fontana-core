@@ -1,6 +1,9 @@
 package com.fontana.backend.log.dto;
 
 import com.fontana.backend.devices.entity.DeviceType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,12 +15,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LogResponseDTO {
+public class LogRequestDTO {
 
-    private int id;
-    private String userFullName;
-    private int sessionId;
+    @NotBlank
+    private String username;
+
+    @NotEmpty
+    private Integer sessionId;
+
+    @NotEmpty
+    @PastOrPresent
     private LocalDateTime executedAt;
+
+    @NotBlank
     private DeviceType deviceType;
+
+    @NotEmpty
     private Integer deviceValue;
 }

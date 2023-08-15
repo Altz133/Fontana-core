@@ -1,10 +1,12 @@
 package com.fontana.backend.log.mapper;
 
+import com.fontana.backend.log.dto.LogRequestDTO;
 import com.fontana.backend.log.dto.LogResponseDTO;
 import com.fontana.backend.log.entity.Log;
 import com.fontana.backend.user.entity.User;
 import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +30,17 @@ public class LogDtoMapper {
                 .executedAt(log.getExecutedAt())
                 .deviceType(log.getDeviceType())
                 .deviceValue(log.getDeviceValue())
+                .build();
+    }
+
+    public Log map(LogRequestDTO logRequestDTO) {
+
+        return Log.builder()
+                .username(logRequestDTO.getUsername())
+                .sessionId(logRequestDTO.getSessionId())
+                .executedAt(logRequestDTO.getExecutedAt())
+                .deviceType(logRequestDTO.getDeviceType())
+                .deviceValue(logRequestDTO.getDeviceValue())
                 .build();
     }
 }

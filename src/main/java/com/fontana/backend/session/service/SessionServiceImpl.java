@@ -183,6 +183,7 @@ public class SessionServiceImpl implements SessionService {
                 .openedTime(activeSession.getOpenedTime())
                 .closedTime(request != null ? request.getClosedTime() : LocalDateTime.now())
                 .expirationTime(request != null ? request.getClosedTime() : LocalDateTime.now())
+                .logs(activeSession.getLogs())
                 .isForcedToClose(isForcedToClose)
                 .isAutoClosed(isAutoClosed)
                 .build();
