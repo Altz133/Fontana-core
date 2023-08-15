@@ -11,7 +11,7 @@ import java.util.List;
 public interface DeviceRepository extends JpaRepository<Device, Integer> {
     Device findByName(String name);
 
-    List<Device> findByDeviceType(DeviceType type);
+    List<Device> findByType(DeviceType type);
 
     List<Device> findByAddress(int[] addresses);
 

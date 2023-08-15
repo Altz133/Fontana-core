@@ -31,5 +31,5 @@ public class Device {
 
     @NotEmpty
     @Enumerated(EnumType.STRING)
-    private DeviceType deviceType;
+    private DeviceType type;
 }

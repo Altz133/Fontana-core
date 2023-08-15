@@ -41,7 +41,7 @@ public class DMXValidator {
     }
 
     public byte[] validateArray(byte[] dmxData) {
-        List<Device> pumps = deviceRepository.findByDeviceType(DeviceType.PUMP);
+        List<Device> pumps = deviceRepository.findByType(DeviceType.PUMP);
         for (Device pump : pumps) {
 
             int[] singlePumpAddresses = pump.getAddress();
