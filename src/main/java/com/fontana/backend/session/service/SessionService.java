@@ -1,7 +1,8 @@
 package com.fontana.backend.session.service;
 
 import com.fontana.backend.session.dto.SessionCloseRequest;
-import com.fontana.backend.session.dto.SessionDTO;
+import com.fontana.backend.session.dto.SessionRequestDTO;
+import com.fontana.backend.session.dto.SessionResponseDTO;
 import com.fontana.backend.session.entity.Session;
 import org.springframework.http.ResponseEntity;
 
@@ -9,11 +10,11 @@ import java.util.List;
 
 public interface SessionService {
 
-    List<Session> findAll();
+    List<SessionResponseDTO> findAll();
 
-    Session findById(Integer id);
+    SessionResponseDTO findById(Integer id);
 
-    ResponseEntity<?> add(SessionDTO sessionDTO);
+    ResponseEntity<?> add(SessionRequestDTO sessionRequestDTO);
 
     ResponseEntity<?> updateCloseSession(SessionCloseRequest sessionCloseRequest);
 

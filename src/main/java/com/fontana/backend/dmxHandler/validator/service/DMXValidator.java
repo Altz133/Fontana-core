@@ -1,6 +1,7 @@
 package com.fontana.backend.dmxHandler.validator.service;
 
 import com.fontana.backend.devices.entity.Device;
+import com.fontana.backend.devices.entity.DeviceType;
 import com.fontana.backend.devices.repository.DeviceRepository;
 import com.fontana.backend.frame.entity.Frame;
 import com.fontana.backend.sensorsHandler.entity.Sensors;
@@ -52,7 +53,7 @@ public class DMXValidator {
 
     //walidacja bez sensorow
     public byte[] validateArray(byte[] dmxData) {
-        List<Device> pumps = deviceRepository.findByType(type);
+        List<Device> pumps = deviceRepository.findByType(DeviceType.PUMP);
         for (Device pump : pumps) {
 
             int[] singlePumpAddresses = pump.getAddress();
@@ -79,7 +80,7 @@ public class DMXValidator {
     }
 
     public byte[] validateArray(byte[] dmxData, Sensors sensors) {
-        List<Device> pumps = deviceRepository.findByType(type);
+        List<Device> pumps = deviceRepository.findByType(DeviceType.PUMP);
         for (Device pump : pumps) {
 
             int[] singlePumpAddresses = pump.getAddress();
@@ -110,8 +111,8 @@ public class DMXValidator {
         }
         //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
         if (sensors.getWaterTop()) {
-            List<Device> leds = deviceRepository.findByType("led");
-            List<Device> lights = deviceRepository.findByType("lights");
+            List<Device> leds = deviceRepository.findByType(DeviceType.LED);
+            List<Device> lights = deviceRepository.findByType(DeviceType.LIGHT);
             //konkatenacja zmniejszy wydajnosc
             //wylaczanie ledow
             for (Device led : leds) {

@@ -1,24 +1,26 @@
 package com.fontana.backend.security.auth;
 
+import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
+import com.fontana.backend.security.blacklist.TokenCleanupService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static com.fontana.backend.config.RestEndpoints.*;
 
 @RestController
 @RequestMapping(AUTH)
 @RequiredArgsConstructor
-@Slf4j
 public class AuthenticationController {
 
     private final AuthenticationService authService;
+    private final TokenCleanupService tokenCleanupService;
 
     @PostMapping(AUTH_AUTHENTICATE)
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Validated AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request) {
         return authService.authenticate(request);
     }
 
@@ -31,10 +33,24 @@ public class AuthenticationController {
         return authService.refreshToken(token);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody String refreshToken) {
+    @PostMapping(LOGOUT)
+    public ResponseEntity<Void> logout(@RequestBody String refreshToken) {
         authService.blacklistToken(refreshToken);
+        tokenCleanupService.removeFromBlacklistImmediately(refreshToken);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(REMOVE_TOKEN_IMMEDIATELY)
+    public ResponseEntity<Void> removeTokenImmediately(@RequestBody String token) {
+        tokenCleanupService.removeFromBlacklistImmediately(token);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @PostMapping(BLACKLIST)
+    public ResponseEntity<Void> addToBlacklist(@Valid @RequestBody BlacklistTokenRequest tokenRequest) {
+        String token = tokenRequest.getToken();
+        authService.blacklistToken(token);
         return ResponseEntity.ok().build();
     }
 }
-
