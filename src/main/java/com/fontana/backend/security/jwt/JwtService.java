@@ -101,7 +101,7 @@ public class JwtService {
         try {
             return !isTokenExpired(token) && isTokenValidWithSecretKey(token) && !isTokenBlacklisted(token);
         } catch (JwtException exc) {
-//            log.error("Invalid token: " + exc.getMessage());
+            log.error("Invalid token: " + exc.getMessage());
             return false;
         }
     }

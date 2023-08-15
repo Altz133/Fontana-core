@@ -58,8 +58,7 @@ public class UserServiceImpl implements UserService {
                 .username(ldapDetails.get(7).toString())
                 .firstName(nameParts[0])
                 .lastName(nameParts[1])
-//                .role(roleRepository.findAllByName(RoleType.VIEWER.name()).get(0))
-                .role(roleRepository.findRoleByName("VIEWER"))
+                .role(roleRepository.findAllByName(RoleType.VIEWER.name()).get(0))
                 .build();
 
 
