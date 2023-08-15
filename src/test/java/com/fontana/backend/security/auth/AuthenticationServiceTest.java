@@ -96,7 +96,7 @@ public class AuthenticationServiceTest {
 
     @Test
     public void testBlacklistToken() {
-        String refreshToken = "your-refresh-token";
+        String refreshToken = mockRefreshToken;
 
         authenticationService.blacklistToken(refreshToken);
 
