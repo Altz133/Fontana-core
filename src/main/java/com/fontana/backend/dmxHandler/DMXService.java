@@ -39,8 +39,8 @@ public class DMXService {
     }
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
-//        System.out.println(Arrays.toString(dmxData));
-            /*try {
+        System.out.println(Arrays.toString(dmxData));
+            try {
 
                 if (connectionOpened){
                 jd.resetDevice();
@@ -56,7 +56,7 @@ public class DMXService {
                     refreshConnection();
                 } catch (IOException ex) {
                 }
-            }*/
+            }
     }
 
     private void initialSetup() throws IOException {
@@ -64,7 +64,7 @@ public class DMXService {
         for (int j = 0; j < 512; j++) {
             dmxData[j] = 0;
         }
-        /*
+
         dmxData[3] = (byte) 255;
         dmxData[6] = (byte) 255;
         dmxData[9] = (byte) 255;
@@ -77,11 +77,11 @@ public class DMXService {
         dmxData[30] = (byte) 255;
         dmxData[49] = (byte) 150;
         dmxData[50] = (byte) 150;
-        */
+
         dmxData[dmxData.length - 3] = 33;
         dmxData[dmxData.length - 2] = 22;
         dmxData[dmxData.length - 1] = 11;
-        //ostream.write(dmxData);
+        ostream.write(dmxData);
     }
 
 

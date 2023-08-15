@@ -28,5 +28,4 @@ public class Session {
     private boolean isAutoClosed;
 
     //TODO list of logs as OneToMany relationship
-<<<<<<< HEAD
 }
