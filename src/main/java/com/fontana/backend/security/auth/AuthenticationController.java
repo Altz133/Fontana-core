@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import static com.fontana.backend.config.RestEndpoints.*;
 
 @RestController
@@ -21,6 +22,10 @@ public class AuthenticationController {
         return authService.authenticate(request);
     }
 
+    /**
+     * @param token has to contain prefix of "Bearer " in order to validate token properly.
+     * @return new access token wit updated expiration time
+     */
     @PostMapping(AUTH_REFRESHTOKEN)
     public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         return authService.refreshToken(token);
@@ -32,8 +37,4 @@ public class AuthenticationController {
         return ResponseEntity.ok().build();
     }
 }
-    /**
-     * @param token has to contain prefix of "Bearer " in order to validate token properly.
-     * @return new access token wit updated expiration time
-     */
 

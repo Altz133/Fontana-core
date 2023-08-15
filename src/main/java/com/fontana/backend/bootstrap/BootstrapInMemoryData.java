@@ -1,10 +1,10 @@
 package com.fontana.backend.bootstrap;
 
-import com.fontana.backend.role.Role;
-import com.fontana.backend.role.RoleRepository;
-import com.fontana.backend.role.RoleType;
-import com.fontana.backend.user.User;
-import com.fontana.backend.user.UserRepository;
+import com.fontana.backend.role.entity.Role;
+import com.fontana.backend.role.repository.RoleRepository;
+import com.fontana.backend.role.entity.RoleType;
+import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
  * This class allows you to create a bunch of mock data and put them in H2 database on each run, so you always have
  * data to work with.
  */
-
 @Component
 @RequiredArgsConstructor
 @Profile("h2")
@@ -23,6 +22,7 @@ public class BootstrapInMemoryData implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+
     @Transactional
     @Override
     public void run(String... args) {

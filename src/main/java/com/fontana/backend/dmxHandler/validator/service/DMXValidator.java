@@ -28,7 +28,10 @@ public class DMXValidator {
     @Autowired
     private DeviceRepository deviceRepository;
     private Sensors sensors;
-
+    private final String relativePowerMsg = " is running on too much power relative to closed valves";
+    private final String closedValvesMsg = " is on but all valves are closed";
+    private final String overflowingMsg = "Lights are on but water level is too high";
+    private final String lowWaterMsg = "Water level is too low";
     public static void changePumpMultiplier(float multiplier) {
         pumpPowerMultiplier = multiplier;
     }
@@ -65,11 +68,11 @@ public class DMXValidator {
             }
             if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
-                throw new RuntimeException("Pump " + pumpId + " is running on too much power relative to closed valves");
+                throw new RuntimeException("Pump " + pumpId + relativePowerMsg);
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                throw new RuntimeException("Pump " + pumpId + " is on but all valves are closed");
+                throw new RuntimeException("Pump " + pumpId + closedValvesMsg);
             }
         }
         return dmxData;
@@ -92,17 +95,17 @@ public class DMXValidator {
             }
             if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
-                throw new RuntimeException("Pump " + pumpId + " is running on too much power relative to closed valves");
+                throw new RuntimeException("Pump " + pumpId + relativePowerMsg);
             }
             //wyłączenie pompy jeśli wszystkie zawory są zamknięte
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                throw new RuntimeException("Pump " + pumpId + " is on but all valves are closed");
+                throw new RuntimeException("Pump " + pumpId + closedValvesMsg);
             }
             //wyłączenie pomp jeśli poziom wody jest za niski
             if (sensors.getWaterBottom()) {
                 dmxData[pumpId] = 0;
-                throw new RuntimeException("Water level is too low");
+                throw new RuntimeException(lowWaterMsg);
             }
         }
         //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
@@ -124,7 +127,7 @@ public class DMXValidator {
                     dmxData[lightId] = 0;
                 }
             }
-            throw new RuntimeException("Lights are on but water level is too high");
+            throw new RuntimeException(overflowingMsg);
         }
         return dmxData;
     }
