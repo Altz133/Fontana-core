@@ -5,6 +5,7 @@ import com.fontana.backend.sensorsHandler.entity.Sensors;
 import lombok.NoArgsConstructor;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.client5.http.fluent.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import static com.fontana.backend.config.RestEndpoints.SENSORS_URL;
 @Service
 public class SensorsHandlerService {
     Response response;
+    @Autowired
     ObjectMapper objectMapper;
 
     public Sensors getSensors() throws IOException {
@@ -23,4 +25,6 @@ public class SensorsHandlerService {
         return objectMapper.readValue(response.returnContent().asString(), Sensors.class);
 
     }
+
+
 }
