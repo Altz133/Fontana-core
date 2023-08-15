@@ -24,9 +24,9 @@ public class DMXValidator {
     private static float pumpPowerMultiplier = 0.1f;
     @Autowired
     private final SensorsHandlerService sensorsHandlerService;
+    private final String type = "pump";
     @Autowired
     private DeviceRepository deviceRepository;
-    private final String type = "pump";
     private Sensors sensors;
 
     public static void changePumpMultiplier(float multiplier) {

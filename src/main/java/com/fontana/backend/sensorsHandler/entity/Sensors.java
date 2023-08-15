@@ -14,6 +14,7 @@ public class Sensors {
 
     @JsonProperty("water_top")
     private Boolean waterTop;
+
     @JsonProperty("water_bottom")
     private Boolean waterBottom;
 }
