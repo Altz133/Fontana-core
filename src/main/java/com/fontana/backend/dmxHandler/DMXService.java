@@ -34,7 +34,7 @@ public class DMXService {
             initialSetup();
             startScheduler();
         } catch (Exception e) {
-            refreshConnection();
+//            refreshConnection();
         }
     }
     @Scheduled(fixedRate = 250L)
