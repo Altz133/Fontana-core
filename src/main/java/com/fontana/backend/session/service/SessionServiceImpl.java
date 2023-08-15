@@ -54,6 +54,7 @@ public class SessionServiceImpl implements SessionService {
     @Scheduled(fixedRate = 15000)
     public void autoCloseSession() {
         Session session = getActiveSession();
+        log.info("AutoCloseSession scheduler invoked with no action.");
 
         if (session != null && session.getExpirationTime().isBefore(LocalDateTime.now())) {
             Session updated = buildUpdatedSession(session, null, false, true);
