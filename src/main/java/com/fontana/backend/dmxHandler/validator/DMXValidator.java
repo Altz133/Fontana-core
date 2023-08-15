@@ -1,6 +1,7 @@
 package com.fontana.backend.dmxHandler.validator;
 
 import com.fontana.backend.devices.entity.Device;
+import com.fontana.backend.devices.entity.DeviceType;
 import com.fontana.backend.devices.repository.DeviceRepository;
 import com.fontana.backend.frame.entity.Frame;
 import com.fontana.backend.sensorsHandler.entity.Sensors;
@@ -40,8 +41,7 @@ public class DMXValidator {
     }
 
     public byte[] validateArray(byte[] dmxData) {
-        String type = "pump";
-        List<Device> pumps = deviceRepository.findByType(type);
+        List<Device> pumps = deviceRepository.findByDeviceType(DeviceType.PUMP);
         for (Device pump : pumps) {
 
             int[] singlePumpAddresses = pump.getAddress();
@@ -56,7 +56,7 @@ public class DMXValidator {
                 }
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
-                throw new IllegalArgumentException(type +" "+ pumpId + " is on, but all valves are closed");
+                throw new IllegalArgumentException(DeviceType.PUMP.name() +" "+ pumpId + " is on, but all valves are closed");
             }
             if(closedValveCounter >0 && pumpPower > 255 * (1 - (0.1 * closedValveCounter))){
                 dmxData[pumpId] = (byte) (255 * (1 - (0.1 * closedValveCounter)));

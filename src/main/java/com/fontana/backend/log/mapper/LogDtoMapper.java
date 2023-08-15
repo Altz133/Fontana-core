@@ -17,7 +17,9 @@ public class LogDtoMapper {
 
         User user = userRepository.findByUsername(log.getUsername()).orElse(null);
 
-        String fullName = user.getFirstName().concat(" " + user.getLastName());
+        String fullName = user != null ?
+                user.getFirstName().concat(" " + user.getLastName()) :
+                null;
 
         return LogResponseDTO.builder()
                 .id(log.getId())

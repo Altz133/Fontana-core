@@ -19,10 +19,6 @@ public class LogController {
 
     /**
      * To use queryParam, just add ?param_name=value to main http path. For example: ?username=fontanna_admin.
-     *
-     * @param username not required
-     * @param sessionId not required
-     * @return complete list of all logs or shorter list based on given parameters
      */
     @GetMapping()
     public List<LogResponseDTO> findAll(
