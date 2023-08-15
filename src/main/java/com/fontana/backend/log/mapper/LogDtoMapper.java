@@ -26,6 +26,7 @@ public class LogDtoMapper {
                 .sessionId(log.getSessionId())
                 .userFullName(fullName)
                 .executedAt(log.getExecutedAt())
+                .deviceType(log.getDeviceType())
                 .deviceValue(log.getDeviceValue())
                 .build();
     }

@@ -1,5 +1,6 @@
 package com.fontana.backend.log.dto;
 
+import com.fontana.backend.devices.entity.DeviceType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,6 @@ public class LogResponseDTO {
     private String userFullName;
     private int sessionId;
     private LocalDateTime executedAt;
+    private DeviceType deviceType;
     private short deviceValue;
 }

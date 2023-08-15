@@ -1,9 +1,7 @@
 package com.fontana.backend.log.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fontana.backend.devices.entity.DeviceType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,5 +23,9 @@ public class Log {
     private String username;
     private Integer sessionId;
     private LocalDateTime executedAt;
+
+    @Enumerated(EnumType.STRING)
+    private DeviceType deviceType;
+
     private short deviceValue;
 }
