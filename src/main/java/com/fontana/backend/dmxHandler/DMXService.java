@@ -1,13 +1,13 @@
 package com.fontana.backend.dmxHandler;
 
-import com.fontana.backend.dmxHandler.validator.DMXValidator;
+import com.fontana.backend.dmxHandler.validator.service.DMXValidator;
 import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
-import org.springframework.scheduling.TaskScheduler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -28,13 +28,13 @@ public class DMXService {
     @Autowired
     private DMXValidator dmxValidator;
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
         try {
 //            openConnection();
             initialSetup();
             startScheduler();
         } catch (Exception e) {
-
+            refreshConnection();
         }
     }
     @Scheduled(fixedRate = 250L)
@@ -86,11 +86,15 @@ public class DMXService {
 
 
     public void setDMXDataField(Frame frame) throws IOException {
-        dmxData = dmxValidator.validateDmxData(dmxData,frame);
+        dmxData = dmxValidator.validateDmxData(dmxData, frame);
     }
 
     public byte[] getDMXDataArray() {
         return dmxData;
+    }
+
+    public void setDMXDataArray(byte[] dmxDataArray) {
+        this.dmxData = dmxDataArray;
     }
 
     public void closeConnection() throws IOException {
@@ -113,7 +117,9 @@ public class DMXService {
         openConnection();
     }
 
-    public void setDMXDataArray(byte[] dmxDataArray) {
-        this.dmxData = dmxDataArray;
+    public void panic() throws IOException {
+        for (int j = 0; j < 512; j++) {
+            dmxData[j] = 0;
+        }
     }
 }

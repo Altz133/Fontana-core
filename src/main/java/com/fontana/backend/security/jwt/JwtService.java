@@ -22,6 +22,7 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtService {
 
     @Value("${jwt.secret-key}")

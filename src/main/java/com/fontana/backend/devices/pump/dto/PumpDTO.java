@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PumpDTO extends DeviceDTO {
+
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
     private byte value;
