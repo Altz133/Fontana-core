@@ -16,4 +16,8 @@ public class PumpDTO extends DeviceDTO {
     @Max(value = Byte.MAX_VALUE)
     private byte value;
 
+    public PumpDTO(String name, byte value) {
+        super(name);
+        this.value = value;
+    }
 }

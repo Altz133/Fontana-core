@@ -1,5 +1,7 @@
 package com.fontana.backend.dmxHandler;
 
+import com.fontana.backend.dmxHandler.currentStateDTO.CurrentStateDTO;
+import com.fontana.backend.dmxHandler.currentStateDTO.mapper.CurrentStateDTOMapper;
 import com.fontana.backend.dmxHandler.validator.service.DMXValidator;
 import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
@@ -22,6 +24,7 @@ public class DMXService {
     private byte[] dmxData;
     @Autowired
     private DMXValidator dmxValidator;
+    private CurrentStateDTOMapper currentStateDTOMapper;
     @PostConstruct
     public void init() throws IOException {
         try {
@@ -83,8 +86,8 @@ public class DMXService {
         dmxData = dmxValidator.validateDmxData(dmxData, frame);
     }
 
-    public byte[] getDMXDataArray() {
-        return dmxData;
+    public CurrentStateDTO getDMXDataArray() {
+        return currentStateDTOMapper.DMXtoCurrentStateDTO(dmxData);
     }
 
     public void setDMXDataArray(byte[] dmxDataArray) {

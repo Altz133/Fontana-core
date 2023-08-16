@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableScheduling
 public class DMXValidator {
-    public static boolean enableApiValidation = true;
+    public static boolean enableApiValidation = false;
     private static float pumpPowerMultiplier = 0.1f;
     @Autowired
     private final SensorsHandlerService sensorsHandlerService;
