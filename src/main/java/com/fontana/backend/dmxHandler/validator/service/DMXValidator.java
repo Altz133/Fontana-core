@@ -136,6 +136,7 @@ public class DMXValidator {
     //co 30 sekund pobiera dane z sensorow
     @Scheduled(fixedRate = 30000L)
     public void getSensorData() throws IOException {
+        if(enableApiValidation){
         sensors = sensorsHandlerService.getSensors();
-    }
+    }}
 }
