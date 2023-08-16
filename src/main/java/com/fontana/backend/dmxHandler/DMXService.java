@@ -3,8 +3,6 @@ package com.fontana.backend.dmxHandler;
 import com.fontana.backend.dmxHandler.validator.service.DMXValidator;
 import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Service
 @EnableScheduling
@@ -23,8 +20,6 @@ public class DMXService {
     private JD2XX jd;
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
-    //@Autowired
-    //private TaskScheduler taskScheduler;
     @Autowired
     private DMXValidator dmxValidator;
     @PostConstruct
@@ -39,7 +34,6 @@ public class DMXService {
     }
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
-        System.out.println(Arrays.toString(dmxData));
             try {
 
                 if (connectionOpened){
