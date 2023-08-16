@@ -69,8 +69,8 @@ public class DMXService {
         dmxData[24] = (byte) 255;
         dmxData[27] = (byte) 255;
         dmxData[30] = (byte) 255;
-        dmxData[49] = (byte) 150;
-        dmxData[50] = (byte) 150;
+        dmxData[49] = (byte) 100;
+        dmxData[50] = (byte) 100;
 
         dmxData[dmxData.length - 3] = 33;
         dmxData[dmxData.length - 2] = 22;
