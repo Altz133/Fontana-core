@@ -2,16 +2,20 @@ package com.fontana.backend.security.auth;
 
 import com.fontana.backend.security.LdapService;
 import com.fontana.backend.security.jwt.JwtService;
+import com.fontana.backend.security.blacklist.entity.BlacklistedToken;
+import com.fontana.backend.security.blacklist.repository.BlacklistedTokenRepository;
+import com.fontana.backend.security.TokenType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.fontana.backend.security.TokenType;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +24,7 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
     private final LdapService ldapService;
+    private final BlacklistedTokenRepository blacklistedTokenRepository;
 
     @Value("${jwt.token-type}")
     private String tokenType;
@@ -46,7 +51,6 @@ public class AuthenticationService {
         return ResponseEntity.ok(generateAuthResponse(newJwtAccessToken, oldRefreshToken));
     }
 
-
     private AuthenticationResponse generateAuthResponse(String accessToken, String refreshToken) {
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
@@ -56,7 +60,17 @@ public class AuthenticationService {
                 .build();
     }
 
-    public void blacklistToken(String refreshToken) {
-        jwtService.blacklistToken(refreshToken, TokenType.REFRESH);
+    public void blacklistToken(String token, TokenType tokenType) {
+        Date now = new Date();
+        Date expirationDate = Date.from(now.toInstant().plus(Duration.ofHours(2)));
+
+        BlacklistedToken blacklistedToken = BlacklistedToken.builder()
+                .token(token)
+                .tokenType(tokenType)
+                .dateAdded(now)
+                .expirationDate(expirationDate)
+                .build();
+
+        blacklistedTokenRepository.save(blacklistedToken);
     }
 }

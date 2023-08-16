@@ -17,7 +17,6 @@ public interface BlacklistedTokenRepository extends JpaRepository<BlacklistedTok
     @Query("DELETE FROM BlacklistedToken b WHERE b.token = ?1")
     void deleteByToken(String token);
 
-    void deleteByDateAddedBefore(Date expiryDate);
-
-
+    void deleteByExpirationDateBefore(Date expiryDate);
 }
+

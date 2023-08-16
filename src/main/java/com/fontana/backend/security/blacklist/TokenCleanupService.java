@@ -15,14 +15,11 @@ import java.time.Duration;
 public class TokenCleanupService {
 
     private final BlacklistedTokenRepository blacklistedTokenRepository;
-    private final JwtService jwtService;
 
     @Scheduled(fixedRate = 7200000)  // Every 2 hours
     public void cleanupBlacklistedTokens() {
-        Date twoHoursAgo = Date.from(Instant.now().minus(Duration.ofHours(2)));
-        blacklistedTokenRepository.deleteByDateAddedBefore(twoHoursAgo);
-    }
-    public void removeFromBlacklistImmediately(String token) {
-        blacklistedTokenRepository.deleteByToken(token);
+        Date now = new Date();
+        blacklistedTokenRepository.deleteByExpirationDateBefore(now);
     }
 }
+
