@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableScheduling
 public class DMXValidator {
-    public static boolean enableApiValidation = true;
+    public static boolean enableApiValidation = false;
     private static float pumpPowerMultiplier = 0.1f;
     @Autowired
     private final SensorsHandlerService sensorsHandlerService;
@@ -104,13 +104,13 @@ public class DMXValidator {
                 throw new RuntimeException("Pump " + pumpId + closedValvesMsg);
             }
             //wyłączenie pomp jeśli poziom wody jest za niski
-            if (sensors.getWaterBottom()) {
+            if (!sensors.getWaterBottom()) {
                 dmxData[pumpId] = 0;
                 throw new RuntimeException(lowWaterMsg);
             }
         }
         //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
-        if (sensors.getWaterTop()) {
+        if (!sensors.getWaterTop()) {
             List<Device> leds = deviceRepository.findByType(DeviceType.LED);
             List<Device> lights = deviceRepository.findByType(DeviceType.LIGHT);
             //konkatenacja zmniejszy wydajnosc
