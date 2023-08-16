@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LightMapper {
+
     @Autowired
     private DeviceRepository deviceRepository;
 

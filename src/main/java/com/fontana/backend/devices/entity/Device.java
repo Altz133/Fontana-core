@@ -1,6 +1,8 @@
 package com.fontana.backend.devices.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -21,10 +23,13 @@ public class Device {
     @Min(value = 0)
     @Max(value = 511)
     private Integer id;
+
     @NotEmpty
     private String name;
-    private int[] address;
-    @NotEmpty
-    private String type;
 
+    private int[] address;
+
+    @NotEmpty
+    @Enumerated(EnumType.STRING)
+    private DeviceType type;
 }
