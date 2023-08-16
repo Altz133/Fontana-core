@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
                 .role(roleRepository.findAllByName(RoleType.VIEWER.name()).get(0))
                 .build();
 
+
         User user = userDtoMapper.map(userDto);
 
         if (userRepository.findById(user.getUsername()).isEmpty()) {

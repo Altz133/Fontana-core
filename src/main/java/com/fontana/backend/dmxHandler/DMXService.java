@@ -3,6 +3,8 @@ package com.fontana.backend.dmxHandler;
 import com.fontana.backend.dmxHandler.validator.service.DMXValidator;
 import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Service
 @EnableScheduling
@@ -20,31 +23,40 @@ public class DMXService {
     private JD2XX jd;
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
+    //@Autowired
+    //private TaskScheduler taskScheduler;
     @Autowired
     private DMXValidator dmxValidator;
-
     @PostConstruct
     public void init() throws IOException {
         try {
-            //openConnection();
+//            openConnection();
             initialSetup();
             startScheduler();
         } catch (Exception e) {
-            refreshConnection();
+//            refreshConnection();
         }
     }
-
     @Scheduled(fixedRate = 250L)
-    private void startScheduler() throws IOException {
-        /*
-            jd.resetDevice();
-            jd.setTimeouts(16, 50);
-            jd.setBaudRate(250000);
-            jd.setDataCharacteristics(8, JD2XX.STOP_BITS_2, JD2XX.PARITY_NONE);
-            jd.setFlowControl(JD2XX.FLOW_NONE, 11, 13);
-            jd.setBreakOn();
-            jd.setBreakOff();
-            ostream.write(dmxData);*/
+    private void startScheduler() {
+        System.out.println(Arrays.toString(dmxData));
+            try {
+
+                if (connectionOpened){
+                jd.resetDevice();
+                jd.setTimeouts(16, 50);
+                jd.setBaudRate(250000);
+                jd.setDataCharacteristics(8, JD2XX.STOP_BITS_2, JD2XX.PARITY_NONE);
+                jd.setFlowControl(JD2XX.FLOW_NONE, 11, 13);
+                jd.setBreakOn();
+                jd.setBreakOff();
+                ostream.write(dmxData);}
+            } catch (IOException e) {
+                try {
+                    refreshConnection();
+                } catch (IOException ex) {
+                }
+            }
     }
 
     private void initialSetup() throws IOException {
@@ -52,7 +64,7 @@ public class DMXService {
         for (int j = 0; j < 512; j++) {
             dmxData[j] = 0;
         }
-        /*
+
         dmxData[3] = (byte) 255;
         dmxData[6] = (byte) 255;
         dmxData[9] = (byte) 255;
@@ -65,11 +77,11 @@ public class DMXService {
         dmxData[30] = (byte) 255;
         dmxData[49] = (byte) 150;
         dmxData[50] = (byte) 150;
-        */
+
         dmxData[dmxData.length - 3] = 33;
         dmxData[dmxData.length - 2] = 22;
         dmxData[dmxData.length - 1] = 11;
-        //ostream.write(dmxData);
+        ostream.write(dmxData);
     }
 
 
