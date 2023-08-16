@@ -49,7 +49,7 @@ public class SessionServiceImpl implements SessionService {
 
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
-    private final AuthUtils appUtils;
+    private final AuthUtils authUtils;
 
     @Scheduled(fixedRate = 15000)
     public void autoCloseSession() {
@@ -83,7 +83,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public ResponseEntity<?> add(SessionRequestDTO sessionRequestDTO) {
         Session activeSession = getActiveSession();
-        String authority = appUtils.extractAuthenticatedAuthority();
+        String authority = authUtils.extractAuthenticatedAuthority();
 
         if (authority.equals(RoleType.VIEWER.name())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -109,14 +109,14 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public ResponseEntity<?> updateCloseSession(SessionCloseRequest sessionCloseRequest) {
         Session activeSession = getActiveSession();
-        String authority = appUtils.extractAuthenticatedAuthority();
+        String authority = authUtils.extractAuthenticatedAuthority();
         log.info("Request:" + sessionCloseRequest);
 
         if (activeSession == null) {
             throw new SessionNotModifiedException(sessionAlreadyClosedMsg);
         }
 
-        String currentPrincipalName = appUtils.getAuthentication().getPrincipal().toString();
+        String currentPrincipalName = authUtils.getAuthentication().getPrincipal().toString();
 
         if (activeSession.getUsername().equals(currentPrincipalName) || authority.equals(RoleType.ADMIN.name())) {
             Session updated = buildUpdatedSession(
