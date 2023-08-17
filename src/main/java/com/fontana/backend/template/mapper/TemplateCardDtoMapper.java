@@ -12,7 +12,14 @@ public class TemplateCardDtoMapper {
 
     private final TemplateServiceImpl templateService;
 
-    public TemplateCardDto TemplateToTemplateCardDto(Template template){
-        return TemplateCardDto.builder().id(template.getId()).name(template.getName()).ownerUsername(template.getUser().getUsername()).favourites(templateService.getFavouriteCount(template)).isFavouritedByOwner(templateService.isFavouritedByOwner(template)).updatedAt(template.getUpdatedAt()).status(template.getStatus()).build();
+    public TemplateCardDto TemplateToTemplateCardDto(Template template) {
+        return TemplateCardDto.builder()
+                .id(template.getId())
+                .name(template.getName())
+                .ownerUsername(template.getUser().getUsername())
+                .favourites(templateService.getFavouriteCount(template))
+                .isFavouritedByOwner(templateService.isFavouritedByOwner(template)).updatedAt(template.getUpdatedAt())
+                .status(template.getStatus())
+                .build();
     }
 }

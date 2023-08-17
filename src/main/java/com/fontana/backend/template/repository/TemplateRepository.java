@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TemplateRepository extends JpaRepository<Template, Integer> {
 
     Template[] getTemplatesByUser(User user);
+
     Template[] getAllByStatus(TemplateStatus status);
 }
