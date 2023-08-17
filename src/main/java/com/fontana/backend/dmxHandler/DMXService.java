@@ -30,7 +30,7 @@ public class DMXService {
     @PostConstruct
     public void init() throws IOException {
         try {
-//            openConnection();
+            openConnection();
             initialSetup();
             startScheduler();
         } catch (Exception e) {
@@ -39,10 +39,9 @@ public class DMXService {
     }
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
-        System.out.println(Arrays.toString(dmxData));
             try {
-
                 if (connectionOpened){
+                    System.out.print(".");
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
                 jd.setBaudRate(250000);
@@ -75,8 +74,8 @@ public class DMXService {
         dmxData[24] = (byte) 255;
         dmxData[27] = (byte) 255;
         dmxData[30] = (byte) 255;
-        dmxData[49] = (byte) 150;
-        dmxData[50] = (byte) 150;
+        dmxData[49] = (byte) 70;
+        dmxData[50] = (byte) 100;
 
         dmxData[dmxData.length - 3] = 33;
         dmxData[dmxData.length - 2] = 22;
@@ -107,6 +106,7 @@ public class DMXService {
     public void openConnection() throws IOException {
         jd = new JD2XX();
         String serial = new JD2XX().listDevicesBySerialNumber()[0].toString();
+        System.out.println(serial);
         jd.openBySerialNumber(serial);
         ostream = new JD2XXOutputStream(jd);
         connectionOpened = true;
