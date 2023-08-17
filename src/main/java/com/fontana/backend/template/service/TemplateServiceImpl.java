@@ -1,6 +1,7 @@
 package com.fontana.backend.template.service;
 
 import com.fontana.backend.template.entity.Template;
+import com.fontana.backend.template.entity.TemplateStatus;
 import com.fontana.backend.template.repository.TemplateRepository;
 import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,10 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public Template getTemplateById(Integer templateId) {
         return templateRepository.getReferenceById(templateId);
+    }
+
+    @Override
+    public Template[] getAllPublicTemplates() {
+        return templateRepository.getAllByStatus(TemplateStatus.PUBLIC);
     }
 }

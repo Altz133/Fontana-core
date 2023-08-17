@@ -19,4 +19,6 @@ public interface TemplateService {
     boolean isFavouritedByOwner(Template template);
 
     Template getTemplateById(Integer templateId);
+
+    Template[] getAllPublicTemplates();
 }
