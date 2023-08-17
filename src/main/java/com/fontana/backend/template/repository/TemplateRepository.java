@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface TemplateRepository extends JpaRepository<Template, Integer> {
 
-    Template[] getTemplatesByUser(User user);
+    List<Template> getTemplatesByUser(User user);
 
-    Template[] getAllByStatus(TemplateStatus status);
+    List<Template> getAllByStatus(TemplateStatus status);
 
     List<Template> getTemplatesByUser(User user, Pageable pageable);
 }

@@ -15,7 +15,7 @@ public interface TemplateService {
 
     void updateTemplate(Template template);
 
-    Template[] getTemplatesByUsername(String username);
+    List<Template> getTemplatesByUsername(String username);
 
     int getFavouriteCount(Template template);
 
@@ -23,7 +23,7 @@ public interface TemplateService {
 
     Template getTemplateById(Integer templateId);
 
-    Template[] getAllPublicTemplates();
+    List<Template> getAllPublicTemplates();
 
     List<Template> getTemplatesByUsernamePaginated(String username, Pageable pageable);
 }

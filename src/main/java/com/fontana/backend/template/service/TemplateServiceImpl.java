@@ -37,7 +37,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public Template[] getTemplatesByUsername(String username) {
+    public List<Template> getTemplatesByUsername(String username) {
         return templateRepository.getTemplatesByUser(userRepository.getReferenceById(username));
     }
 
@@ -57,7 +57,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public Template[] getAllPublicTemplates() {
+    public List<Template> getAllPublicTemplates() {
         return templateRepository.getAllByStatus(TemplateStatus.PUBLIC);
     }
 

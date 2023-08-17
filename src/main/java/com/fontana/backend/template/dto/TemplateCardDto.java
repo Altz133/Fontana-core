@@ -27,4 +27,6 @@ public class TemplateCardDto {
     private Timestamp updatedAt;
 
     private TemplateStatus status;
+
+    private Integer length;
 }
