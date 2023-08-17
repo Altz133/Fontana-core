@@ -1,6 +1,6 @@
 package com.fontana.backend.dmxHandler.validator.controller;
 
-import com.fontana.backend.dmxHandler.validator.service.DMXValidator;
+import com.fontana.backend.dmxHandler.validator.service.DMXValidatorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,20 +11,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
-import static com.fontana.backend.config.RestEndpoints.DMX;
-import static com.fontana.backend.config.RestEndpoints.DMX_CHANGE_PUMP_POWER_MULTIPLIER;
+import static com.fontana.backend.config.RestEndpoints.*;
 
 @RestController
 @RequestMapping(DMX)
 @RequiredArgsConstructor
 public class DMXValidatorController {
     @Autowired
-    private final DMXValidator dmxValidator;
+    private final DMXValidatorService dmxValidatorService;
 
     @PostMapping(value = DMX_CHANGE_PUMP_POWER_MULTIPLIER)
     public ResponseEntity<Object> changePumpMultiplier(@RequestBody float multiplier) throws IOException {
-        DMXValidator.changePumpMultiplier(multiplier);
+        DMXValidatorService.changePumpMultiplier(multiplier);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(value = DMX_UPDATE_DMX_ADDRESSES)
+    public ResponseEntity<Object> updateDMXAddresses(){
+        dmxValidatorService.updateDMXAddresses();
+        return ResponseEntity.ok().build();
+    }
+
 
 }

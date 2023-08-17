@@ -29,11 +29,11 @@ public class LedMapper {
                 5 - Strobe
                  */
         return new Led(
-                addresses[0], ledDTO.getColorR(),
-                addresses[1], ledDTO.getColorG(),
-                addresses[2], ledDTO.getColorB(),
-                addresses[3], ledDTO.getColorW(),
-                addresses[4], ledDTO.getPower(),
-                addresses[5], ledDTO.getStroboscopeFrequency());
+                addresses[0],(byte) ledDTO.getColorR(),
+                addresses[1],(byte) ledDTO.getColorG(),
+                addresses[2],(byte) ledDTO.getColorB(),
+                addresses[3],(byte) ledDTO.getColorW(),
+                addresses[4],(byte) ledDTO.getPower(),
+                addresses[5],(byte) ledDTO.getStroboscopeFrequency());
     }
 }

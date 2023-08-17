@@ -6,43 +6,44 @@ import com.fontana.backend.devices.jet.dto.JetDTO;
 import com.fontana.backend.devices.led.dto.LedDTO;
 import com.fontana.backend.devices.light.dto.LightDTO;
 import com.fontana.backend.devices.pump.dto.PumpDTO;
+import com.fontana.backend.dmxHandler.currentStateDTO.factory.messages.DeviceDTOFactoryMessages;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeviceDTOFactory {
-    private final String unknownDeviceMSG = "Unknown device type";
 
     public DeviceDTO createDeviceDTO(Device device, byte[] DMXDataArray, int[] addresses) {
         return switch (device.getType()) {
-            case PUMP -> deviceToJetDTO(device, DMXDataArray);
-            case JET -> deviceToPumpDTO(device, DMXDataArray);
+            case PUMP -> deviceToPumpDTO(device, DMXDataArray);
+            case JET -> deviceToJetDTO(device, DMXDataArray);
             case LED -> deviceToLedDTO(device, DMXDataArray, addresses);
             case LIGHT -> deviceToLightDTO(device, DMXDataArray, addresses);
-            default -> throw new IllegalArgumentException(unknownDeviceMSG);
+            default -> throw new IllegalArgumentException(DeviceDTOFactoryMessages.UNKNOWN_DEVICE.getMessage());
         };
     }
 
-    private LedDTO deviceToLightDTO(Device device, byte[] DMXDataArray, int[] addresses) {
-        return new LedDTO(DMXDataArray[addresses[0]],
-                DMXDataArray[addresses[1]],
-                DMXDataArray[addresses[2]],
-                DMXDataArray[addresses[3]],
-                DMXDataArray[addresses[4]],
-                DMXDataArray[addresses[5]]);
+    private LedDTO deviceToLedDTO(Device device, byte[] DMXDataArray, int[] addresses) {
+        return new LedDTO(device.getName(),
+                DMXDataArray[addresses[0]],//R
+                DMXDataArray[addresses[1]],//G
+                DMXDataArray[addresses[2]],//B
+                DMXDataArray[addresses[3]],//W
+                DMXDataArray[addresses[4]],//POWER
+                DMXDataArray[addresses[5]]);//STROBO FREQ
     }
 
-    private LightDTO deviceToLedDTO(Device device, byte[] DMXDataArray, int[] addresses) {
-        return new LightDTO(
-                DMXDataArray[addresses[0]],
-                DMXDataArray[addresses[1]],
-                DMXDataArray[addresses[2]]);
+    private LightDTO deviceToLightDTO(Device device, byte[] DMXDataArray, int[] addresses) {
+        return new LightDTO(device.getName(),
+                DMXDataArray[addresses[0]],//R
+                DMXDataArray[addresses[1]],//G
+                DMXDataArray[addresses[2]]);//B
     }
 
     public JetDTO deviceToJetDTO(Device device, byte[] DMXDataArray) {
-        //moge zrobic mappera na jeta i z jeta na jetdto ale to jest szybsze
         return new JetDTO(device.getName(), DMXDataArray[device.getId()] != 0);
     }
 
     public PumpDTO deviceToPumpDTO(Device device, byte[] DMXDataArray) {
-        return new PumpDTO(device.getName(),DMXDataArray[device.getId()]);}
+        return new PumpDTO(device.getName(), DMXDataArray[device.getId()]);
+    }
 }
