@@ -32,4 +32,7 @@ public class RestEndpoints {
 
     public static final String LOG = BASE + "/log";
     public static final String LOG_FIND_BY_ID = "/{id}";
+
+    public static final String TEMPLATE = BASE + "/template";
+    public static final String TEMPLATE_MY_TEMPLATES_CARDS = "/myTemplatesCards";
 }
