@@ -1,5 +1,6 @@
 package com.fontana.backend.template.entity;
 
+import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,9 +34,7 @@ public class Template {
     private Timestamp createdAt;
 
     @UpdateTimestamp
-    private Timestamp updatesAt;
-
-    private int[] snapshotsSequence;
+    private Timestamp updatedAt;
 
     @Enumerated
     private TemplateStatus status;
@@ -45,5 +44,14 @@ public class Template {
             joinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "username", referencedColumnName = "username")
     )
-    private List<User> users = new ArrayList<>();
+    private List<User> usersFavourited = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "snapshots_templates",
+            joinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "snapshotId", referencedColumnName = "id")
+    )
+    @OrderColumn(name = "snapshotIndex")
+    private List<Snapshot> snapshotsSequence = new ArrayList<>();
+
 }

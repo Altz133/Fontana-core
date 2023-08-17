@@ -39,12 +39,12 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public int getFavouriteCount(Template template) {
-        return template.getUsers().size();
+        return template.getUsersFavourited().size();
     }
 
     @Override
     public boolean isFavouritedByOwner(Template template) {
-        return template.getUsers().contains(template.getUser());
+        return template.getUsersFavourited().contains(template.getUser());
     }
 
     @Override
