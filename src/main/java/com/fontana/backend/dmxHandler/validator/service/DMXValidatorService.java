@@ -32,6 +32,7 @@ public class DMXValidatorService {
     private List<Device> pumps;
     private List<Device> leds;
     private List<Device> lights;
+
     public static void changePumpMultiplier(float multiplier) {
         pumpPowerMultiplier = multiplier;
     }
@@ -44,7 +45,7 @@ public class DMXValidatorService {
         lights = deviceRepository.findByType(DeviceType.LIGHT);
     }
 
-    public void updateDMXAddresses(){
+    public void updateDMXAddresses() {
         pumps = deviceRepository.findByType(DeviceType.PUMP);
         leds = deviceRepository.findByType(DeviceType.LED);
         lights = deviceRepository.findByType(DeviceType.LIGHT);
@@ -140,7 +141,8 @@ public class DMXValidatorService {
     //co 30 sekund pobiera dane z sensorow
     @Scheduled(fixedRate = 30000L)
     public void getSensorData() throws IOException {
-        if(enableApiValidation){
-        sensors = sensorsHandlerService.getSensors();
-    }}
+        if (enableApiValidation) {
+            sensors = sensorsHandlerService.getSensors();
+        }
+    }
 }

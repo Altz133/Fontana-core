@@ -15,7 +15,7 @@ public class PumpMapper {
 
     public Pump DTOToPump(PumpDTO pumpDTO) {
         Device device = deviceRepository.findByName(pumpDTO.getName());
-        return new Pump(device.getId(),(byte)pumpDTO.getValue());
+        return new Pump(device.getId(), (byte) pumpDTO.getValue());
     }
 
     public PumpDTO PumpToDTO(Pump pump) {

@@ -27,6 +27,7 @@ public class DMXService {
     private DMXValidatorService dmxValidatorService;
     @Autowired
     private CurrentStateDTOMapper currentStateDTOMapper;
+
     @PostConstruct
     public void init() throws IOException {
         try {
@@ -37,11 +38,12 @@ public class DMXService {
 //            refreshConnection();
         }
     }
+
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
-            try {
+        try {
 
-                if (connectionOpened){
+            if (connectionOpened) {
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
                 jd.setBaudRate(250000);
@@ -49,13 +51,14 @@ public class DMXService {
                 jd.setFlowControl(JD2XX.FLOW_NONE, 11, 13);
                 jd.setBreakOn();
                 jd.setBreakOff();
-                ostream.write(dmxData);}
-            } catch (IOException e) {
-                try {
-                    refreshConnection();
-                } catch (IOException ex) {
-                }
+                ostream.write(dmxData);
             }
+        } catch (IOException e) {
+            try {
+                refreshConnection();
+            } catch (IOException ex) {
+            }
+        }
     }
 
     private void initialSetup() throws IOException {

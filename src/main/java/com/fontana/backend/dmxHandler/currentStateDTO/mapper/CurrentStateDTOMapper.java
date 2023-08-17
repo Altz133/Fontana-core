@@ -16,12 +16,13 @@ public class CurrentStateDTOMapper {
 
     private final DeviceDTOFactory deviceDTOFactory;
     private final CurrentStateDTOService currentStateDTOService;
+
     public List<DeviceDTO> DMXtoCurrentStateDTO(byte[] DMXDataArray) {
 
         List<DeviceDTO> currentStateDTO = new ArrayList<>();
         List<Device> devices = currentStateDTOService.getDevices();
 
-        for(Device device : devices){
+        for (Device device : devices) {
             currentStateDTO.add(deviceDTOFactory.createDeviceDTO(device, DMXDataArray, device.getAddress()));
         }
 

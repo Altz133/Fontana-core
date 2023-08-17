@@ -32,9 +32,6 @@ public class JetMapper {
     }
 
     public Boolean checkIfEnabled(byte isEnabled) {
-        if (isEnabled == 0) {
-            return false;
-        }
-        return true;
+        return isEnabled != 0;
     }
 }

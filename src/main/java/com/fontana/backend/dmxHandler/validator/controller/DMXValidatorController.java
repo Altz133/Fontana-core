@@ -27,7 +27,7 @@ public class DMXValidatorController {
     }
 
     @PostMapping(value = DMX_UPDATE_DMX_ADDRESSES)
-    public ResponseEntity<Object> updateDMXAddresses(){
+    public ResponseEntity<Object> updateDMXAddresses() {
         dmxValidatorService.updateDMXAddresses();
         return ResponseEntity.ok().build();
     }

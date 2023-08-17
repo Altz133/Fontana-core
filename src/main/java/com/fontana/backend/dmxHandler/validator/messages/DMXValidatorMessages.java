@@ -8,14 +8,13 @@ public enum DMXValidatorMessages {
 
     private final String message;
 
-    DMXValidatorMessages(String message){
+    DMXValidatorMessages(String message) {
         this.message = message;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return message;
     }
-
 
 
 }
