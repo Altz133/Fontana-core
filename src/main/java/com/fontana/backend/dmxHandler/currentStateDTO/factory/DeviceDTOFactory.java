@@ -7,6 +7,7 @@ import com.fontana.backend.devices.led.dto.LedDTO;
 import com.fontana.backend.devices.light.dto.LightDTO;
 import com.fontana.backend.devices.pump.dto.PumpDTO;
 import com.fontana.backend.dmxHandler.currentStateDTO.factory.messages.DeviceDTOFactoryMessages;
+import com.fontana.backend.exception.customExceptions.DeviceDTOFactoryException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +19,7 @@ public class DeviceDTOFactory {
             case JET -> deviceToJetDTO(device, DMXDataArray);
             case LED -> deviceToLedDTO(device, DMXDataArray, addresses);
             case LIGHT -> deviceToLightDTO(device, DMXDataArray, addresses);
-            default -> throw new IllegalArgumentException(DeviceDTOFactoryMessages.UNKNOWN_DEVICE.getMessage());
+            default -> throw new DeviceDTOFactoryException(DeviceDTOFactoryMessages.UNKNOWN_DEVICE.getMessage());
         };
     }
 

@@ -4,6 +4,7 @@ import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.entity.DeviceType;
 import com.fontana.backend.devices.repository.DeviceRepository;
 import com.fontana.backend.dmxHandler.validator.messages.DMXValidatorMessages;
+import com.fontana.backend.exception.customExceptions.DMXValidatorException;
 import com.fontana.backend.frame.entity.Frame;
 import com.fontana.backend.sensorsHandler.entity.Sensors;
 import com.fontana.backend.sensorsHandler.service.SensorsHandlerService;
@@ -77,11 +78,11 @@ public class DMXValidatorService {
             }
             if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
-                throw new RuntimeException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER);
+                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER.getMessage());
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                throw new RuntimeException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES);
+                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
             }
         }
         return dmxData;
@@ -103,17 +104,17 @@ public class DMXValidatorService {
             }
             if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
-                throw new RuntimeException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER);
+                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER.getMessage());
             }
             //wyłączenie pompy jeśli wszystkie zawory są zamknięte
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                throw new RuntimeException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES);
+                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
             }
             //wyłączenie pomp jeśli poziom wody jest za niski
             if (sensors.getWaterBottom()) {
                 dmxData[pumpId] = 0;
-                throw new RuntimeException(String.valueOf(DMXValidatorMessages.LOW_WATER.getMessage()));
+                throw new DMXValidatorException(DMXValidatorMessages.LOW_WATER.getMessage());
             }
         }
         //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
@@ -133,7 +134,7 @@ public class DMXValidatorService {
                     dmxData[lightId] = 0;
                 }
             }
-            throw new RuntimeException(DMXValidatorMessages.OVERFLOWING.getMessage());
+            throw new DMXValidatorException(DMXValidatorMessages.OVERFLOWING.getMessage());
         }
         return dmxData;
     }
@@ -143,6 +144,12 @@ public class DMXValidatorService {
     public void getSensorData() throws IOException {
         if (enableApiValidation) {
             sensors = sensorsHandlerService.getSensors();
+        }
+    }
+
+    public void validateMultiplier(float multiplier) {
+        if (multiplier < 0 || multiplier > 1) {
+            throw new DMXValidatorException(DMXValidatorMessages.MULTIPLIER_OUT_OF_RANGE.getMessage());
         }
     }
 }
