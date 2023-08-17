@@ -28,4 +28,5 @@ public class Log {
     private DeviceType deviceType;
 
     private Integer deviceValue;
+    private String deviceName;
 }

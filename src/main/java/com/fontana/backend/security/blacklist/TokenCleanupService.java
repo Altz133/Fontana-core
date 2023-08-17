@@ -16,7 +16,7 @@ public class TokenCleanupService {
 
     private final BlacklistedTokenRepository blacklistedTokenRepository;
 
-    @Scheduled(fixedRate = 7200000)  // Every 2 hours
+    @Scheduled(fixedRate = 600000)//co 10 min sprawdza czy sa przedawnione tokeny
     public void cleanupBlacklistedTokens() {
         Date now = new Date();
         blacklistedTokenRepository.deleteByExpirationDateBefore(now);
