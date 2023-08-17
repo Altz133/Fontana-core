@@ -36,15 +36,15 @@ public class AuthenticationController {
 
     @PostMapping(LOGOUT)
     public ResponseEntity<Void> logout(@RequestBody String refreshToken) {
-        authService.blacklistToken(refreshToken, TokenType.REFRESH); // Added TokenType.REFRESH argument
+        authService.blacklistToken(refreshToken, TokenType.REFRESH);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(BLACKLIST)
     public ResponseEntity<Void> addToBlacklist(@Valid @RequestBody BlacklistTokenRequest tokenRequest) {
         String token = tokenRequest.getToken();
-        TokenType tokenType = tokenRequest.getTokenType(); // Get TokenType from tokenRequest
-        authService.blacklistToken(token, tokenType); // Pass tokenType as second argument
+        TokenType tokenType = tokenRequest.getTokenType();
+        authService.blacklistToken(token, tokenType);
         return ResponseEntity.ok().build();
     }
 }
