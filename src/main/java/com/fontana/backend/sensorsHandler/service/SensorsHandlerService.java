@@ -23,7 +23,6 @@ public class SensorsHandlerService {
 
         response = Request.get(SENSORS_URL).execute();
         return objectMapper.readValue(response.returnContent().asString(), Sensors.class);
-
     }
 
 
