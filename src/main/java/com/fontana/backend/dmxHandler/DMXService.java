@@ -76,8 +76,8 @@ public class DMXService {
         dmxData[24] = (byte) 255;
         dmxData[27] = (byte) 255;
         dmxData[30] = (byte) 255;
-        dmxData[49] = (byte) 150;
-        dmxData[50] = (byte) 150;
+        dmxData[49] = (byte) 100;
+        dmxData[50] = (byte) 100;
         //pasek
         dmxData[51] = (byte) 150;
         dmxData[52] = (byte) 150;

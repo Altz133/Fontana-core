@@ -119,7 +119,6 @@ public class DMXValidatorService {
         }
         //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
         if (sensors.getWaterTop()) {
-            //konkatenacja zmniejszy wydajnosc
             //wylaczanie ledow
             for (Device led : leds) {
                 int[] singleLedAddresses = led.getAddress();
