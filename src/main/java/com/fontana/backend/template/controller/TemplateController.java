@@ -5,10 +5,9 @@ import com.fontana.backend.template.entity.Template;
 import com.fontana.backend.template.mapper.TemplateCardDtoMapper;
 import com.fontana.backend.template.service.TemplateServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,18 @@ public class TemplateController {
         List<TemplateCardDto> list = new ArrayList<>();
 
         for (Template t : templateService.getTemplatesByUsername(username)) {
+            list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
+        }
+
+        return list;
+    }
+
+    @GetMapping(TEMPLATE_MY_TEMPLATES_CARDS_PAGINATION)
+    public List<TemplateCardDto> getMyTemplates(@RequestParam String username, @PathVariable int page, @PathVariable int size) {
+        List<TemplateCardDto> list = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size);
+
+        for (Template t : templateService.getTemplatesByUsernamePaginated(username, pageable)) {
             list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
         }
 

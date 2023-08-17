@@ -5,7 +5,10 @@ import com.fontana.backend.template.entity.TemplateStatus;
 import com.fontana.backend.template.repository.TemplateRepository;
 import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +59,10 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public Template[] getAllPublicTemplates() {
         return templateRepository.getAllByStatus(TemplateStatus.PUBLIC);
+    }
+
+    @Override
+    public List<Template> getTemplatesByUsernamePaginated(String username, Pageable pageable) {
+        return templateRepository.getTemplatesByUser(userRepository.getReferenceById(username), pageable);
     }
 }
