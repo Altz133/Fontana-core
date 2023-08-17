@@ -40,11 +40,11 @@ public class DeviceDTOFactory {
                 DMXDataArray[addresses[2]]);//B
     }
 
-    public JetDTO deviceToJetDTO(Device device, byte[] DMXDataArray) {
+    private JetDTO deviceToJetDTO(Device device, byte[] DMXDataArray) {
         return new JetDTO(device.getName(), DMXDataArray[device.getId()] != 0);
     }
 
-    public PumpDTO deviceToPumpDTO(Device device, byte[] DMXDataArray) {
+    private PumpDTO deviceToPumpDTO(Device device, byte[] DMXDataArray) {
         return new PumpDTO(device.getName(), DMXDataArray[device.getId()]);
     }
 }

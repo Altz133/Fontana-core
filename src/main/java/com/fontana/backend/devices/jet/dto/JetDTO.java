@@ -12,7 +12,6 @@ public class JetDTO extends DeviceDTO {
 
     private Boolean value;
 
-    //TODO zapytaj Lukasza czy ten konstruktor jest potrzebny
     public JetDTO(String name, Boolean value) {
         super(name);
         this.value = value;
