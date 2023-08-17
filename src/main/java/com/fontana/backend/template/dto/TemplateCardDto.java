@@ -14,6 +14,8 @@ import java.sql.Timestamp;
 @Builder
 public class TemplateCardDto {
 
+    private Integer id;
+
     private String name;
 
     private String ownerUsername;
