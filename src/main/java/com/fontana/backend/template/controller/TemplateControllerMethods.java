@@ -18,16 +18,6 @@ public class TemplateControllerMethods {
     private final TemplateServiceImpl templateService;
     private final TemplateCardDtoMapper templateCardDtoMapper;
 
-    public List<TemplateCardDto> getMyTemplates(String username) {
-        List<TemplateCardDto> list = new ArrayList<>();
-
-        for (Template t : templateService.getTemplatesByUsername(username)) {
-            list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
-        }
-
-        return list;
-    }
-
     public List<TemplateCardDto> getMyTemplatesPaginated(String username, int page, int size) {
         List<TemplateCardDto> list = new ArrayList<>();
         Pageable pageable = PageRequest.of(page, size);
@@ -39,10 +29,11 @@ public class TemplateControllerMethods {
         return list;
     }
 
-    public List<TemplateCardDto> getPublicTemplates() {
+    public List<TemplateCardDto> getPublicTemplatesPaginated(String name, int page, int size) {
         List<TemplateCardDto> list = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size);
 
-        for (Template t : templateService.getAllPublicTemplates()) {
+        for (Template t : templateService.getAllPublicTemplatesByName(name, pageable)) {
             list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
         }
 
