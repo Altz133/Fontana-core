@@ -1,6 +1,7 @@
 package com.fontana.backend.template.service;
 
 
+import com.fontana.backend.template.dto.TemplateCardDto;
 import com.fontana.backend.template.entity.Template;
 import org.springframework.data.domain.Pageable;
 
@@ -31,4 +32,9 @@ public interface TemplateService {
 
     int getDurationFromTemplates(List<Template> templates);
 
+    List<TemplateCardDto> getMyTemplates(String username);
+
+    List<TemplateCardDto> getMyTemplatesPaginated(String username, int page, int size);
+
+    List<TemplateCardDto> getPublicTemplates();
 }

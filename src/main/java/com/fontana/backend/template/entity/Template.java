@@ -11,7 +11,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -44,7 +43,7 @@ public class Template {
             joinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "username", referencedColumnName = "username")
     )
-    private List<User> usersFavourited = new ArrayList<>();
+    private List<User> usersFavourited;
 
     @ManyToMany
     @JoinTable(name = "snapshots_templates",
@@ -52,6 +51,6 @@ public class Template {
             inverseJoinColumns = @JoinColumn(name = "snapshotId", referencedColumnName = "id")
     )
     @OrderColumn(name = "snapshotIndex")
-    private List<Snapshot> snapshotsSequence = new ArrayList<>();
+    private List<Snapshot> snapshotsSequence;
 
 }
