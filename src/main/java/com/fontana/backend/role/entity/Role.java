@@ -24,8 +24,9 @@ public class Role {
 
     private String name;
 
-    @OneToMany
-    @JsonIgnore
-    private List<User> users = new ArrayList<>();
+////    @OneToMany
+////    @JoinColumn(name = "roleId")
+////    @JsonIgnore
+//    private List<User> users = new ArrayList<>();
 
 }
