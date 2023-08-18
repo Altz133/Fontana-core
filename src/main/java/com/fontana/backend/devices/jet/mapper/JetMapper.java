@@ -2,6 +2,7 @@ package com.fontana.backend.devices.jet.mapper;
 
 import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.jet.dto.JetDTO;
+import com.fontana.backend.devices.jet.dto.JetDTOGet;
 import com.fontana.backend.devices.jet.entity.Jet;
 import com.fontana.backend.devices.repository.DeviceRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,8 @@ public class JetMapper {
     @Autowired
     private DeviceRepository deviceRepository;
 
-    public JetDTO JetToDTO(Jet jet) {
-        return new JetDTO(jet.getName(), checkIfEnabled(jet.getValue()));
+    public JetDTOGet JetToDTOGet(Jet jet) {
+        return new JetDTOGet(jet.getName(), checkIfEnabled(jet.getValue()));
     }
 
     public Jet DTOToJet(JetDTO jetDTO) {

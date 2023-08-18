@@ -66,29 +66,29 @@ public class DMXService {
             dmxData[j] = 0;
         }
 
-        dmxData[3] = (byte) 255;
-        dmxData[6] = (byte) 255;
-        dmxData[9] = (byte) 255;
-        dmxData[12] = (byte) 255;
-        dmxData[15] = (byte) 255;
-        dmxData[18] = (byte) 255;
-        dmxData[21] = (byte) 255;
-        dmxData[24] = (byte) 255;
-        dmxData[27] = (byte) 255;
-        dmxData[30] = (byte) 255;
-        dmxData[49] = (byte) 100;
-        dmxData[50] = (byte) 100;
+        dmxData[3] = (byte) 0;
+        dmxData[6] = (byte) 0;
+        dmxData[9] = (byte) 0;
+        dmxData[12] = (byte) 0;
+        dmxData[15] = (byte) 0;
+        dmxData[18] = (byte) 0;
+        dmxData[21] = (byte) 0;
+        dmxData[24] = (byte) 0;
+        dmxData[27] = (byte) 0;
+        dmxData[30] = (byte) 0;
+        dmxData[49] = (byte) 0;
+        dmxData[50] = (byte) 0;
         //pasek
-        dmxData[51] = (byte) 150;
-        dmxData[52] = (byte) 150;
-        dmxData[53] = (byte) 150;
-        dmxData[54] = (byte) 150;
-        dmxData[55] = (byte) 150;
-        dmxData[56] = (byte) 150;
+        dmxData[51] = (byte) 0;
+        dmxData[52] = (byte) 0;
+        dmxData[53] = (byte) 0;
+        dmxData[54] = (byte) 0;
+        dmxData[55] = (byte) 0;
+        dmxData[56] = (byte) 0;
         //light
-        dmxData[57] = (byte) 150;
-        dmxData[58] = (byte) 150;
-        dmxData[59] = (byte) 150;
+        dmxData[57] = (byte) 0;
+        dmxData[58] = (byte) 0;
+        dmxData[59] = (byte) 0;
 
         dmxData[dmxData.length - 3] = 33;
         dmxData[dmxData.length - 2] = 22;

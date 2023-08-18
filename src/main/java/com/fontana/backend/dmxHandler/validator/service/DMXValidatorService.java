@@ -67,7 +67,7 @@ public class DMXValidatorService {
 
             int[] singlePumpAddresses = pump.getAddress();
             int pumpId = pump.getId();
-            byte pumpPower = dmxData[pumpId];
+            int pumpPower = dmxData[pumpId];
             int closedValveCounter = 0;
 
             for (int jetId : singlePumpAddresses) {
@@ -76,8 +76,9 @@ public class DMXValidatorService {
                     closedValveCounter++;
                 }
             }
-            if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
+            if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
+                System.out.println(dmxData[pumpId]);
                 throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER.getMessage());
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
@@ -102,7 +103,7 @@ public class DMXValidatorService {
                     closedValveCounter++;
                 }
             }
-            if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
+            if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
                 throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER.getMessage());
             }

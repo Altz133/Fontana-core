@@ -2,10 +2,10 @@ package com.fontana.backend.dmxHandler.currentStateDTO.factory;
 
 import com.fontana.backend.devices.dto.DeviceDTO;
 import com.fontana.backend.devices.entity.Device;
-import com.fontana.backend.devices.jet.dto.JetDTO;
+import com.fontana.backend.devices.jet.dto.JetDTOGet;
 import com.fontana.backend.devices.led.dto.LedDTO;
 import com.fontana.backend.devices.light.dto.LightDTO;
-import com.fontana.backend.devices.pump.dto.PumpDTO;
+import com.fontana.backend.devices.pump.dto.PumpDTOGet;
 import com.fontana.backend.dmxHandler.currentStateDTO.factory.messages.DeviceDTOFactoryMessages;
 import com.fontana.backend.exception.customExceptions.DeviceDTOFactoryException;
 import org.springframework.stereotype.Service;
@@ -40,11 +40,11 @@ public class DeviceDTOFactory {
                 DMXDataArray[addresses[2]]);//B
     }
 
-    private JetDTO deviceToJetDTO(Device device, byte[] DMXDataArray) {
-        return new JetDTO(device.getName(), DMXDataArray[device.getId()] != 0);
+    private JetDTOGet deviceToJetDTO(Device device, byte[] DMXDataArray) {
+        return new JetDTOGet(device.getName(), DMXDataArray[device.getId()] != 0);
     }
 
-    private PumpDTO deviceToPumpDTO(Device device, byte[] DMXDataArray) {
-        return new PumpDTO(device.getName(), DMXDataArray[device.getId()]);
+    private PumpDTOGet deviceToPumpDTO(Device device, byte[] DMXDataArray) {
+        return new PumpDTOGet(device.getName(), DMXDataArray[device.getId()]);
     }
 }
