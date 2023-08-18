@@ -1,22 +1,29 @@
 package com.fontana.backend.devices.light.dto;
 
+import com.fontana.backend.devices.dto.DeviceDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class LightDTOGet {
-    @Min(value = Byte.MIN_VALUE)
-    @Max(value = Byte.MAX_VALUE)
-    private byte colorR;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class LightDTOGet extends DeviceDTO {
+    @Min(value = 0)
+    @Max(value = 255)
+    private int colorR;
 
-    @Min(value = Byte.MIN_VALUE)
-    @Max(value = Byte.MAX_VALUE)
-    private byte colorG;
+    @Min(value = 0)
+    @Max(value = 255)
+    private int colorG;
 
-    @Min(value = Byte.MIN_VALUE)
-    @Max(value = Byte.MAX_VALUE)
-    private byte colorB;
+    @Min(value = 0)
+    @Max(value = 255)
+    private int colorB;
 
-    public LightDTO(String name, byte ColorR, byte ColorG, byte ColorB) {
+    public LightDTOGet(String name, int ColorR, int ColorG, int ColorB) {
         super(name);
         this.colorR = ColorR & 0xFF;
         this.colorG = ColorG & 0xFF;

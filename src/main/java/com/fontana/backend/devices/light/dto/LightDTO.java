@@ -23,11 +23,4 @@ public class LightDTO extends DeviceDTO {
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
     private byte colorB;
-
-    public LightDTO(String name, byte ColorR, byte ColorG, byte ColorB) {
-        super(name);
-        this.colorR = ColorR & 0xFF;
-        this.colorG = ColorG & 0xFF;
-        this.colorB = ColorB & 0xFF;
-    }
 }
