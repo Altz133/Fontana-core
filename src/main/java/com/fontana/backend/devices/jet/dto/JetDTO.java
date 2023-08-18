@@ -11,4 +11,9 @@ import lombok.NoArgsConstructor;
 public class JetDTO extends DeviceDTO {
 
     private Boolean value;
+
+    public JetDTO(String name, Boolean value) {
+        super(name);
+        this.value = value;
+    }
 }

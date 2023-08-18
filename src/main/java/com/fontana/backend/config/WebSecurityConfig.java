@@ -64,9 +64,7 @@ public class WebSecurityConfig {
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(sessionStatusFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
+                .addFilterBefore(sessionStatusFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

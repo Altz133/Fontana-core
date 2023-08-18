@@ -2,6 +2,7 @@ package com.fontana.backend.security.auth;
 
 import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
 import com.fontana.backend.security.blacklist.TokenCleanupService;
+import com.fontana.backend.security.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class AuthenticationController {
 
     /**
      * @param token has to contain prefix of "Bearer " in order to validate token properly.
-     * @return new access token wit updated expiration time
+     * @return new access token with updated expiration time
      */
     @PostMapping(AUTH_REFRESHTOKEN)
     public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
@@ -35,22 +36,15 @@ public class AuthenticationController {
 
     @PostMapping(LOGOUT)
     public ResponseEntity<Void> logout(@RequestBody String refreshToken) {
-        authService.blacklistToken(refreshToken);
-        tokenCleanupService.removeFromBlacklistImmediately(refreshToken);
+        authService.blacklistToken(refreshToken, TokenType.REFRESH);
         return ResponseEntity.ok().build();
     }
-
-    @PostMapping(REMOVE_TOKEN_IMMEDIATELY)
-    public ResponseEntity<Void> removeTokenImmediately(@RequestBody String token) {
-        tokenCleanupService.removeFromBlacklistImmediately(token);
-        return ResponseEntity.ok().build();
-    }
-
 
     @PostMapping(BLACKLIST)
     public ResponseEntity<Void> addToBlacklist(@Valid @RequestBody BlacklistTokenRequest tokenRequest) {
         String token = tokenRequest.getToken();
-        authService.blacklistToken(token);
+        TokenType tokenType = tokenRequest.getTokenType();
+        authService.blacklistToken(token, tokenType);
         return ResponseEntity.ok().build();
     }
 }

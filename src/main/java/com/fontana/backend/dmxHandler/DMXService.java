@@ -1,6 +1,8 @@
 package com.fontana.backend.dmxHandler;
 
-import com.fontana.backend.dmxHandler.validator.service.DMXValidator;
+import com.fontana.backend.devices.dto.DeviceDTO;
+import com.fontana.backend.dmxHandler.currentStateDTO.mapper.CurrentStateDTOMapper;
+import com.fontana.backend.dmxHandler.validator.service.DMXValidatorService;
 import com.fontana.backend.frame.entity.Frame;
 import jakarta.annotation.PostConstruct;
 import jd2xx.JD2XX;
@@ -11,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @EnableScheduling
@@ -21,7 +24,10 @@ public class DMXService {
     private JD2XXOutputStream ostream;
     private byte[] dmxData;
     @Autowired
-    private DMXValidator dmxValidator;
+    private DMXValidatorService dmxValidatorService;
+    @Autowired
+    private CurrentStateDTOMapper currentStateDTOMapper;
+
     @PostConstruct
     public void init() throws IOException {
         try {
@@ -29,14 +35,14 @@ public class DMXService {
             initialSetup();
             startScheduler();
         } catch (Exception e) {
-//            refreshConnection();
         }
     }
+
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
-            try {
+        try {
 
-                if (connectionOpened){
+            if (connectionOpened) {
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
                 jd.setBaudRate(250000);
@@ -44,13 +50,14 @@ public class DMXService {
                 jd.setFlowControl(JD2XX.FLOW_NONE, 11, 13);
                 jd.setBreakOn();
                 jd.setBreakOff();
-                ostream.write(dmxData);}
-            } catch (IOException e) {
-                try {
-                    refreshConnection();
-                } catch (IOException ex) {
-                }
+                ostream.write(dmxData);
             }
+        } catch (IOException e) {
+            try {
+                refreshConnection();
+            } catch (IOException ex) {
+            }
+        }
     }
 
     private void initialSetup() throws IOException {
@@ -69,8 +76,19 @@ public class DMXService {
         dmxData[24] = (byte) 255;
         dmxData[27] = (byte) 255;
         dmxData[30] = (byte) 255;
-        dmxData[49] = (byte) 150;
-        dmxData[50] = (byte) 150;
+        dmxData[49] = (byte) 100;
+        dmxData[50] = (byte) 100;
+        //pasek
+        dmxData[51] = (byte) 150;
+        dmxData[52] = (byte) 150;
+        dmxData[53] = (byte) 150;
+        dmxData[54] = (byte) 150;
+        dmxData[55] = (byte) 150;
+        dmxData[56] = (byte) 150;
+        //light
+        dmxData[57] = (byte) 150;
+        dmxData[58] = (byte) 150;
+        dmxData[59] = (byte) 150;
 
         dmxData[dmxData.length - 3] = 33;
         dmxData[dmxData.length - 2] = 22;
@@ -80,11 +98,11 @@ public class DMXService {
 
 
     public void setDMXDataField(Frame frame) throws IOException {
-        dmxData = dmxValidator.validateDmxData(dmxData, frame);
+        dmxData = dmxValidatorService.validateDmxData(dmxData, frame);
     }
 
-    public byte[] getDMXDataArray() {
-        return dmxData;
+    public List<DeviceDTO> getDMXDataArray() {
+        return currentStateDTOMapper.DMXtoCurrentStateDTO(dmxData);
     }
 
     public void setDMXDataArray(byte[] dmxDataArray) {

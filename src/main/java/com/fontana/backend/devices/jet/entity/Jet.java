@@ -1,5 +1,6 @@
 package com.fontana.backend.devices.jet.entity;
 
+import com.fontana.backend.devices.entity.Device;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -13,11 +14,11 @@ import org.springframework.validation.annotation.Validated;
 @NoArgsConstructor
 @Validated
 @Component
-public class Jet {
+public class Jet extends Device {
 
     @Min(value = 0)
     @Max(value = 511)
-    private int id;
+    private Integer id;
 
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
