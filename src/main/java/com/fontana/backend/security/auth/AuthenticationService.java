@@ -44,7 +44,7 @@ public class AuthenticationService {
         return ResponseEntity.ok(generateAuthResponse(jwtAccessToken, jwtRefreshToken));
     }
 
-    public ResponseEntity<?> refreshToken(String oldRefreshToken) throws JwtExpiredOrUntrustedException {
+    public ResponseEntity<?> refreshToken(String oldRefreshToken) {
         String username = jwtService.extractUsername(oldRefreshToken);
         String newJwtAccessToken = jwtService.generateAccessToken(username);
 

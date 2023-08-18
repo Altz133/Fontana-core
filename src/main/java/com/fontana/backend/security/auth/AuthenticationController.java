@@ -18,7 +18,6 @@ import static com.fontana.backend.config.RestEndpoints.*;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
-    private final TokenCleanupService tokenCleanupService;
 
     @PostMapping(AUTH_AUTHENTICATE)
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request) {
