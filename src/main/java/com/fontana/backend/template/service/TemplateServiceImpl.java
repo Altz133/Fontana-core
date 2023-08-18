@@ -16,6 +16,8 @@ public class TemplateServiceImpl implements TemplateService {
     private final TemplateRepository templateRepository;
     private final UserRepository userRepository;
 
+    private final int sequencesPerSecond = 4;
+
     @Override
     public void addTemplate(Template template) {
         templateRepository.save(template);
@@ -64,5 +66,20 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public List<Template> getTemplatesByUsernamePaginated(String username, Pageable pageable) {
         return templateRepository.getTemplatesByUser(userRepository.getReferenceById(username), pageable);
+    }
+
+    @Override
+    public int getDurationFromTemplate(Template template) {
+        return template.getSnapshotsSequence().size() / sequencesPerSecond;
+    }
+
+    @Override
+    public int getDurationFromTemplates(List<Template> templates) {
+        int sum = 0;
+        for (Template t : templates) {
+            sum += t.getSnapshotsSequence().size();
+        }
+
+        return sum / sequencesPerSecond;
     }
 }

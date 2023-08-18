@@ -26,4 +26,9 @@ public interface TemplateService {
     List<Template> getAllPublicTemplates();
 
     List<Template> getTemplatesByUsernamePaginated(String username, Pageable pageable);
+
+    int getDurationFromTemplate(Template template);
+
+    int getDurationFromTemplates(List<Template> templates);
+
 }

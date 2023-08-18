@@ -21,7 +21,7 @@ public class TemplateCardDtoMapper {
                 .isFavouritedByOwner(templateService.isFavouritedByOwner(template))
                 .updatedAt(template.getUpdatedAt())
                 .status(template.getStatus())
-                .length(template.getSnapshotsSequence().size() / 4) //jeden snapshot co 0.25s
+                .length(templateService.getDurationFromTemplate(template))
                 .build();
     }
 }
