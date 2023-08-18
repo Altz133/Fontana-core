@@ -29,4 +29,7 @@ public class BlacklistedToken {
     @Column(name = "token_type", nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expirationDate;
 }

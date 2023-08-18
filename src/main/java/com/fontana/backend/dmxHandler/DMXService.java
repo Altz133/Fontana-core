@@ -30,9 +30,9 @@ public class DMXService {
     @PostConstruct
     public void init() throws IOException {
         try {
-            openConnection();
-            initialSetup();
-            startScheduler();
+//            openConnection();
+//            initialSetup();
+//            startScheduler();
         } catch (Exception e) {
 //            refreshConnection();
         }
