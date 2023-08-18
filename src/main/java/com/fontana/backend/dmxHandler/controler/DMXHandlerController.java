@@ -12,6 +12,7 @@ import com.fontana.backend.dmxHandler.service.DMXHandlerService;
 import com.fontana.backend.frame.entity.Frame;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class DMXHandlerController {
     }
 
     @PostMapping(value = DMX_UPDATE_PUMP)
-    public ResponseEntity<Object> updateFramePump(@RequestBody PumpDTO pumpDTO) throws IOException {
+    public ResponseEntity<Object> updateFramePump(@Validated @RequestBody PumpDTO pumpDTO) throws IOException {
         DMXHandlerService.sendDMXDataPump(pumpMapper.DTOToPump(pumpDTO), frame);
         return ResponseEntity.ok().build();
     }
