@@ -1,16 +1,18 @@
 package com.fontana.backend.dmxHandler.service;
 
+import com.fontana.backend.devices.dto.DeviceDTO;
 import com.fontana.backend.devices.jet.entity.Jet;
 import com.fontana.backend.devices.led.entity.Led;
 import com.fontana.backend.devices.light.entity.Light;
 import com.fontana.backend.devices.pump.entity.Pump;
 import com.fontana.backend.dmxHandler.DMXService;
-import com.fontana.backend.dmxHandler.validator.service.DMXValidator;
+import com.fontana.backend.dmxHandler.validator.service.DMXValidatorService;
 import com.fontana.backend.frame.entity.Frame;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class DMXHandlerService {
         DMXService.setDMXDataArray(DMXDataArray);
     }
 
-    public byte[] getDMXDataArray() {
+    public List<DeviceDTO> getDMXDataArray() {
         return DMXService.getDMXDataArray();
     }
 
@@ -82,7 +84,7 @@ public class DMXHandlerService {
     }
 
     public void changeApiValidationStatus(boolean status) {
-        DMXValidator.enableApiValidation = status;
+        DMXValidatorService.enableApiValidation = status;
     }
 
 

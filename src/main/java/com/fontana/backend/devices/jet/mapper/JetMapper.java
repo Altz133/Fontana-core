@@ -16,7 +16,7 @@ public class JetMapper {
     private DeviceRepository deviceRepository;
 
     public JetDTO JetToDTO(Jet jet) {
-        return new JetDTO();
+        return new JetDTO(jet.getName(), checkIfEnabled(jet.getValue()));
     }
 
     public Jet DTOToJet(JetDTO jetDTO) {
@@ -29,5 +29,9 @@ public class JetMapper {
             return (byte) 255;
         }
         return (byte) 0;
+    }
+
+    public Boolean checkIfEnabled(byte isEnabled) {
+        return isEnabled != 0;
     }
 }
