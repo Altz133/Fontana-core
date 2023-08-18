@@ -59,8 +59,8 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public List<Template> getAllPublicTemplates() {
-        return templateRepository.getAllByStatus(TemplateStatus.PUBLIC);
+    public List<Template> getAllPublicTemplatesByName(String name, Pageable pageable) {
+        return templateRepository.getAllByStatusAndNameContaining(TemplateStatus.PUBLIC, name, pageable);
     }
 
     @Override

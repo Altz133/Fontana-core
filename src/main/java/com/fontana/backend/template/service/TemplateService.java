@@ -23,7 +23,7 @@ public interface TemplateService {
 
     Template getTemplateById(Integer templateId);
 
-    List<Template> getAllPublicTemplates();
+    List<Template> getAllPublicTemplatesByName(String name, Pageable pageable);
 
     List<Template> getTemplatesByUsernamePaginated(String username, Pageable pageable);
 
