@@ -27,5 +27,4 @@ public class Role {
     @OneToMany
     @JsonIgnore
     private List<User> users = new ArrayList<>();
-
 }
