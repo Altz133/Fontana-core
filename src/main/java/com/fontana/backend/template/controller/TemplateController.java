@@ -14,21 +14,20 @@ import static com.fontana.backend.config.RestEndpoints.*;
 @RequestMapping(TEMPLATE)
 @RequiredArgsConstructor
 public class TemplateController {
-    private final TemplateServiceImpl templateService;
-    private final TemplateCardDtoMapper templateCardDtoMapper;
+    private final TemplateControllerMethods templateControllerMethods;
 
     @GetMapping(TEMPLATE_MY_TEMPLATES_CARDS)
     public List<TemplateCardDto> getMyTemplates(@RequestParam String username) {
-        return templateService.getMyTemplates(username);
+        return templateControllerMethods.getMyTemplates(username);
     }
 
     @GetMapping(TEMPLATE_MY_TEMPLATES_CARDS_PAGINATION)
     public List<TemplateCardDto> getMyTemplates(@RequestParam String username, @PathVariable int page, @PathVariable int size) {
-        return templateService.getMyTemplatesPaginated(username, page, size);
+        return templateControllerMethods.getMyTemplatesPaginated(username, page, size);
     }
 
     @GetMapping(TEMPLATE_PUBLIC_TEMPLATES_CARDS)
     public List<TemplateCardDto> getPublicTemplates() {
-        return templateService.getPublicTemplates();
+        return templateControllerMethods.getPublicTemplates();
     }
 }

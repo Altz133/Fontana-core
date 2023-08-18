@@ -1,17 +1,13 @@
 package com.fontana.backend.template.service;
 
-import com.fontana.backend.template.dto.TemplateCardDto;
 import com.fontana.backend.template.entity.Template;
 import com.fontana.backend.template.entity.TemplateStatus;
-import com.fontana.backend.template.mapper.TemplateCardDtoMapper;
 import com.fontana.backend.template.repository.TemplateRepository;
 import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,7 +15,6 @@ import java.util.List;
 public class TemplateServiceImpl implements TemplateService {
     private final TemplateRepository templateRepository;
     private final UserRepository userRepository;
-    private final TemplateCardDtoMapper templateCardDtoMapper;
 
     private final int sequencesPerSecond = 4;
 
@@ -86,39 +81,5 @@ public class TemplateServiceImpl implements TemplateService {
         }
 
         return sum / sequencesPerSecond;
-    }
-
-    @Override
-    public List<TemplateCardDto> getMyTemplates(String username) {
-        List<TemplateCardDto> list = new ArrayList<>();
-
-        for (Template t : getTemplatesByUsername(username)) {
-            list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
-        }
-
-        return list;
-    }
-
-    @Override
-    public List<TemplateCardDto> getMyTemplatesPaginated(String username, int page, int size) {
-        List<TemplateCardDto> list = new ArrayList<>();
-        Pageable pageable = PageRequest.of(page, size);
-
-        for (Template t : getTemplatesByUsernamePaginated(username, pageable)) {
-            list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
-        }
-
-        return list;
-    }
-
-    @Override
-    public List<TemplateCardDto> getPublicTemplates() {
-        List<TemplateCardDto> list = new ArrayList<>();
-
-        for (Template t : getAllPublicTemplates()) {
-            list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
-        }
-
-        return list;
     }
 }
