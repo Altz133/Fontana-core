@@ -35,7 +35,8 @@ public class RestEndpoints {
     public static final String LOG = BASE + "/log";
     public static final String LOG_FIND_BY_ID = "/{id}";
     public static final String SCHEDULE = BASE + "/schedule";
-    public static final String SCHEDULE_FIND_BY_DATE_AND_CYCLE = "/{date}";
+    public static final String SCHEDULE_FIND_BY_DATE = "/{date}";
     public static final String SCHEDULE_ADD = "/add";
     public static final String SCHEDULE_DELETE = "/delete";
+    public static final String SCHEDULE_FIND_BY_MONTH = "/month/{date}";
 }

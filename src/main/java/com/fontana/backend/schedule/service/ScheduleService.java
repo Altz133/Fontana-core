@@ -1,11 +1,11 @@
 package com.fontana.backend.schedule.service;
 
-import com.fontana.backend.schedule.dto.ScheduleCardDTO;
+import com.fontana.backend.schedule.entity.Schedule;
 import com.fontana.backend.schedule.repository.ScheduleRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -18,7 +18,12 @@ public class ScheduleService {
         scheduleRepository.deleteById(id);
     }
 
-    public List<ScheduleCardDTO> getScheduleByDate(){
-        return scheduleRepository.findAllByCycle();
+    public List<Schedule> findByMonth(Timestamp date){
+        return scheduleRepository.findByMonth(date);
     }
+
+    public List<Schedule> findByDate(Timestamp date){
+        return scheduleRepository.findByDate(date);
+    }
+
 }

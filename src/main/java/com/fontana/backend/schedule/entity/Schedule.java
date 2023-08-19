@@ -1,11 +1,9 @@
 package com.fontana.backend.schedule.entity;
 
-import com.fontana.backend.schedule.utils.ScheduleCycle;
+import com.fontana.backend.schedule.utils.TimestampListConverter;
 import com.fontana.backend.template.entity.Template;
 import com.fontana.backend.user.entity.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,14 +24,9 @@ public class Schedule {
     private Integer id;
     @NotEmpty
     private String name;
-    @NotEmpty
-    private Timestamp startDate;
-    @NotEmpty
-    private Timestamp endDate;
-    @NotEmpty
-    private List<ScheduleCycle> cycle;
-    @Min(value = 0)
-    private Integer repetitions;
+    @Convert(converter = TimestampListConverter.class)
+    private List<Timestamp> dates;
+    private Timestamp duration;
     private Boolean enabled;
     @ManyToOne
     @JoinColumn(name="username")

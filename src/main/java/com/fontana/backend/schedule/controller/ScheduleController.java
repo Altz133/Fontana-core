@@ -1,9 +1,7 @@
 package com.fontana.backend.schedule.controller;
 
-import com.fontana.backend.schedule.dto.ScheduleCardDTO;
 import com.fontana.backend.schedule.dto.ScheduleFormDTO;
 import com.fontana.backend.schedule.service.ScheduleService;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +34,12 @@ public class ScheduleController {
     }
 
     //TODO implementacja
-    @GetMapping(value = SCHEDULE_FIND_BY_DATE_AND_CYCLE)
-    public ResponseEntity<Object> findSchedulesByDateAndCycle(@RequestBody Timestamp date){
+    @GetMapping(value = SCHEDULE_FIND_BY_DATE)
+    public ResponseEntity<Object> findSchedulesByDate(@RequestBody Timestamp date){
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping(value = SCHEDULE_FIND_BY_MONTH)
+    public ResponseEntity<Object> findSchedulesByMonth(@RequestBody Timestamp date){
         return ResponseEntity.ok().build();
     }
 }
