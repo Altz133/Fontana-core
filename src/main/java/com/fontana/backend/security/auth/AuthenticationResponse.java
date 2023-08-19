@@ -1,5 +1,6 @@
 package com.fontana.backend.security.auth;
 
+import com.fontana.backend.role.entity.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +17,6 @@ public class AuthenticationResponse {
     private String accessToken;
     private String refreshToken;
     private String tokenType;
+    private String role;
     private LocalDateTime expiration;
 }
