@@ -67,7 +67,6 @@ public class DMXValidatorService {
             int[] singlePumpAddresses = pump.getAddress();
             int pumpId = pump.getId();
             int pumpPower =dmxData[pumpId] & 0xFF;
-            System.out.println(pumpPower);
             int closedValveCounter = 0;
 
             for (int jetId : singlePumpAddresses) {
