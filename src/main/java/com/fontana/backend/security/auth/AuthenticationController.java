@@ -22,10 +22,6 @@ public class AuthenticationController {
         return authService.authenticate(request);
     }
 
-    /**
-     * @param token has to contain prefix of "Bearer " in order to validate token properly.
-     * @return new access token with updated expiration time
-     */
     @GetMapping(AUTH_REFRESHTOKEN)
     public ResponseEntity<?> refreshToken(@RequestHeader("${jwt.refresh-token-custom-header}") String token) {
         return authService.refreshToken(token);
