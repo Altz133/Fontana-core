@@ -1,6 +1,5 @@
 package com.fontana.backend.security.auth;
 
-import com.fontana.backend.role.entity.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
