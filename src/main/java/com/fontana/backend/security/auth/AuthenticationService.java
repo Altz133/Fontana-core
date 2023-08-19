@@ -1,5 +1,6 @@
 package com.fontana.backend.security.auth;
 
+import com.fontana.backend.security.jwt.JwtExpiredOrUntrustedException;
 import com.fontana.backend.security.LdapService;
 import com.fontana.backend.security.jwt.JwtService;
 import com.fontana.backend.security.blacklist.entity.BlacklistedToken;

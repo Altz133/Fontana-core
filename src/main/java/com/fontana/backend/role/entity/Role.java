@@ -8,9 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,10 +20,4 @@ public class Role {
     private Integer id;
 
     private String name;
-
-////    @OneToMany
-////    @JoinColumn(name = "roleId")
-////    @JsonIgnore
-//    private List<User> users = new ArrayList<>();
-
 }
