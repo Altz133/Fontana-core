@@ -1,11 +1,8 @@
 package com.fontana.backend.security.auth;
 
-import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
-import com.fontana.backend.security.blacklist.TokenCleanupService;
 import com.fontana.backend.security.TokenType;
+import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
