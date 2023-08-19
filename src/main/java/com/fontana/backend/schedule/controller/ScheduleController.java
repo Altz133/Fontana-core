@@ -1,14 +1,14 @@
-package com.fontana.backend.schedules.controller;
+package com.fontana.backend.schedule.controller;
 
-import com.fontana.backend.schedules.dto.ScheduleCardDTO;
-import com.fontana.backend.schedules.dto.ScheduleFormDTO;
+import com.fontana.backend.schedule.dto.ScheduleCardDTO;
+import com.fontana.backend.schedule.dto.ScheduleFormDTO;
+import com.fontana.backend.schedule.service.ScheduleService;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 
@@ -18,6 +18,7 @@ import static com.fontana.backend.config.RestEndpoints.*;
 @RequestMapping(SCHEDULE)
 @RequiredArgsConstructor
 public class ScheduleController {
+    private final ScheduleService scheduleService;
 
     //TODO implementacja
     //dodawanie z formu
@@ -29,13 +30,14 @@ public class ScheduleController {
     //TODO implementacja
     //usuwanie po kardzie
     @PostMapping(value = SCHEDULE_DELETE)
-    public ResponseEntity<Object> deleteSchedule(@RequestBody ScheduleCardDTO scheduleCardDTO) {
+    public ResponseEntity<Object> deleteSchedule(@RequestParam @NotNull Integer id) {
+        scheduleService.removeById(id);
         return ResponseEntity.ok().build();
     }
 
     //TODO implementacja
     @GetMapping(value = SCHEDULE_FIND_BY_DATE_AND_CYCLE)
-    public ResponseEntity<Object> findScheduleByDate(@RequestBody Timestamp date){
+    public ResponseEntity<Object> findSchedulesByDateAndCycle(@RequestBody Timestamp date){
         return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,6 @@
-package com.fontana.backend.schedules.entity;
+package com.fontana.backend.schedule.entity;
 
+import com.fontana.backend.schedule.utils.ScheduleCycle;
 import com.fontana.backend.template.entity.Template;
 import com.fontana.backend.user.entity.User;
 import jakarta.persistence.*;
@@ -29,15 +30,11 @@ public class Schedule {
     private Timestamp startDate;
     @NotEmpty
     private Timestamp endDate;
-    @Min(value = Byte.MIN_VALUE)
-    @Max(value = Byte.MAX_VALUE)
-    //zmiana byte na set
-    // enumow
-    //PN  WT SR CZ PT SB ND  EN(ON/OFF)
-    //128 64 32 16 8   4  2  1
-    private Byte cycle;
+    @NotEmpty
+    private List<ScheduleCycle> cycle;
     @Min(value = 0)
     private Integer repetitions;
+    private Boolean enabled;
     @ManyToOne
     @JoinColumn(name="username")
     private User user;

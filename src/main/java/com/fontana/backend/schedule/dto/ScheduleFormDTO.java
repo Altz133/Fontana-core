@@ -1,4 +1,4 @@
-package com.fontana.backend.schedules.dto;
+package com.fontana.backend.schedule.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
