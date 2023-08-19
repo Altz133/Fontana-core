@@ -64,10 +64,10 @@ public class DMXValidatorService {
     //walidacja bez sensorow
     public byte[] validateArray(byte[] dmxData) {
         for (Device pump : pumps) {
-
             int[] singlePumpAddresses = pump.getAddress();
             int pumpId = pump.getId();
-            int pumpPower = dmxData[pumpId];
+            int pumpPower =dmxData[pumpId] & 0xFF;
+            System.out.println(pumpPower);
             int closedValveCounter = 0;
 
             for (int jetId : singlePumpAddresses) {
@@ -77,9 +77,7 @@ public class DMXValidatorService {
                 }
             }
             if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
-                dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
-                System.out.println(dmxData[pumpId]);
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER.getMessage());
+                dmxData[pumpId] = (byte) ( (255 * (1 - (pumpPowerMultiplier * closedValveCounter))));
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
@@ -105,7 +103,6 @@ public class DMXValidatorService {
             }
             if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER.getMessage());
             }
             //wyłączenie pompy jeśli wszystkie zawory są zamknięte
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
