@@ -58,7 +58,7 @@ public class DMXService {
             }
         }
     }
-    //co 5 minut spradzam czy jest woda i czy nie jest overflowing
+    //every 5 minutes check if the dmx data is valid
     @Scheduled(fixedRate = 1000L * 60 * 5)
     private void validateDMXData() throws IOException {
         if(DMXValidatorService.enableApiValidation){
