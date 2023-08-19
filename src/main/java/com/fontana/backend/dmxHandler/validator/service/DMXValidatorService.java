@@ -81,7 +81,7 @@ public class DMXValidatorService {
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
+                //throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
             }
         }
         return dmxData;
@@ -107,12 +107,11 @@ public class DMXValidatorService {
             //wyłączenie pompy jeśli wszystkie zawory są zamknięte
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
+                //throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
             }
             //wyłączenie pomp jeśli poziom wody jest za niski
             if (sensors.getWaterBottom()) {
                 dmxData[pumpId] = 0;
-                throw new DMXValidatorException(DMXValidatorMessages.LOW_WATER.getMessage());
             }
         }
         //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
@@ -131,7 +130,33 @@ public class DMXValidatorService {
                     dmxData[lightId] = 0;
                 }
             }
-            throw new DMXValidatorException(DMXValidatorMessages.OVERFLOWING.getMessage());
+            //throw new DMXValidatorException(DMXValidatorMessages.OVERFLOWING.getMessage());
+        }
+        return dmxData;
+    }
+
+    public byte[] validateArrayCyclic(byte[] dmxData){
+        //wyłączenie pomp jeśli poziom wody jest za niski
+        if (sensors.getWaterBottom()) {
+            for(Device pump : pumps){
+                int pumpId = pump.getId();
+                dmxData[pumpId] = 0;
+            }
+        }
+        if(sensors.getWaterTop()){
+            for (Device led : leds) {
+                int[] singleLedAddresses = led.getAddress();
+                for (int ledId : singleLedAddresses) {
+                    dmxData[ledId] = 0;
+                }
+            }
+            //wylaczanie swiatel
+            for (Device light : lights) {
+                int[] singleLightAddresses = light.getAddress();
+                for (int lightId : singleLightAddresses) {
+                    dmxData[lightId] = 0;
+                }
+            }
         }
         return dmxData;
     }

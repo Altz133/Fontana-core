@@ -41,7 +41,6 @@ public class DMXService {
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
         try {
-
             if (connectionOpened) {
                 jd.resetDevice();
                 jd.setTimeouts(16, 50);
@@ -57,6 +56,13 @@ public class DMXService {
                 refreshConnection();
             } catch (IOException ex) {
             }
+        }
+    }
+    //co 5 minut spradzam czy jest woda i czy nie jest overflowing
+    @Scheduled(fixedRate = 1000L * 60 * 5)
+    private void validateDMXData() throws IOException {
+        if(DMXValidatorService.enableApiValidation){
+            dmxData = dmxValidatorService.validateArrayCyclic(dmxData);
         }
     }
 
