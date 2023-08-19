@@ -4,6 +4,7 @@ import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
 import com.fontana.backend.security.blacklist.TokenCleanupService;
 import com.fontana.backend.security.TokenType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,8 @@ public class AuthenticationController {
      * @param token has to contain prefix of "Bearer " in order to validate token properly.
      * @return new access token with updated expiration time
      */
-    @PostMapping(AUTH_REFRESHTOKEN)
-    public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    @GetMapping(AUTH_REFRESHTOKEN)
+    public ResponseEntity<?> refreshToken(@RequestHeader("${jwt.refresh-token-custom-header}") String token) {
         return authService.refreshToken(token);
     }
 
