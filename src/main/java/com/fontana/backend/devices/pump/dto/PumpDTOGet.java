@@ -10,9 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PumpDTO extends DeviceDTO {
+public class PumpDTOGet extends DeviceDTO {
 
-    @Min(value = Byte.MIN_VALUE)
-    @Max(value = Byte.MAX_VALUE)
-    private byte value;
+    @Min(value = 0)
+    @Max(value = 255)
+    private int value;
+
+    public PumpDTOGet(String name, byte value) {
+        super(name);
+        this.value = value & 0xFF;
+    }
 }

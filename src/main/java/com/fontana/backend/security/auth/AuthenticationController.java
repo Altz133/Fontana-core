@@ -1,10 +1,8 @@
 package com.fontana.backend.security.auth;
 
-import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
-import com.fontana.backend.security.blacklist.TokenCleanupService;
 import com.fontana.backend.security.TokenType;
+import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,19 +16,14 @@ import static com.fontana.backend.config.RestEndpoints.*;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
-    private final TokenCleanupService tokenCleanupService;
 
     @PostMapping(AUTH_AUTHENTICATE)
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request) {
         return authService.authenticate(request);
     }
 
-    /**
-     * @param token has to contain prefix of "Bearer " in order to validate token properly.
-     * @return new access token with updated expiration time
-     */
-    @PostMapping(AUTH_REFRESHTOKEN)
-    public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    @GetMapping(AUTH_REFRESHTOKEN)
+    public ResponseEntity<?> refreshToken(@RequestHeader("${jwt.refresh-token-custom-header}") String token) {
         return authService.refreshToken(token);
     }
 

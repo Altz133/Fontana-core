@@ -1,10 +1,17 @@
 package com.fontana.backend.security.auth;
 
+import com.fontana.backend.role.entity.Role;
+import com.fontana.backend.role.entity.RoleType;
+import com.fontana.backend.role.repository.RoleRepository;
+import com.fontana.backend.security.jwt.JwtExpiredOrUntrustedException;
 import com.fontana.backend.security.LdapService;
 import com.fontana.backend.security.jwt.JwtService;
 import com.fontana.backend.security.blacklist.entity.BlacklistedToken;
 import com.fontana.backend.security.blacklist.repository.BlacklistedTokenRepository;
 import com.fontana.backend.security.TokenType;
+import com.fontana.backend.user.repository.UserRepository;
+import com.fontana.backend.user.service.UserService;
+import com.fontana.backend.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +32,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final LdapService ldapService;
     private final BlacklistedTokenRepository blacklistedTokenRepository;
+    private final UserRepository userRepository;
 
     @Value("${jwt.token-type}")
     private String tokenType;
@@ -40,7 +48,9 @@ public class AuthenticationService {
         String jwtAccessToken = jwtService.generateAccessToken(request.getUsername());
         String jwtRefreshToken = jwtService.generateRefreshToken(request.getUsername());
 
-        return ResponseEntity.ok(generateAuthResponse(jwtAccessToken, jwtRefreshToken));
+        String role = userRepository.findByUsername(request.getUsername()).get().getRole().getName();
+
+        return ResponseEntity.ok(generateAuthResponse(jwtAccessToken, jwtRefreshToken, role));
     }
 
     public ResponseEntity<?> refreshToken(String oldRefreshToken) {
@@ -49,6 +59,16 @@ public class AuthenticationService {
 
         jwtService.blacklistToken(oldRefreshToken, TokenType.REFRESH);
         return ResponseEntity.ok(generateAuthResponse(newJwtAccessToken, oldRefreshToken));
+    }
+
+    private AuthenticationResponse generateAuthResponse(String accessToken, String refreshToken, String role) {
+        return AuthenticationResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType(tokenType)
+                .role(role)
+                .expiration(LocalDateTime.now().plus(Long.parseLong(accessExpDelay), ChronoUnit.MILLIS))
+                .build();
     }
 
     private AuthenticationResponse generateAuthResponse(String accessToken, String refreshToken) {
