@@ -16,5 +16,6 @@ public class AuthenticationResponse {
     private String accessToken;
     private String refreshToken;
     private String tokenType;
+    private String role;
     private LocalDateTime expiration;
 }
