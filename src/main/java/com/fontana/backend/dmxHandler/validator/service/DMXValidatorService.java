@@ -64,10 +64,9 @@ public class DMXValidatorService {
     //walidacja bez sensorow
     public byte[] validateArray(byte[] dmxData) {
         for (Device pump : pumps) {
-
             int[] singlePumpAddresses = pump.getAddress();
             int pumpId = pump.getId();
-            byte pumpPower = dmxData[pumpId];
+            int pumpPower =dmxData[pumpId] & 0xFF;
             int closedValveCounter = 0;
 
             for (int jetId : singlePumpAddresses) {
@@ -76,13 +75,13 @@ public class DMXValidatorService {
                     closedValveCounter++;
                 }
             }
-            if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
-                dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER.getMessage());
+            if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
+                dmxData[pumpId] = (byte) ( (255 * (1 - (pumpPowerMultiplier * closedValveCounter))));
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
+                //FIXME albo rezygnujemy z tego albo trzeba dopytac o te exceptiony
+                //throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
             }
         }
         return dmxData;
@@ -102,19 +101,18 @@ public class DMXValidatorService {
                     closedValveCounter++;
                 }
             }
-            if (closedValveCounter > 0 && pumpPower > (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
+            if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.RELATIVE_POWER.getMessage());
             }
             //wyłączenie pompy jeśli wszystkie zawory są zamknięte
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
+                //FIXME albo rezygnujemy z tego albo trzeba dopytac o te exceptiony
+                //throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
             }
             //wyłączenie pomp jeśli poziom wody jest za niski
             if (sensors.getWaterBottom()) {
                 dmxData[pumpId] = 0;
-                throw new DMXValidatorException(DMXValidatorMessages.LOW_WATER.getMessage());
             }
         }
         //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
@@ -133,22 +131,43 @@ public class DMXValidatorService {
                     dmxData[lightId] = 0;
                 }
             }
-            throw new DMXValidatorException(DMXValidatorMessages.OVERFLOWING.getMessage());
+            //FIXME albo rezygnujemy z tego albo trzeba dopytac o te exceptiony
+            //throw new DMXValidatorException(DMXValidatorMessages.OVERFLOWING.getMessage());
         }
         return dmxData;
     }
 
-    //co 30 sekund pobiera dane z sensorow
+    public byte[] validateArrayCyclic(byte[] dmxData){
+        //turning off the pumps if the water level is too low
+        if (sensors.getWaterBottom()) {
+            for(Device pump : pumps){
+                int pumpId = pump.getId();
+                dmxData[pumpId] = 0;
+            }
+        }
+        //turning off the lights if the water level is too high
+        if(sensors.getWaterTop()){
+            for (Device led : leds) {
+                int[] singleLedAddresses = led.getAddress();
+                for (int ledId : singleLedAddresses) {
+                    dmxData[ledId] = 0;
+                }
+            }
+            for (Device light : lights) {
+                int[] singleLightAddresses = light.getAddress();
+                for (int lightId : singleLightAddresses) {
+                    dmxData[lightId] = 0;
+                }
+            }
+        }
+        return dmxData;
+    }
+
+    //every 30 seconds update the sensors data
     @Scheduled(fixedRate = 30000L)
     public void getSensorData() throws IOException {
         if (enableApiValidation) {
             sensors = sensorsHandlerService.getSensors();
-        }
-    }
-
-    public void validateMultiplier(float multiplier) {
-        if (multiplier < 0 || multiplier > 1) {
-            throw new DMXValidatorException(DMXValidatorMessages.MULTIPLIER_OUT_OF_RANGE.getMessage());
         }
     }
 }

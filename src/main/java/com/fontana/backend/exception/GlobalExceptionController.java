@@ -51,6 +51,7 @@ public class GlobalExceptionController {
     @ExceptionHandler(JwtExpiredOrUntrustedException.class)
     public ResponseEntity<Map<String, Object>> handleJwtException(JwtExpiredOrUntrustedException exc) {
         Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
+        log.info("JWT Expired or untrusted exception invoked in exception handler.");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 

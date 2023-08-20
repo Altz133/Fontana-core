@@ -6,7 +6,6 @@ import com.fontana.backend.security.filters.SessionStatusFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -59,7 +58,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(new AntPathRequestMatcher(SESSION + "/*")).hasAnyAuthority(
                                         RoleType.ADMIN.name(), RoleType.OPERATOR.name())
                                 .anyRequest().authenticated())
-                                //TODO keep adding every endpoint/group of endpoints with proper access level
+                //TODO keep adding every endpoint/group of endpoints with proper access level
                 .sessionManagement((sessionManagement) ->
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

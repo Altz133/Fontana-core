@@ -48,17 +48,14 @@ public class BootstrapInMemoryData implements CommandLineRunner {
         if (roleRepository.findAll().size() == 0) {
             Role admin = Role.builder()
                     .name(RoleType.ADMIN.name())
-                    .users(null)
                     .build();
 
             Role operator = Role.builder()
                     .name(RoleType.OPERATOR.name())
-                    .users(null)
                     .build();
 
             Role viewer = Role.builder()
                     .name(RoleType.VIEWER.name())
-                    .users(null)
                     .build();
 
             roleRepository.save(admin);
