@@ -1,6 +1,6 @@
 package com.fontana.backend.schedule.entity;
 
-import com.fontana.backend.schedule.utils.TimestampListConverter;
+import com.fontana.backend.schedule.utils.ScheduleDate;
 import com.fontana.backend.template.entity.Template;
 import com.fontana.backend.user.entity.User;
 import jakarta.persistence.*;
@@ -24,8 +24,8 @@ public class Schedule {
     private Integer id;
     @NotEmpty
     private String name;
-    @Convert(converter = TimestampListConverter.class)
-    private List<Timestamp> dates;
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ScheduleDate> dates;
     private Timestamp duration;
     private Boolean enabled;
     @ManyToOne

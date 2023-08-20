@@ -28,18 +28,18 @@ public class ScheduleController {
     //TODO implementacja
     //usuwanie po kardzie
     @PostMapping(value = SCHEDULE_DELETE)
-    public ResponseEntity<Object> deleteSchedule(@RequestParam @NotNull Integer id) {
+    public ResponseEntity<Object> deleteSchedule(@PathVariable @NotNull Integer id) {
         scheduleService.removeById(id);
         return ResponseEntity.ok().build();
     }
 
     //TODO implementacja
     @GetMapping(value = SCHEDULE_FIND_BY_DATE)
-    public ResponseEntity<Object> findSchedulesByDate(@RequestBody Timestamp date){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> findSchedulesByDate(@PathVariable Timestamp date){
+        return ResponseEntity.ok(scheduleService.findByDate(date));
     }
     @GetMapping(value = SCHEDULE_FIND_BY_MONTH)
-    public ResponseEntity<Object> findSchedulesByMonth(@RequestBody Timestamp date){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> findSchedulesByMonth(@PathVariable Timestamp date){
+        return ResponseEntity.ok(scheduleService.findByMonth(date));
     }
 }
