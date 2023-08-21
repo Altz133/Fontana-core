@@ -57,9 +57,9 @@ public class DMXValidatorService {
         byte[] data = Arrays.copyOf(dmxData, dmxData.length);
         data[frame.getId()] = frame.getValue();
         Device device = deviceRepository.findById(frame.getId()).orElseThrow(() -> new DMXValidatorException(DMXValidatorMessages.DEVICE_NOT_FOUND.getMessage() + frame.getId()));
-
+        DeviceType type = device.getType();
         if(enableApiValidation){
-            switch (device.getType()){
+            switch (type){
                 case JET, PUMP -> {
                     return validateArrayWithSensors(data);
                 }
@@ -68,7 +68,7 @@ public class DMXValidatorService {
                 }
             }
         }
-        switch (device.getType()){
+        switch (type){
             case JET, PUMP -> {
                 return validateArray(data);
             }
