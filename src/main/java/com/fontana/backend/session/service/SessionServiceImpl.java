@@ -65,7 +65,6 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public List<SessionResponseDTO> findAll() {
-
         List<Session> sessions = sessionRepository.findAll();
 
         return sessions.stream()
@@ -96,7 +95,7 @@ public class SessionServiceImpl implements SessionService {
             sessionRepository.save(updated);
         }
 
-        if (activeSession != null) {
+        if (activeSession != null && !authority.equals(RoleType.ADMIN.name())) {
             SessionBusyResponse response = buildSessionBusyResponse(sessionBusyMsg, activeSession);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }

@@ -9,6 +9,7 @@ import com.fontana.backend.devices.light.mapper.LightMapper;
 import com.fontana.backend.devices.pump.dto.PumpDTO;
 import com.fontana.backend.devices.pump.mapper.PumpMapper;
 import com.fontana.backend.dmxHandler.service.DMXHandlerService;
+import com.fontana.backend.exception.customExceptions.DMXValidatorException;
 import com.fontana.backend.frame.entity.Frame;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,13 @@ public class DMXHandlerController {
 
     @PostMapping(value = DMX_UPDATE_JET)
     public ResponseEntity<Object> updateFrameJet(@RequestBody JetDTO jetDTO) throws IOException {
-        DMXHandlerService.sendDMXDataJet(jetMapper.DTOToJet(jetDTO), frame);
-        return ResponseEntity.ok().build();
+        try{
+            DMXHandlerService.sendDMXDataJet(jetMapper.DTOToJet(jetDTO), frame);
+            return ResponseEntity.ok().build();
+        } catch (DMXValidatorException e) {
+            String errorMessage = "An error occurred: " + e.getMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
     }
 
     @PostMapping(value = DMX_UPDATE_ARRAY)
@@ -43,9 +49,14 @@ public class DMXHandlerController {
     }
 
     @PostMapping(value = DMX_UPDATE_PUMP)
-    public ResponseEntity<Object> updateFramePump(@RequestBody PumpDTO pumpDTO) throws IOException {
-        DMXHandlerService.sendDMXDataPump(pumpMapper.DTOToPump(pumpDTO), frame);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updateFramePump(@RequestBody PumpDTO pumpDTO) {
+        try {
+            DMXHandlerService.sendDMXDataPump(pumpMapper.DTOToPump(pumpDTO), frame);
+            return ResponseEntity.ok().build();
+        } catch (DMXValidatorException | IOException e) {
+            String errorMessage = "An error occurred: " + e.getMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
     }
 
     @PostMapping(value = DMX_UPDATE_LIGHT)
