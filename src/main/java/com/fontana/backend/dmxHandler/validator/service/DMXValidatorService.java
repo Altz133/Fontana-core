@@ -25,6 +25,7 @@ import java.util.List;
 public class DMXValidatorService {
     public static boolean enableApiValidation = false;
     private static float pumpPowerMultiplier = 0.1f;
+    private static final int byteMaxValue = 255;
     @Autowired
     private final SensorsHandlerService sensorsHandlerService;
     @Autowired
@@ -55,6 +56,9 @@ public class DMXValidatorService {
     public byte[] validateDmxData(byte[] dmxData, Frame frame) throws IOException {
         byte[] data = Arrays.copyOf(dmxData, dmxData.length);
         data[frame.getId()] = frame.getValue();
+        if (enableApiValidation){
+            return validateArray(data,sensors);
+        }
         return validateArray(data);
     }
 
@@ -72,8 +76,8 @@ public class DMXValidatorService {
                     closedValveCounter++;
                 }
             }
-            if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
-                dmxData[pumpId] = (byte) ( (255 * (1 - (pumpPowerMultiplier * closedValveCounter))));
+            if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (byteMaxValue * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
+                dmxData[pumpId] = (byte) ( (byteMaxValue * (1 - (pumpPowerMultiplier * closedValveCounter))));
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
@@ -81,6 +85,12 @@ public class DMXValidatorService {
             }
         }
         return dmxData;
+    }
+
+    //validation with sensors
+    public byte[] validateArray(byte[] dmxData, Sensors sensors) {
+        byte[] validatedArray = validateArray(dmxData);
+        return validateArrayCyclic(validatedArray);
     }
 
     public byte[] validateArrayCyclic(byte[] dmxData){
