@@ -1,6 +1,7 @@
 package com.fontana.backend.dmxHandler.validator.messages;
 
 public enum DMXValidatorMessages {
+    //I'm going to leave those here just in case we need them further down the line
     RELATIVE_POWER(" is running on too much power relative to closed valves"),
     CLOSED_VALVES(" is on but all valves are closed"),
     OVERFLOWING("Lights are on but water level is too high"),
