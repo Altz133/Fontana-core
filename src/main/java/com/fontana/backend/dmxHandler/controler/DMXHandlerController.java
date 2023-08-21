@@ -37,8 +37,7 @@ public class DMXHandlerController {
             DMXHandlerService.sendDMXDataJet(jetMapper.DTOToJet(jetDTO), frame);
             return ResponseEntity.ok().build();
         } catch (DMXValidatorException e) {
-            String errorMessage = "An error occurred: " + e.getMessage();
-            return ResponseEntity.badRequest().body(errorMessage);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -53,9 +52,8 @@ public class DMXHandlerController {
         try {
             DMXHandlerService.sendDMXDataPump(pumpMapper.DTOToPump(pumpDTO), frame);
             return ResponseEntity.ok().build();
-        } catch (DMXValidatorException | IOException e) {
-            String errorMessage = "An error occurred: " + e.getMessage();
-            return ResponseEntity.badRequest().body(errorMessage);
+        } catch (DMXValidatorException | IOException e) {;
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

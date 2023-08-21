@@ -25,6 +25,7 @@ import java.util.List;
 public class DMXValidatorService {
     public static boolean enableApiValidation = false;
     private static float pumpPowerMultiplier = 0.1f;
+    private static final int byteMaxValue = 255;
     @Autowired
     private final SensorsHandlerService sensorsHandlerService;
     @Autowired
@@ -72,8 +73,8 @@ public class DMXValidatorService {
                     closedValveCounter++;
                 }
             }
-            if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
-                dmxData[pumpId] = (byte) ( (255 * (1 - (pumpPowerMultiplier * closedValveCounter))));
+            if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (byteMaxValue * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
+                dmxData[pumpId] = (byte) ( (byteMaxValue * (1 - (pumpPowerMultiplier * closedValveCounter))));
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
