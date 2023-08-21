@@ -25,8 +25,6 @@ public class ScheduleController {
         return ResponseEntity.ok().build();
     }
 
-    //TODO implementacja
-    //usuwanie po kardzie
     @PostMapping(value = SCHEDULE_DELETE)
     public ResponseEntity<Object> deleteSchedule(@PathVariable @NotNull Integer id) {
         scheduleService.removeById(id);
