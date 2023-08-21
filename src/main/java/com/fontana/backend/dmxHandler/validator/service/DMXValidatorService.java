@@ -55,9 +55,6 @@ public class DMXValidatorService {
     public byte[] validateDmxData(byte[] dmxData, Frame frame) throws IOException {
         byte[] data = Arrays.copyOf(dmxData, dmxData.length);
         data[frame.getId()] = frame.getValue();
-        if (enableApiValidation) {
-            return validateArray(data, sensors);
-        }
         return validateArray(data);
     }
 
@@ -81,52 +78,6 @@ public class DMXValidatorService {
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
                 throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
-            }
-        }
-        return dmxData;
-    }
-
-    public byte[] validateArray(byte[] dmxData, Sensors sensors) {
-        for (Device pump : pumps) {
-
-            int[] singlePumpAddresses = pump.getAddress();
-            int pumpId = pump.getId();
-            byte pumpPower = dmxData[pumpId];
-            int closedValveCounter = 0;
-
-            for (int jetId : singlePumpAddresses) {
-                byte jetPower = dmxData[jetId];
-                if (jetPower == 0) {
-                    closedValveCounter++;
-                }
-            }
-            if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
-                dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
-            }
-            if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
-                dmxData[pumpId] = 0;
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
-            }
-            //turning off the pumps if the water level is too low
-            if (sensors.getWaterBottom()) {
-                dmxData[pumpId] = 0;
-            }
-        }
-        //turning off the lights if the water level is too high
-        if (sensors.getWaterTop()) {
-            //turning off the led ring
-            for (Device led : leds) {
-                int[] singleLedAddresses = led.getAddress();
-                for (int ledId : singleLedAddresses) {
-                    dmxData[ledId] = 0;
-                }
-            }
-            //turning off the lights
-            for (Device light : lights) {
-                int[] singleLightAddresses = light.getAddress();
-                for (int lightId : singleLightAddresses) {
-                    dmxData[lightId] = 0;
-                }
             }
         }
         return dmxData;
