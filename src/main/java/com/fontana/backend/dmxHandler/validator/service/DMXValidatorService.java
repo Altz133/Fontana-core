@@ -61,7 +61,7 @@ public class DMXValidatorService {
         return validateArray(data);
     }
 
-    //walidacja bez sensorow
+    //validation without sensors
     public byte[] validateArray(byte[] dmxData) {
         for (Device pump : pumps) {
             int[] singlePumpAddresses = pump.getAddress();
@@ -80,8 +80,7 @@ public class DMXValidatorService {
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                //FIXME albo rezygnujemy z tego albo trzeba dopytac o te exceptiony
-                //throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
+                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
             }
         }
         return dmxData;
@@ -104,35 +103,31 @@ public class DMXValidatorService {
             if (closedValveCounter > 0 && closedValveCounter != singlePumpAddresses.length && pumpPower > (255 * (1 - (pumpPowerMultiplier * closedValveCounter))) && pumpPower != 0) {
                 dmxData[pumpId] = (byte) (255 * (1 - (pumpPowerMultiplier * closedValveCounter)));
             }
-            //wyłączenie pompy jeśli wszystkie zawory są zamknięte
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                //FIXME albo rezygnujemy z tego albo trzeba dopytac o te exceptiony
-                //throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
+                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
             }
-            //wyłączenie pomp jeśli poziom wody jest za niski
+            //turning off the pumps if the water level is too low
             if (sensors.getWaterBottom()) {
                 dmxData[pumpId] = 0;
             }
         }
-        //wyłączenie świateł i ledów jeśli poziom wody jest za wysoki
+        //turning off the lights if the water level is too high
         if (sensors.getWaterTop()) {
-            //wylaczanie ledow
+            //turning off the led ring
             for (Device led : leds) {
                 int[] singleLedAddresses = led.getAddress();
                 for (int ledId : singleLedAddresses) {
                     dmxData[ledId] = 0;
                 }
             }
-            //wylaczanie swiatel
+            //turning off the lights
             for (Device light : lights) {
                 int[] singleLightAddresses = light.getAddress();
                 for (int lightId : singleLightAddresses) {
                     dmxData[lightId] = 0;
                 }
             }
-            //FIXME albo rezygnujemy z tego albo trzeba dopytac o te exceptiony
-            //throw new DMXValidatorException(DMXValidatorMessages.OVERFLOWING.getMessage());
         }
         return dmxData;
     }
