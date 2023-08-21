@@ -95,7 +95,7 @@ public class SessionServiceImpl implements SessionService {
             sessionRepository.save(updated);
         }
 
-        if (activeSession != null && authority.equals(RoleType.ADMIN.name())) {
+        if (activeSession != null && !authority.equals(RoleType.ADMIN.name())) {
             SessionBusyResponse response = buildSessionBusyResponse(sessionBusyMsg, activeSession);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
