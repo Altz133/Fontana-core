@@ -56,10 +56,27 @@ public class DMXValidatorService {
     public byte[] validateDmxData(byte[] dmxData, Frame frame) throws IOException {
         byte[] data = Arrays.copyOf(dmxData, dmxData.length);
         data[frame.getId()] = frame.getValue();
-        if (enableApiValidation){
-            return validateArray(data,sensors);
+        Device device = deviceRepository.findById(frame.getId()).orElseThrow(() -> new DMXValidatorException(DMXValidatorMessages.DEVICE_NOT_FOUND.getMessage() + frame.getId()));
+
+        if(enableApiValidation){
+            switch (device.getType()){
+                case JET, PUMP -> {
+                    return validateArrayWithSensors(data);
+                }
+                case LED, LIGHT -> {
+                    return validateLightsAndLeds(data);
+                }
+            }
         }
-        return validateArray(data);
+        switch (device.getType()){
+            case JET, PUMP -> {
+                return validateArray(data);
+            }
+            case LED, LIGHT -> {
+                return data;
+            }
+        }
+        return data;
     }
 
     //validation without sensors
@@ -88,20 +105,12 @@ public class DMXValidatorService {
     }
 
     //validation with sensors
-    public byte[] validateArray(byte[] dmxData, Sensors sensors) {
+    public byte[] validateArrayWithSensors(byte[] dmxData){
         byte[] validatedArray = validateArray(dmxData);
-        return validateArrayCyclic(validatedArray);
+        return validatePumpsAPI(validatedArray);
     }
 
-    public byte[] validateArrayCyclic(byte[] dmxData){
-        //turning off the pumps if the water level is too low
-        if (sensors.getWaterBottom()) {
-            for(Device pump : pumps){
-                int pumpId = pump.getId();
-                dmxData[pumpId] = 0;
-            }
-        }
-        //turning off the lights if the water level is too high
+    public byte[] validateLightsAndLeds(byte[] dmxData){
         if(sensors.getWaterTop()){
             for (Device led : leds) {
                 int[] singleLedAddresses = led.getAddress();
@@ -117,6 +126,24 @@ public class DMXValidatorService {
             }
         }
         return dmxData;
+    }
+
+    public byte[] validatePumpsAPI(byte[] dmxData){
+        //turning off the pumps if the water level is too low
+        if (sensors.getWaterBottom()) {
+            for(Device pump : pumps){
+                int pumpId = pump.getId();
+                dmxData[pumpId] = 0;
+            }
+        }
+        return dmxData;
+    }
+
+    public byte[] validateArrayCyclic(byte[] dmxData){
+        //turning off the pumps if the water level is too low
+        byte[] validatedPumpsAndJets = validatePumpsAPI(dmxData);
+        //turning off the lights if the water level is too high
+        return validateLightsAndLeds(validatedPumpsAndJets);
     }
 
     //every 30 seconds update the sensors data
