@@ -16,7 +16,7 @@ public class TemplateServiceImpl implements TemplateService {
     private final TemplateRepository templateRepository;
     private final UserRepository userRepository;
 
-    private final int sequencesPerSecond = 4;
+    private final int SEQUENCES_PER_SECOND = 4;
 
     @Override
     public void addTemplate(Template template) {
@@ -70,7 +70,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public int getDurationFromTemplate(Template template) {
-        return template.getSnapshotsSequence().size() / sequencesPerSecond;
+        return template.getSnapshotsSequence().size() / SEQUENCES_PER_SECOND;
     }
 
     @Override
@@ -80,6 +80,6 @@ public class TemplateServiceImpl implements TemplateService {
             sum += t.getSnapshotsSequence().size();
         }
 
-        return sum / sequencesPerSecond;
+        return sum / SEQUENCES_PER_SECOND;
     }
 }
