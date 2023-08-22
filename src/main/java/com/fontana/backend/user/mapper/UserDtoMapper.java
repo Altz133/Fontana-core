@@ -14,6 +14,7 @@ public class UserDtoMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .role(user.getRole())
+                .lastRoleChange(user.getLastRoleChange())
                 .build();
     }
 
@@ -24,6 +25,7 @@ public class UserDtoMapper {
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .role(userDto.getRole())
+                .lastRoleChange(null)
                 .build();
     }
 }
