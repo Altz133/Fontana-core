@@ -3,6 +3,7 @@ package com.fontana.backend.dmxHandler.validator.service;
 import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.entity.DeviceType;
 import com.fontana.backend.devices.repository.DeviceRepository;
+import com.fontana.backend.dmxHandler.DMXService;
 import com.fontana.backend.dmxHandler.validator.messages.DMXValidatorMessages;
 import com.fontana.backend.exception.customExceptions.DMXValidatorException;
 import com.fontana.backend.frame.entity.Frame;
@@ -26,17 +27,24 @@ public class DMXValidatorService {
     public static boolean enableApiValidation = false;
     private static float pumpPowerMultiplier = 0.1f;
     private static final int byteMaxValue = 255;
+    private static boolean waterLevelTopStatus = false;
+    private static boolean waterLevelBottomStatus = false;
     @Autowired
     private final SensorsHandlerService sensorsHandlerService;
     @Autowired
     private final DeviceRepository deviceRepository;
-    private Sensors sensors;
-    private List<Device> pumps;
-    private List<Device> leds;
-    private List<Device> lights;
+    private static Sensors sensors;
+    private static List<Device> pumps;
+    private static List<Device> leds;
+    private static List<Device> lights;
 
     public static void changePumpMultiplier(float multiplier) {
         pumpPowerMultiplier = multiplier;
+    }
+
+    public static void setStatusesToEnabled() {
+        waterLevelTopStatus = true;
+        waterLevelBottomStatus = true;
     }
 
     @PostConstruct
@@ -54,31 +62,33 @@ public class DMXValidatorService {
     }
 
     public byte[] validateDmxData(byte[] dmxData, Frame frame) throws IOException {
+
         byte[] data = Arrays.copyOf(dmxData, dmxData.length);
         data[frame.getId()] = frame.getValue();
         Device device = deviceRepository.findById(frame.getId()).orElseThrow(() -> new DMXValidatorException(DMXValidatorMessages.DEVICE_NOT_FOUND.getMessage() + frame.getId()));
         DeviceType type = device.getType();
-        if(enableApiValidation){
-            switch (type){
-                case JET, PUMP -> {
-                    return validateArrayWithSensors(data);
-                }
-                case LED, LIGHT -> {
-                    return validateLightsAndLeds(data);
+
+        switch (type){
+            case PUMP -> {
+                if(waterLevelBottomStatus){//TODO update walidatora enabled disabled
+                    return validateArray(data);
                 }
             }
-        }
-        switch (type){
-            case JET, PUMP -> {
+            case JET ->{
                 return validateArray(data);
             }
             case LED, LIGHT -> {
-                return data;
+                if(waterLevelTopStatus){
+                    return data;
+                }
             }
         }
-        return data;
+        return dmxData;
     }
 
+    public static void runCyclicValidation(){
+        validateArrayCyclic(DMXService.getDMXData());
+    }
     //validation without sensors
     public byte[] validateArray(byte[] dmxData) {
         for (Device pump : pumps) {
@@ -105,13 +115,15 @@ public class DMXValidatorService {
     }
 
     //validation with sensors
+    /*
     public byte[] validateArrayWithSensors(byte[] dmxData){
         byte[] validatedArray = validateArray(dmxData);
         return validatePumpsAPI(validatedArray);
-    }
+    }*/
 
-    public byte[] validateLightsAndLeds(byte[] dmxData){
+    public static byte[] validateLightsAndLeds(byte[] dmxData){
         if(sensors.getWaterTop()){
+            waterLevelTopStatus = false;
             for (Device led : leds) {
                 int[] singleLedAddresses = led.getAddress();
                 for (int ledId : singleLedAddresses) {
@@ -128,7 +140,8 @@ public class DMXValidatorService {
         return dmxData;
     }
 
-    public byte[] validatePumpsAPI(byte[] dmxData){
+    public static byte[] validatePumpsAPI(byte[] dmxData){
+        waterLevelBottomStatus = false;
         //turning off the pumps if the water level is too low
         if (sensors.getWaterBottom()) {
             for(Device pump : pumps){
@@ -139,7 +152,7 @@ public class DMXValidatorService {
         return dmxData;
     }
 
-    public byte[] validateArrayCyclic(byte[] dmxData){
+    public static byte[] validateArrayCyclic(byte[] dmxData){
         //turning off the pumps if the water level is too low
         byte[] validatedPumpsAndJets = validatePumpsAPI(dmxData);
         //turning off the lights if the water level is too high

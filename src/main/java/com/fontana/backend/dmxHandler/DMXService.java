@@ -22,7 +22,7 @@ public class DMXService {
     private boolean connectionOpened = false;
     private JD2XX jd;
     private JD2XXOutputStream ostream;
-    private byte[] dmxData;
+    private static byte[] dmxData;
     @Autowired
     private DMXValidatorService dmxValidatorService;
     @Autowired
@@ -64,6 +64,10 @@ public class DMXService {
         if(DMXValidatorService.enableApiValidation){
             dmxData = dmxValidatorService.validateArrayCyclic(dmxData);
         }
+    }
+
+    public static byte[] getDMXData(){
+        return dmxData;
     }
 
     private void initialSetup() throws IOException {
