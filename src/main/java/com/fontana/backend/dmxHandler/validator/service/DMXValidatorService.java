@@ -27,8 +27,8 @@ public class DMXValidatorService {
     public static boolean enableApiValidation = false;
     private static float pumpPowerMultiplier = 0.1f;
     private static final int byteMaxValue = 255;
-    private static boolean waterLevelTopStatus = false;
-    private static boolean waterLevelBottomStatus = false;
+    private static boolean waterLevelTopStatus = true;
+    private static boolean waterLevelBottomStatus = true;
     @Autowired
     private final SensorsHandlerService sensorsHandlerService;
     @Autowired
@@ -65,12 +65,21 @@ public class DMXValidatorService {
 
         byte[] data = Arrays.copyOf(dmxData, dmxData.length);
         data[frame.getId()] = frame.getValue();
-        Device device = deviceRepository.findById(frame.getId()).orElseThrow(() -> new DMXValidatorException(DMXValidatorMessages.DEVICE_NOT_FOUND.getMessage() + frame.getId()));
+        Device device = deviceRepository.findById(frame.getId()).orElse(null);
+
+        if(device == null){
+            device = deviceRepository.findContainedAddress(frame.getId());
+            if(device.getId() != 0 && waterLevelTopStatus){
+                return data;
+            }
+            return dmxData;
+        }
+
         DeviceType type = device.getType();
 
         switch (type){
             case PUMP -> {
-                if(waterLevelBottomStatus){//TODO update walidatora enabled disabled
+                if(waterLevelBottomStatus){
                     return validateArray(data);
                 }
             }
@@ -114,16 +123,8 @@ public class DMXValidatorService {
         return dmxData;
     }
 
-    //validation with sensors
-    /*
-    public byte[] validateArrayWithSensors(byte[] dmxData){
-        byte[] validatedArray = validateArray(dmxData);
-        return validatePumpsAPI(validatedArray);
-    }*/
-
     public static byte[] validateLightsAndLeds(byte[] dmxData){
-        if(sensors.getWaterTop()){
-            waterLevelTopStatus = false;
+        if(!sensors.getWaterTop()){
             for (Device led : leds) {
                 int[] singleLedAddresses = led.getAddress();
                 for (int ledId : singleLedAddresses) {
@@ -136,19 +137,24 @@ public class DMXValidatorService {
                     dmxData[lightId] = 0;
                 }
             }
+            waterLevelBottomStatus = false;
+            return dmxData;
         }
+        waterLevelBottomStatus = true;
         return dmxData;
     }
 
     public static byte[] validatePumpsAPI(byte[] dmxData){
-        waterLevelBottomStatus = false;
         //turning off the pumps if the water level is too low
-        if (sensors.getWaterBottom()) {
+        if (!sensors.getWaterBottom()) {
             for(Device pump : pumps){
                 int pumpId = pump.getId();
                 dmxData[pumpId] = 0;
             }
+            waterLevelTopStatus = false;
+            return dmxData;
         }
+        waterLevelTopStatus = true;
         return dmxData;
     }
 
