@@ -72,6 +72,11 @@ public class SessionServiceImpl implements SessionService {
             User user = userRepository.findByUsername(watcher).orElseThrow(
                     () -> new NotFoundException("User not found"));
 
+            if (!user.getRole().getName().equals(RoleType.ADMIN.name())) {
+                log.warn("Only admin should be parsed as watcher into parameter.");
+                return null;
+            }
+
             return sessionRepository.findAllInReversedOrder().stream()
                     .filter(session -> user.getLastRoleChange().isBefore(session.getOpenedTime()))
                     .filter(session -> session.getClosedTime() != null)
