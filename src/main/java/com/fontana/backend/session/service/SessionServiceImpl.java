@@ -64,8 +64,14 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public List<SessionResponseDTO> findAll() {
-        List<Session> sessions = sessionRepository.findAll();
+    public List<SessionResponseDTO> findAll(String watcher) {
+        List<Session> sessions;
+
+        if (watcher != null) {
+            sessions = sessionRepository.findAllInReversedOrder();
+        } else {
+            sessions = sessionRepository.findAll();
+        }
 
         return sessions.stream()
                 .map(sessionMapper::map)
