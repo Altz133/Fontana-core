@@ -1,7 +1,5 @@
 package com.fontana.backend.session.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fontana.backend.log.entity.Log;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,4 +33,8 @@ public class Session {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "sessionId")
     private List<Log> logs = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "sessionId")
+    private List<SessionWatcher> watchers = new ArrayList<>();
 }

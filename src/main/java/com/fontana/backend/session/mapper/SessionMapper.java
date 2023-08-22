@@ -45,6 +45,7 @@ public class SessionMapper {
                 .isForcedToClose(session.isForcedToClose())
                 .isAutoClosed(session.isAutoClosed())
                 .logsAmount(logsAmount)
+                .watchers(session.getWatchers())
                 .build();
 
         log.info("Mapped SessionResponseDTO: " + sessionResponseDTO);
