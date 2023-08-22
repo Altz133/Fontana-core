@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SessionService {
 
-    List<SessionResponseDTO> findAll();
+    List<SessionResponseDTO> findAll(String watcher);
 
     SessionResponseDTO findById(Integer id);
 
