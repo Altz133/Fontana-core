@@ -7,6 +7,8 @@ import com.fontana.backend.session.dto.*;
 import com.fontana.backend.session.mapper.SessionMapper;
 import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.session.repository.SessionRepository;
+import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.repository.UserRepository;
 import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +50,7 @@ public class SessionServiceImpl implements SessionService {
     private String expirationDelay;
 
     private final SessionRepository sessionRepository;
+    private final UserRepository userRepository;
     private final SessionMapper sessionMapper;
     private final AuthUtils authUtils;
 
@@ -65,17 +68,20 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public List<SessionResponseDTO> findAll(String watcher) {
-        List<Session> sessions;
-
         if (watcher != null) {
-            sessions = sessionRepository.findAllInReversedOrder();
-        } else {
-            sessions = sessionRepository.findAll();
-        }
+            User user = userRepository.findByUsername(watcher).orElseThrow(
+                    () -> new NotFoundException("User not found"));
 
-        return sessions.stream()
-                .map(sessionMapper::map)
-                .toList();
+            return sessionRepository.findAllInReversedOrder().stream()
+                    .filter(session -> user.getLastRoleChange().isBefore(session.getOpenedTime()))
+                    .filter(session -> session.getClosedTime() != null)
+                    .map(sessionMapper::map)
+                    .toList();
+        } else {
+            return sessionRepository.findAll().stream()
+                    .map(sessionMapper::map)
+                    .toList();
+        }
     }
 
     @Override
