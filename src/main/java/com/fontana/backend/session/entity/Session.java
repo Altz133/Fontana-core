@@ -34,7 +34,7 @@ public class Session {
     @JoinColumn(name = "sessionId")
     private List<Log> logs = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "sessionId")
     private List<SessionWatcher> watchers = new ArrayList<>();
 }
