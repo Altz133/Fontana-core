@@ -31,4 +31,6 @@ public class ScheduleCardDto {
     private boolean isCycle;
 
     private List<ScheduleCycleDays> cycleDays;
+
+    private boolean isEnabled;
 }
