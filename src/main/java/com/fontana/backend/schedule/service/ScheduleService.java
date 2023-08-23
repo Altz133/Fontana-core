@@ -29,4 +29,8 @@ public class ScheduleService {
     Schedule getSchedule(Integer id) {
         return scheduleRepository.getReferenceById(id);
     }
+
+    public boolean isCycle(Schedule schedule){
+        return !schedule.getCycleDays().isEmpty();
+    }
 }
