@@ -28,11 +28,10 @@ import java.util.Optional;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.prefix}")
-    private String tokenPrefix;
-
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    @Value("${jwt.prefix}")
+    private String tokenPrefix;
 
     /**
      * Performs the authentication filter logic for processing incoming HTTP requests.

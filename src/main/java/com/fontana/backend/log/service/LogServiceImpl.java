@@ -22,11 +22,10 @@ import static com.fontana.backend.config.RestEndpoints.LOG;
 @Slf4j
 public class LogServiceImpl implements LogService {
 
-    @Value("${log.not-found-msg}")
-    private String notFoundMsg;
-
     private final LogRepository logRepository;
     private final LogDtoMapper logDtoMapper;
+    @Value("${log.not-found-msg}")
+    private String notFoundMsg;
 
     @Override
     public List<LogResponseDTO> findAll(String username, Integer sessionId) {

@@ -18,7 +18,7 @@ public class RestEndpoints {
     public static final String DMX_PANIC = "/panic";
     public static final String DMX_CHANGE_API_STATUS = "/enableApiValidation";
     public static final String DMX_CHANGE_PUMP_POWER_MULTIPLIER = "/changePumpPowerMultiplier";
-    public static final String DMX_GET_PUMP_POWER_MULTIPLIER = "/getPumpPowerMultiplier" ;
+    public static final String DMX_GET_PUMP_POWER_MULTIPLIER = "/getPumpPowerMultiplier";
     public static final String DMX_GET_API_STATUS = "/getApiValidationStatus";
     public static final String DMX_UPDATE_DMX_ADDRESSES = "/updateDMXAddresses";
     public static final String SESSION = BASE + "/session";

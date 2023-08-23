@@ -33,7 +33,7 @@ public class DMXHandlerController {
 
     @PostMapping(value = DMX_UPDATE_JET)
     public ResponseEntity<Object> updateFrameJet(@RequestBody JetDTO jetDTO) throws IOException {
-        try{
+        try {
             DMXHandlerService.sendDMXDataJet(jetMapper.DTOToJet(jetDTO), frame);
             return ResponseEntity.ok().build();
         } catch (DMXValidatorException e) {

@@ -3,7 +3,6 @@ package com.fontana.backend.session.controller;
 import com.fontana.backend.session.dto.SessionCloseRequest;
 import com.fontana.backend.session.dto.SessionRequestDTO;
 import com.fontana.backend.session.dto.SessionResponseDTO;
-import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.session.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

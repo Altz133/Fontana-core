@@ -1,17 +1,11 @@
 package com.fontana.backend.security.auth;
 
-import com.fontana.backend.role.entity.Role;
-import com.fontana.backend.role.entity.RoleType;
-import com.fontana.backend.role.repository.RoleRepository;
-import com.fontana.backend.security.jwt.JwtExpiredOrUntrustedException;
 import com.fontana.backend.security.LdapService;
-import com.fontana.backend.security.jwt.JwtService;
+import com.fontana.backend.security.TokenType;
 import com.fontana.backend.security.blacklist.entity.BlacklistedToken;
 import com.fontana.backend.security.blacklist.repository.BlacklistedTokenRepository;
-import com.fontana.backend.security.TokenType;
+import com.fontana.backend.security.jwt.JwtService;
 import com.fontana.backend.user.repository.UserRepository;
-import com.fontana.backend.user.service.UserService;
-import com.fontana.backend.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,10 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor

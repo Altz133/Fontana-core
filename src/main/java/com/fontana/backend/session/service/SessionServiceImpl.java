@@ -4,8 +4,8 @@ import com.fontana.backend.exception.customExceptions.NotFoundException;
 import com.fontana.backend.exception.customExceptions.SessionNotModifiedException;
 import com.fontana.backend.role.entity.RoleType;
 import com.fontana.backend.session.dto.*;
-import com.fontana.backend.session.mapper.SessionMapper;
 import com.fontana.backend.session.entity.Session;
+import com.fontana.backend.session.mapper.SessionMapper;
 import com.fontana.backend.session.repository.SessionRepository;
 import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
@@ -29,27 +29,21 @@ import static com.fontana.backend.config.RestEndpoints.SESSION;
 @Slf4j
 public class SessionServiceImpl implements SessionService {
 
-    @Value("${session.not-found-msg}")
-    private String notFoundMsg;
-
-    @Value("${session.busy-msg}")
-    private String sessionBusyMsg;
-
-    @Value("${session.not-allowed-to-close-msg}")
-    private String notAllowedToCloseMsg;
-
-    @Value("${session.already-closed}")
-    private String sessionAlreadyClosedMsg;
-
-    @Value("${session.role-not-allowed-msg}")
-    private String roleNotAllowedMsg;
-
-    @Value("${session.expiration-delay}")
-    private String expirationDelay;
-
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
     private final AuthUtils authUtils;
+    @Value("${session.not-found-msg}")
+    private String notFoundMsg;
+    @Value("${session.busy-msg}")
+    private String sessionBusyMsg;
+    @Value("${session.not-allowed-to-close-msg}")
+    private String notAllowedToCloseMsg;
+    @Value("${session.already-closed}")
+    private String sessionAlreadyClosedMsg;
+    @Value("${session.role-not-allowed-msg}")
+    private String roleNotAllowedMsg;
+    @Value("${session.expiration-delay}")
+    private String expirationDelay;
 
     @Scheduled(fixedRate = 15000)
     public void autoCloseSession() {

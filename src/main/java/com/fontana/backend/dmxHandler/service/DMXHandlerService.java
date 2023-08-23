@@ -85,10 +85,9 @@ public class DMXHandlerService {
 
     public void changeApiValidationStatus(boolean status) {
         DMXValidatorService.enableApiValidation = status;
-        if(status){
+        if (status) {
             DMXValidatorService.runCyclicValidation();
-        }
-        else {
+        } else {
             DMXValidatorService.setStatusesToEnabled();
         }
     }
