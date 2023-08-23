@@ -42,7 +42,8 @@ public class RestEndpoints {
 
     public static final String SCHEDULE = BASE + "/schedule";
     public static final String SCHEDULE_ADD = "/add";
-    public static final String SCHEDULE_DELETE = "/delete";
+    public static final String SCHEDULE_DELETE = "/delete/{id}";
     public static final String SCHEDULE_UPDATE = "/update";
-    public static final String SCHEDULE_GET = "/get";
+    public static final String SCHEDULE_GET_MONTH = "/get/month";
+    public static final String SCHEDULE_GET_DAY = "/get/day";
 }
