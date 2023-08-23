@@ -86,4 +86,9 @@ public class DMXHandlerController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(value = DMX_GET_API_STATUS)
+    public ResponseEntity<Object> getApiStatus() {
+        return ResponseEntity.ok(DMXHandlerService.getValidationStatus());
+    }
+
 }

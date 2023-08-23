@@ -91,7 +91,10 @@ public class DMXHandlerService {
         else {
             DMXValidatorService.setStatusesToEnabled();
         }
+    }
 
+    public boolean getValidationStatus() {
+        return DMXValidatorService.getValidationStatus();
     }
 
 

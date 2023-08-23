@@ -1,15 +1,13 @@
 package com.fontana.backend.dmxHandler.validator.controller;
 
 import com.fontana.backend.dmxHandler.validator.service.DMXValidatorService;
+import com.fontana.backend.exception.customExceptions.DMXValidatorException;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -23,9 +21,19 @@ public class DMXValidatorController {
     private final DMXValidatorService dmxValidatorService;
 
     @PostMapping(value = DMX_CHANGE_PUMP_POWER_MULTIPLIER)
-    public ResponseEntity<Object> changePumpMultiplier(@RequestBody @Min(value =0) @Max(value=1) float multiplier) throws IOException {
-        DMXValidatorService.changePumpMultiplier(multiplier);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> changePumpMultiplier(@RequestBody float multiplier){
+        try{
+            DMXValidatorService.changePumpMultiplier(multiplier);
+            return ResponseEntity.ok().build();
+        }
+        catch (DMXValidatorException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = DMX_GET_PUMP_POWER_MULTIPLIER)
+    public ResponseEntity<Object> getPumpMultiplier(){
+        return ResponseEntity.ok(DMXValidatorService.getPumpMultiplier());
     }
 
     @PostMapping(value = DMX_UPDATE_DMX_ADDRESSES)
@@ -33,6 +41,4 @@ public class DMXValidatorController {
         dmxValidatorService.updateDMXAddresses();
         return ResponseEntity.ok().build();
     }
-
-
 }

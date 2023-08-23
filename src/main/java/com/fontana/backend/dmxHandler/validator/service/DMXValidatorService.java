@@ -39,12 +39,29 @@ public class DMXValidatorService {
     private static List<Device> lights;
 
     public static void changePumpMultiplier(float multiplier) {
-        pumpPowerMultiplier = multiplier;
+        if(validatePumpMultiplier(multiplier)){
+            pumpPowerMultiplier = multiplier;
+        }
+        else {
+            throw new DMXValidatorException(DMXValidatorMessages.INVALID_PUMP_MULTIPLIER.getMessage());
+        }
     }
 
     public static void setStatusesToEnabled() {
         waterLevelTopStatus = true;
         waterLevelBottomStatus = true;
+    }
+
+    public static boolean getValidationStatus() {
+        return enableApiValidation;
+    }
+
+    public static float getPumpMultiplier() {
+        return pumpPowerMultiplier;
+    }
+
+    public static Boolean validatePumpMultiplier(float multiplier) {
+        return multiplier >= 0 && multiplier <= 1;
     }
 
     @PostConstruct
