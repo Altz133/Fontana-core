@@ -10,27 +10,27 @@ import org.springframework.stereotype.Service;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
-    void addSchedule(Schedule schedule) {
+    public void addSchedule(Schedule schedule) {
         scheduleRepository.save(schedule);
     }
 
-    void deleteSchedule(Schedule schedule) {
+    public void deleteSchedule(Schedule schedule) {
         scheduleRepository.delete(schedule);
     }
 
-    void deleteSchedule(Integer id) {
+    public void deleteSchedule(Integer id) {
         scheduleRepository.deleteById(id);
     }
 
-    void updateSchedule(Schedule schedule) {
+    public void updateSchedule(Schedule schedule) {
         scheduleRepository.save(schedule);
     }
 
-    Schedule getSchedule(Integer id) {
+    public Schedule getSchedule(Integer id) {
         return scheduleRepository.getReferenceById(id);
     }
 
-    public boolean isCycle(Schedule schedule){
+    public boolean isCycle(Schedule schedule) {
         return !schedule.getCycleDays().isEmpty();
     }
 }
