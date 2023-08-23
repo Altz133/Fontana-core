@@ -18,5 +18,6 @@ public class SessionWatcher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Integer sessionId;
     private String watcher;
 }

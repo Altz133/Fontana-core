@@ -22,6 +22,7 @@ public class RestEndpoints {
     public static final String SESSION = BASE + "/session";
     public static final String SESSION_FIND_BY_ID = "/{id}";
     public static final String SESSION_UPDATE_CLOSE = "/close";
+    public static final String SESSION_UPDATE_WATCHER = "/{sessionId}/watcher";
 
     public static final String SENSORS_URL = "http://192.168.253.29/api";
 

@@ -3,7 +3,8 @@ package com.fontana.backend.session.controller;
 import com.fontana.backend.session.dto.SessionCloseRequest;
 import com.fontana.backend.session.dto.SessionRequestDTO;
 import com.fontana.backend.session.dto.SessionResponseDTO;
-import com.fontana.backend.session.entity.Session;
+import com.fontana.backend.session.dto.SessionWatcherRequestDTO;
+import com.fontana.backend.session.service.NotificationService;
 import com.fontana.backend.session.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import static com.fontana.backend.config.RestEndpoints.*;
 public class SessionController {
 
     private final SessionService sessionService;
+    private final NotificationService notificationService;
 
     @GetMapping()
     public List<SessionResponseDTO> findAll(@RequestParam(name = "watcher", required = false) String watcher) {
@@ -39,5 +41,11 @@ public class SessionController {
     @PutMapping(SESSION_UPDATE_CLOSE)
     public ResponseEntity<?> updateCloseSession(@RequestBody @Validated SessionCloseRequest sessionCloseRequest) {
         return sessionService.updateCloseSession(sessionCloseRequest);
+    }
+
+    @PutMapping(SESSION_UPDATE_WATCHER)
+    public ResponseEntity<?> updateSingleSessionWatcher(@RequestBody @Validated SessionWatcherRequestDTO request,
+                                                        @PathVariable("sessionId") Integer id) {
+        return notificationService.updateSingleSessionWatcher(id, request);
     }
 }
