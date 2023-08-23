@@ -19,7 +19,6 @@ public class ScheduleMapper {
     private final ScheduleService scheduleService;
     private final TemplateServiceImpl templateService;
     private final UserRepository userRepository;
-    private final SchedulePlayer schedulePlayer;
 
     public ScheduleCardDto ScheduleToScheduleCardDto(Schedule schedule) {
         return ScheduleCardDto.builder()
@@ -29,7 +28,7 @@ public class ScheduleMapper {
                 .startTime(schedule.getStartTimestamp())
                 .endTime(schedule.getEndTimestamp())
                 .length(templateService.getDurationFromTemplates(schedule.getTemplates()))
-                .isPlaying(schedulePlayer.isPlaying())
+                .isPlaying(SchedulePlayer.isPlaying())
                 .isCycle(scheduleService.isCycle(schedule))
                 .cycleDays(List.copyOf(schedule.getCycleDays()))
                 .isEnabled(schedule.isEnabled())
