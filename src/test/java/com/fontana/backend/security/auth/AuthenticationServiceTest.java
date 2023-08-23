@@ -97,7 +97,7 @@ public class AuthenticationServiceTest {
     public void testBlacklistToken() {
         String refreshToken = mockRefreshToken;
 
-        authenticationService.blacklistToken(refreshToken);
+        authenticationService.blacklistToken(refreshToken, TokenType.REFRESH);
 
         verify(jwtService, times(1)).blacklistToken(refreshToken, TokenType.REFRESH);
     }

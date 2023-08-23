@@ -3,10 +3,7 @@ package com.fontana.backend.session.service;
 import com.fontana.backend.exception.customExceptions.NotFoundException;
 import com.fontana.backend.exception.customExceptions.SessionNotModifiedException;
 import com.fontana.backend.role.entity.RoleType;
-import com.fontana.backend.session.dto.SessionBusyResponse;
-import com.fontana.backend.session.dto.SessionCloseRequest;
-import com.fontana.backend.session.dto.SessionRequestDTO;
-import com.fontana.backend.session.dto.SessionResponseDTO;
+import com.fontana.backend.session.dto.*;
 import com.fontana.backend.session.mapper.SessionMapper;
 import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.session.repository.SessionRepository;
@@ -43,6 +40,9 @@ public class SessionServiceImpl implements SessionService {
 
     @Value("${session.already-closed}")
     private String sessionAlreadyClosedMsg;
+
+    @Value("${session.role-not-allowed-msg}")
+    private String roleNotAllowedMsg;
 
     @Value("${session.expiration-delay}")
     private String expirationDelay;
@@ -86,7 +86,7 @@ public class SessionServiceImpl implements SessionService {
         String authority = authUtils.extractAuthenticatedAuthority();
 
         if (authority.equals(RoleType.VIEWER.name())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildRoleNotAllowedResponse());
         }
 
         if (activeSession != null && authority.equals(RoleType.ADMIN.name())) {
@@ -95,7 +95,7 @@ public class SessionServiceImpl implements SessionService {
             sessionRepository.save(updated);
         }
 
-        if (activeSession != null) {
+        if (activeSession != null && !authority.equals(RoleType.ADMIN.name())) {
             SessionBusyResponse response = buildSessionBusyResponse(sessionBusyMsg, activeSession);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
@@ -194,6 +194,13 @@ public class SessionServiceImpl implements SessionService {
                 .message(message)
                 .activeUserName(activeSession.getUsername())
                 .activeSessionStartTime(activeSession.getOpenedTime())
+                .intercepted(LocalDateTime.now())
+                .build();
+    }
+
+    private SessionRoleNotAllowedResponse buildRoleNotAllowedResponse() {
+        return SessionRoleNotAllowedResponse.builder()
+                .message(roleNotAllowedMsg)
                 .intercepted(LocalDateTime.now())
                 .build();
     }

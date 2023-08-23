@@ -13,43 +13,27 @@ import lombok.NoArgsConstructor;
 public class LedDTO extends DeviceDTO {
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
-    private int colorR;
+    private byte colorR;
 
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
-    private int colorG;
+    private byte colorG;
 
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
-    private int colorB;
+    private byte colorB;
 
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
-    private int colorW;
+    private byte colorW;
 
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
-    private int power;
+    private byte power;
 
     @Min(value = Byte.MIN_VALUE)
     @Max(value = Byte.MAX_VALUE)
-    private int stroboscopeFrequency;
+    private byte stroboscopeFrequency;
 
-    public LedDTO(String name,
-                  byte colorR,
-                  byte colorG,
-                  byte colorB,
-                  byte colorW,
-                  byte power,
-                  byte stroboscopeFrequency) {
-
-        super(name);
-        this.colorR = colorR & 0xFF;
-        this.colorG = colorG & 0xFF;
-        this.colorB = colorB & 0xFF;
-        this.colorW = colorW & 0xFF;
-        this.power = power & 0xFF;
-        this.stroboscopeFrequency = stroboscopeFrequency & 0xFF;
-    }
 }
 
