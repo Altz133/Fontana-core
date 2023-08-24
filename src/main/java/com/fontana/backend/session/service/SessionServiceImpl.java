@@ -46,6 +46,9 @@ public class SessionServiceImpl implements SessionService {
     @Value("${session.role-not-allowed-msg}")
     private String roleNotAllowedMsg;
 
+    @Value("${user.not-found-msg}")
+    private String userNotFoundMsg;
+
     @Value("${session.expiration-delay}")
     private String expirationDelay;
 
@@ -70,7 +73,7 @@ public class SessionServiceImpl implements SessionService {
     public List<SessionResponseDTO> findAll(String watcher) {
         if (watcher != null) {
             User user = userRepository.findByUsername(watcher).orElseThrow(
-                    () -> new NotFoundException("User not found"));
+                    () -> new NotFoundException(userNotFoundMsg));
 
             if (!user.getRole().getName().equals(RoleType.ADMIN.name())) {
                 log.warn("Only admin should be parsed as watcher into parameter.");

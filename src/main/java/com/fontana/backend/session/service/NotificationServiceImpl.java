@@ -1,11 +1,13 @@
 package com.fontana.backend.session.service;
 
-import com.fontana.backend.session.dto.SessionResponseDTO;
+import com.fontana.backend.exception.customExceptions.NotFoundException;
 import com.fontana.backend.session.dto.SessionWatcherRequestDTO;
 import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.session.entity.SessionWatcher;
 import com.fontana.backend.session.repository.SessionRepository;
 import com.fontana.backend.session.repository.SessionWatcherRepository;
+import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,7 +28,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Value("${notification.already-displayed}")
     private String alreadyDisplayedMsg;
 
+    @Value("${user.not-found-msg}")
+    private String userNotFoundMsg;
+
     private final SessionRepository sessionRepository;
+    private final UserRepository userRepository;
     private final SessionWatcherRepository watcherRepository;
     private final SessionService sessionService;
 
@@ -53,6 +60,19 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public ResponseEntity<?> updateAllSessionsWatchers(SessionWatcherRequestDTO request) {
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(
+                () -> new NotFoundException(userNotFoundMsg));
+
+        List<Session> nonDisplayedSession = sessionService.filterSessionsInReversedOrder(user);
+
+        for (Session session : nonDisplayedSession) {
+            SessionWatcher watcher = SessionWatcher.builder()
+                    .sessionId(session.getId())
+                    .watcher(request.getUsername())
+                    .build();
+
+            watcherRepository.save(watcher);
+        }
 
         return ResponseEntity.ok().build();
     }
