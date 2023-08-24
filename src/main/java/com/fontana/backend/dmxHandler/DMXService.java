@@ -19,24 +19,28 @@ import java.util.List;
 @EnableScheduling
 public class DMXService {
 
+    private static byte[] dmxData;
     private boolean connectionOpened = false;
     private JD2XX jd;
     private JD2XXOutputStream ostream;
-    private byte[] dmxData;
     @Autowired
     private DMXValidatorService dmxValidatorService;
     @Autowired
     private CurrentStateDTOMapper currentStateDTOMapper;
 
-//    @PostConstruct
-//    public void init() throws IOException {
-//        try {
-////            openConnection();
-//            initialSetup();
-//            startScheduler();
-//        } catch (Exception e) {
-//        }
-//    }
+    public static byte[] getDMXData() {
+        return dmxData;
+    }
+
+    @PostConstruct
+    public void init() throws IOException {
+        try {
+//            openConnection();
+            initialSetup();
+            startScheduler();
+        } catch (Exception e) {
+        }
+    }
 
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
@@ -58,11 +62,12 @@ public class DMXService {
             }
         }
     }
+
     //every 5 minutes check if the dmx data is valid
     @Scheduled(fixedRate = 1000L * 60 * 5)
     private void validateDMXData() throws IOException {
-        if(DMXValidatorService.enableApiValidation){
-            dmxData = dmxValidatorService.validateArrayCyclic(dmxData);
+        if (DMXValidatorService.enableApiValidation) {
+            dmxData = DMXValidatorService.validateArrayCyclic(dmxData);
         }
     }
 
@@ -112,7 +117,7 @@ public class DMXService {
     }
 
     public void setDMXDataArray(byte[] dmxDataArray) {
-        this.dmxData = dmxDataArray;
+        dmxData = dmxDataArray;
     }
 
     public void closeConnection() throws IOException {
