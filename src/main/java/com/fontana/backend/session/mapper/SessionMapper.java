@@ -15,9 +15,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SessionMapper {
 
-    private final AuthUtils appUtils;
     @Value("${session.expiration-delay}")
     private String expirationDelay;
+
+    private final AuthUtils appUtils;
 
     public Session map(SessionRequestDTO sessionRequestDTO) {
         String currentPrincipalName = appUtils.getAuthentication().getPrincipal().toString();

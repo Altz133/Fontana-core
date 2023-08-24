@@ -25,13 +25,16 @@ import java.util.function.Function;
 @Slf4j
 public class JwtService {
 
-    private final BlacklistedTokenRepository blacklistedTokenRepository;
     @Value("${jwt.secret-key}")
     private String secretKey;
+
     @Value("${jwt.access-expiration-delay}")
     private String accessExpDelay;
+
     @Value("${jwt.refresh-expiration-delay}")
     private String refreshExpDelay;
+
+    private final BlacklistedTokenRepository blacklistedTokenRepository;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

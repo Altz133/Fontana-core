@@ -1,6 +1,6 @@
 package com.fontana.backend.exception.customExceptions;
 
-public class DeviceDTOFactoryException extends IllegalArgumentException {
+public class DeviceDTOFactoryException extends IllegalArgumentException{
 
     public DeviceDTOFactoryException(String message) {
         super(message);

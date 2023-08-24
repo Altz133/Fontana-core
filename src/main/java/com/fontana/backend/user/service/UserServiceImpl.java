@@ -2,8 +2,8 @@ package com.fontana.backend.user.service;
 
 import com.fontana.backend.exception.customExceptions.NotFoundException;
 import com.fontana.backend.role.entity.Role;
-import com.fontana.backend.role.entity.RoleType;
 import com.fontana.backend.role.repository.RoleRepository;
+import com.fontana.backend.role.entity.RoleType;
 import com.fontana.backend.user.dto.UserDTO;
 import com.fontana.backend.user.dto.UserUpdateRequestDTO;
 import com.fontana.backend.user.entity.User;
@@ -25,12 +25,13 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
+    @Value("${user.not-found-msg}")
+    private String notFoundMsg;
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserDtoMapper userDtoMapper;
     private final AuthUtils authUtils;
-    @Value("${user.not-found-msg}")
-    private String notFoundMsg;
 
     @Override
     public List<UserDTO> findAll(RoleType roleType) {

@@ -8,7 +8,6 @@ import com.fontana.backend.devices.light.dto.LightDTO;
 import com.fontana.backend.devices.light.mapper.LightMapper;
 import com.fontana.backend.devices.pump.dto.PumpDTO;
 import com.fontana.backend.devices.pump.mapper.PumpMapper;
-import com.fontana.backend.dmxHandler.dto.SensorsStatusDTO;
 import com.fontana.backend.dmxHandler.service.DMXHandlerService;
 import com.fontana.backend.exception.customExceptions.DMXValidatorException;
 import com.fontana.backend.frame.entity.Frame;
@@ -34,11 +33,12 @@ public class DMXHandlerController {
 
     @PostMapping(value = DMX_UPDATE_JET)
     public ResponseEntity<Object> updateFrameJet(@RequestBody JetDTO jetDTO) throws IOException {
-        try {
+        try{
             DMXHandlerService.sendDMXDataJet(jetMapper.DTOToJet(jetDTO), frame);
             return ResponseEntity.ok().build();
         } catch (DMXValidatorException e) {
-            return ResponseEntity.badRequest().body(e);
+            String errorMessage = "An error occurred: " + e.getMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
         }
     }
 
@@ -54,7 +54,8 @@ public class DMXHandlerController {
             DMXHandlerService.sendDMXDataPump(pumpMapper.DTOToPump(pumpDTO), frame);
             return ResponseEntity.ok().build();
         } catch (DMXValidatorException | IOException e) {
-            return ResponseEntity.badRequest().body(e);
+            String errorMessage = "An error occurred: " + e.getMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
         }
     }
 
@@ -81,15 +82,10 @@ public class DMXHandlerController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = DMX_CHANGE_API_STATUS)
-    public ResponseEntity<Object> changeApiStatus(@RequestBody SensorsStatusDTO sensorsStatusDTO) {
-        DMXHandlerService.changeApiValidationStatus(sensorsStatusDTO.isSensorsStatus());
+    @PostMapping(value = DMX_CHANGE_API_STATUS)
+    public ResponseEntity<Object> changeApiStatus(@RequestBody boolean status) {
+        DMXHandlerService.changeApiValidationStatus(status);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping(value = DMX_GET_API_STATUS)
-    public ResponseEntity<Object> getApiStatus() {
-        return ResponseEntity.ok(DMXHandlerService.getValidationStatus());
     }
 
 }
