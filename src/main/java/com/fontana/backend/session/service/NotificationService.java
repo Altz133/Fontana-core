@@ -8,4 +8,6 @@ public interface NotificationService {
     ResponseEntity<?> updateSingleSessionWatcher(Integer sessionId, SessionWatcherRequestDTO request);
 
     ResponseEntity<?> updateAllSessionsWatchers(SessionWatcherRequestDTO request);
+
+    ResponseEntity<?> getNonDisplayedAmount(String username);
 }

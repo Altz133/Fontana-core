@@ -28,15 +28,15 @@ public class DMXService {
     @Autowired
     private CurrentStateDTOMapper currentStateDTOMapper;
 
-//    @PostConstruct
-//    public void init() throws IOException {
-//        try {
-////            openConnection();
-//            initialSetup();
-//            startScheduler();
-//        } catch (Exception e) {
-//        }
-//    }
+    @PostConstruct
+    public void init() throws IOException {
+        try {
+//            openConnection();
+            initialSetup();
+            startScheduler();
+        } catch (Exception e) {
+        }
+    }
 
     @Scheduled(fixedRate = 250L)
     private void startScheduler() {
