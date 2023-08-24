@@ -13,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 @NoArgsConstructor
 @Validated
 public class DeviceDTO {
-
     @NotEmpty
     private String name;
 }
