@@ -6,6 +6,7 @@ import com.fontana.backend.session.dto.SessionResponseDTO;
 import com.fontana.backend.session.dto.SessionWatcherRequestDTO;
 import com.fontana.backend.session.service.NotificationService;
 import com.fontana.backend.session.service.SessionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
