@@ -1,9 +1,9 @@
 package com.fontana.backend.user.controller;
 
 import com.fontana.backend.role.entity.RoleType;
+import com.fontana.backend.user.dto.UserDTO;
 import com.fontana.backend.user.dto.UserUpdateRequestDTO;
 import com.fontana.backend.user.service.UserService;
-import com.fontana.backend.user.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

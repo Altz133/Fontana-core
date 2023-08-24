@@ -30,4 +30,6 @@ public interface TemplateService {
     int getDurationFromTemplate(Template template);
 
     int getDurationFromTemplates(List<Template> templates);
+
+    List<Template> getTemplatesByIds(List<Integer> templateIds);
 }
