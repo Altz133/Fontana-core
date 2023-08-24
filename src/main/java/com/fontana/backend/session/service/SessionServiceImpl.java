@@ -71,7 +71,10 @@ public class SessionServiceImpl implements SessionService {
                 return null;
             }
 
-            return filterSessionsInReverseOrder(user);
+            log.info("Filtered sessions: " + filterSessionsInReversedOrder(user));
+            return filterSessionsInReversedOrder(user).stream()
+                    .map(sessionMapper::map)
+                    .toList();
         }
 
         return sessionRepository.findAll().stream()
@@ -187,12 +190,12 @@ public class SessionServiceImpl implements SessionService {
      * @param user for whom to filter sessions.
      * @return A list of SessionResponseDTO objects representing the filtered sessions.
      */
-    public List<SessionResponseDTO> filterSessionsInReverseOrder(User user) {
+    public List<Session> filterSessionsInReversedOrder(User user) {
         return sessionRepository.findAllInReversedOrder().stream()
                 .filter(session -> user.getLastRoleChange().isBefore(session.getOpenedTime()))
                 .filter(session -> session.getClosedTime() != null)
-                .filter(session -> session.getWatchers().contains(user.getUsername()))
-                .map(sessionMapper::map)
+                .filter(session -> session.getWatchers().stream()
+                        .noneMatch(watcher -> watcher.getWatcher().equals(user.getUsername())))
                 .toList();
     }
 
