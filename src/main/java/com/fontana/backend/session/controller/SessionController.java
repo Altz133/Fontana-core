@@ -6,6 +6,7 @@ import com.fontana.backend.session.dto.SessionResponseDTO;
 import com.fontana.backend.session.dto.SessionWatcherRequestDTO;
 import com.fontana.backend.session.service.NotificationService;
 import com.fontana.backend.session.service.SessionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -47,5 +48,10 @@ public class SessionController {
     public ResponseEntity<?> updateSingleSessionWatcher(@RequestBody @Validated SessionWatcherRequestDTO request,
                                                         @PathVariable("sessionId") Integer id) {
         return notificationService.updateSingleSessionWatcher(id, request);
+    }
+
+    @PutMapping(SESSION_UPDATE_WATCHER_ALL)
+    public ResponseEntity<?> updateAllSessionsWatchers(@RequestBody @Validated SessionWatcherRequestDTO request) {
+        return notificationService.updateAllSessionsWatchers(request);
     }
 }

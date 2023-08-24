@@ -71,17 +71,14 @@ public class SessionServiceImpl implements SessionService {
                 return null;
             }
 
-            return sessionRepository.findAllInReversedOrder().stream()
-                    .filter(session -> user.getLastRoleChange().isBefore(session.getOpenedTime()))
-                    .filter(session -> session.getClosedTime() != null)
-                    .map(sessionMapper::map)
-                    .toList();
-        } else {
-            return sessionRepository.findAll().stream()
-                    .map(sessionMapper::map)
-                    .toList();
+            return filterSessionsInReverseOrder(user);
         }
+
+        return sessionRepository.findAll().stream()
+                .map(sessionMapper::map)
+                .toList();
     }
+
 
     @Override
     public SessionResponseDTO findById(Integer id) {
@@ -181,6 +178,22 @@ public class SessionServiceImpl implements SessionService {
         response.put("expirationTime", saved.getExpirationTime());
 
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
+    }
+
+    /**
+     * Filters and retrieves a list of closed sessions in reversed order of opening time,
+     * where the session's opening time is after the user's last role change.
+     *
+     * @param user for whom to filter sessions.
+     * @return A list of SessionResponseDTO objects representing the filtered sessions.
+     */
+    public List<SessionResponseDTO> filterSessionsInReverseOrder(User user) {
+        return sessionRepository.findAllInReversedOrder().stream()
+                .filter(session -> user.getLastRoleChange().isBefore(session.getOpenedTime()))
+                .filter(session -> session.getClosedTime() != null)
+                .filter(session -> session.getWatchers().contains(user.getUsername()))
+                .map(sessionMapper::map)
+                .toList();
     }
 
     private Session buildUpdatedSession(
