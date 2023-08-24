@@ -31,22 +31,31 @@ import static com.fontana.backend.config.RestEndpoints.SESSION;
 @Slf4j
 public class SessionServiceImpl implements SessionService {
 
+    @Value("${session.not-found-msg}")
+    private String notFoundMsg;
+
+    @Value("${session.busy-msg}")
+    private String sessionBusyMsg;
+
+    @Value("${session.not-allowed-to-close-msg}")
+    private String notAllowedToCloseMsg;
+
+    @Value("${session.already-closed}")
+    private String sessionAlreadyClosedMsg;
+
+    @Value("${session.role-not-allowed-msg}")
+    private String roleNotAllowedMsg;
+
+    @Value("${user.not-found-msg}")
+    private String userNotFoundMsg;
+
+    @Value("${session.expiration-delay}")
+    private String expirationDelay;
+
     private final SessionRepository sessionRepository;
     private final UserRepository userRepository;
     private final SessionMapper sessionMapper;
     private final AuthUtils authUtils;
-    @Value("${session.not-found-msg}")
-    private String notFoundMsg;
-    @Value("${session.busy-msg}")
-    private String sessionBusyMsg;
-    @Value("${session.not-allowed-to-close-msg}")
-    private String notAllowedToCloseMsg;
-    @Value("${session.already-closed}")
-    private String sessionAlreadyClosedMsg;
-    @Value("${session.role-not-allowed-msg}")
-    private String roleNotAllowedMsg;
-    @Value("${session.expiration-delay}")
-    private String expirationDelay;
 
     @Scheduled(fixedRate = 15000)
     public void autoCloseSession() {
@@ -64,7 +73,7 @@ public class SessionServiceImpl implements SessionService {
     public List<SessionResponseDTO> findAll(String watcher) {
         if (watcher != null) {
             User user = userRepository.findByUsername(watcher).orElseThrow(
-                    () -> new NotFoundException("User not found"));
+                    () -> new NotFoundException(userNotFoundMsg));
 
             if (!user.getRole().getName().equals(RoleType.ADMIN.name())) {
                 log.warn("Only admin should be parsed as watcher into parameter.");
