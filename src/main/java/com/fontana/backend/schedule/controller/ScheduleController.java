@@ -23,7 +23,7 @@ public class ScheduleController {
 
     @PostMapping(value = SCHEDULE_ADD)
     public void addSchedule(@RequestBody ScheduleFormDto scheduleFormDto) {
-        scheduleService.addSchedule(scheduleMapper.SchduleFormDtoToSchedule(scheduleFormDto));
+        scheduleService.addSchedule(scheduleMapper.ScheduleFormDtoToSchedule(scheduleFormDto));
     }
 
     @DeleteMapping(value = SCHEDULE_DELETE)
@@ -33,7 +33,7 @@ public class ScheduleController {
 
     @PutMapping(value = SCHEDULE_UPDATE)
     public void updateSchedule(@RequestBody ScheduleFormDto scheduleFormDto) {
-        scheduleService.updateSchedule(scheduleMapper.SchduleFormDtoToSchedule(scheduleFormDto));
+        scheduleService.updateSchedule(scheduleMapper.ScheduleFormDtoToSchedule(scheduleFormDto));
     }
 
     @GetMapping(value = SCHEDULE_GET_MONTH)

@@ -35,7 +35,7 @@ public class ScheduleMapper {
                 .build();
     }
 
-    public Schedule SchduleFormDtoToSchedule(ScheduleFormDto scheduleFormDto) {
+    public Schedule ScheduleFormDtoToSchedule(ScheduleFormDto scheduleFormDto) {
         return Schedule.builder()
                 .id(scheduleFormDto.getId())
                 .name(scheduleFormDto.getName())

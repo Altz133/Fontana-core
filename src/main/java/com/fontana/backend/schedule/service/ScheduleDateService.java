@@ -44,11 +44,13 @@ public class ScheduleDateService {
                     LocalDate start = LocalDate.of(schedule.getStartTimestamp().getYear() + 1900, schedule.getStartTimestamp().getMonth() + 1, schedule.getStartTimestamp().getDate());
 
                     LocalDate end;
+
                     if (schedule.getEndTimestamp() == null) {
                         end = date;
                     } else {
                         end = LocalDate.of(schedule.getEndTimestamp().getYear() + 1900, schedule.getEndTimestamp().getMonth() + 1, schedule.getEndTimestamp().getDate()).plusDays(1);
                     }
+
                     switch (cycleDays) {
                         case MON:
                             for (LocalDate localDate : getCycleDays(start, end, DayOfWeek.MONDAY)) {
