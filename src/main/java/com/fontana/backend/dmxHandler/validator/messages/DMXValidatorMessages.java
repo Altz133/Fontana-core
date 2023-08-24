@@ -6,10 +6,7 @@ public enum DMXValidatorMessages {
     CLOSED_VALVES(" is on but all valves are closed"),
     OVERFLOWING("Lights are on but water level is too high"),
     LOW_WATER("Water level is too low"),
-    MULTIPLIER_OUT_OF_RANGE("Multiplier must be between 0 and 1"),
-    DEVICE_NOT_FOUND("Device not found: "),
-
-    INVALID_PUMP_MULTIPLIER("Pump multiplier must be between 0 and 1");
+    MULTIPLIER_OUT_OF_RANGE("Multiplier must be between 0 and 1");
 
     private final String message;
 

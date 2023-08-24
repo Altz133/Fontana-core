@@ -1,6 +1,8 @@
 package com.fontana.backend.user.mapper;
 
+import com.fontana.backend.role.entity.Role;
 import com.fontana.backend.user.dto.UserDTO;
+import com.fontana.backend.user.dto.UserUpdateRequestDTO;
 import com.fontana.backend.user.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ public class UserDtoMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .role(user.getRole())
+                .lastRoleChange(user.getLastRoleChange())
                 .build();
     }
 
@@ -24,6 +27,7 @@ public class UserDtoMapper {
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .role(userDto.getRole())
+                .lastRoleChange(null)
                 .build();
     }
 }

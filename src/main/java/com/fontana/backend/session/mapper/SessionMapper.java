@@ -2,6 +2,7 @@ package com.fontana.backend.session.mapper;
 
 import com.fontana.backend.session.dto.SessionRequestDTO;
 import com.fontana.backend.session.dto.SessionResponseDTO;
+import com.fontana.backend.session.dto.SessionWatcherRequestDTO;
 import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SessionMapper {
 
-    private final AuthUtils appUtils;
     @Value("${session.expiration-delay}")
     private String expirationDelay;
+
+    private final AuthUtils appUtils;
 
     public Session map(SessionRequestDTO sessionRequestDTO) {
         String currentPrincipalName = appUtils.getAuthentication().getPrincipal().toString();
@@ -44,6 +46,7 @@ public class SessionMapper {
                 .isForcedToClose(session.isForcedToClose())
                 .isAutoClosed(session.isAutoClosed())
                 .logsAmount(logsAmount)
+                .watchers(session.getWatchers())
                 .build();
 
         log.info("Mapped SessionResponseDTO: " + sessionResponseDTO);

@@ -33,4 +33,8 @@ public class Session {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "sessionId")
     private List<Log> logs = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sessionId")
+    private List<SessionWatcher> watchers = new ArrayList<>();
 }
