@@ -35,13 +35,13 @@ public class ScheduleController {
     }
 
     @GetMapping(value = SCHEDULE_GET_MONTH)
-    public Set<Integer> getDaysHavingSchedulesInMonth(Integer year, Integer month, Integer timeZoneDiffMin) {
-        return scheduleService.getDaysHavingSchedulesInMonth(year, month, timeZoneDiffMin);
+    public Set<Integer> getDaysHavingSchedulesInMonth(@RequestParam Integer year, @RequestParam Integer month) {
+        return scheduleService.getDaysHavingSchedulesInMonth(year, month);
     }
 
     @GetMapping(value = SCHEDULE_GET_DAY)
-    public List<ScheduleCardDto> getSchedulesInDay(Integer year, Integer month, Integer day, Integer timeZoneDiffMin) {
-        return scheduleService.getSchedulesInDay(year, month, day, timeZoneDiffMin);
+    public List<ScheduleCardDto> getSchedulesInDay(@RequestParam Integer year, @RequestParam Integer month, @RequestParam Integer day) {
+        return scheduleService.getSchedulesInDay(year, month, day);
     }
 
 }
