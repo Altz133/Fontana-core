@@ -1,5 +1,6 @@
 package com.fontana.backend.session.service;
 
+import com.fontana.backend.session.dto.SessionResponseDTO;
 import com.fontana.backend.session.dto.SessionWatcherRequestDTO;
 import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.session.entity.SessionWatcher;
@@ -26,6 +27,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final SessionRepository sessionRepository;
     private final SessionWatcherRepository watcherRepository;
+    private final SessionService sessionService;
 
     @Override
     public ResponseEntity<?> updateSingleSessionWatcher(Integer sessionId, SessionWatcherRequestDTO request) {
