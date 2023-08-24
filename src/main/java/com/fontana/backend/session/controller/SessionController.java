@@ -33,6 +33,11 @@ public class SessionController {
         return sessionService.findById(id);
     }
 
+    @GetMapping(SESSION_FIND_NON_DISPLAYED_AMOUNT)
+    public ResponseEntity<?> findNonDisplayedAmount(@PathVariable("username") String username) {
+        return notificationService.findNonDisplayedAmount(username);
+    }
+
     @PostMapping()
     public ResponseEntity<?> add(@RequestBody @Validated SessionRequestDTO sessionRequestDTO) {
         return sessionService.add(sessionRequestDTO);

@@ -21,6 +21,7 @@ public class RestEndpoints {
     public static final String DMX_UPDATE_DMX_ADDRESSES = "/updateDMXAddresses";
     public static final String SESSION = BASE + "/session";
     public static final String SESSION_FIND_BY_ID = "/{id}";
+    public static final String SESSION_FIND_NON_DISPLAYED_AMOUNT = "/non-displayed-amount/{username}";
     public static final String SESSION_UPDATE_CLOSE = "/close";
     public static final String SESSION_UPDATE_WATCHER = "/{sessionId}/watcher";
     public static final String SESSION_UPDATE_WATCHER_ALL = "/all/watcher";
