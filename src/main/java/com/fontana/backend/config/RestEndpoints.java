@@ -48,4 +48,8 @@ public class RestEndpoints {
     public static final String SCHEDULE_UPDATE = "/update";
     public static final String SCHEDULE_GET_MONTH = "/get/month";
     public static final String SCHEDULE_GET_DAY = "/get/day";
+
+    public static final String DMX_GET_PUMP_POWER_MULTIPLIER = "/getPumpPowerMultiplier";
+    public static final String DMX_GET_API_STATUS = "/getApiValidationStatus";
+
 }
