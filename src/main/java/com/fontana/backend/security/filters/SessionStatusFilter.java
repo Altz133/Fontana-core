@@ -20,14 +20,12 @@ import java.io.IOException;
 @Slf4j
 public class SessionStatusFilter extends OncePerRequestFilter {
 
-    @Value("${session.custom-header}")
-    private String sessionHeader;
-
-    @Value("${session.header-prefix}")
-    private String sessionPrefix;
-
     private final AuthUtils appUtils;
     private final SessionService sessionService;
+    @Value("${session.custom-header}")
+    private String sessionHeader;
+    @Value("${session.header-prefix}")
+    private String sessionPrefix;
 
     /**
      * Filters incoming requests if "X-Live-Control" header with value of "active" can be found. If a valid

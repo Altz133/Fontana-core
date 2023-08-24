@@ -1,7 +1,5 @@
 package com.fontana.backend.session.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fontana.backend.log.entity.Log;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
