@@ -29,10 +29,10 @@ public class DMXValidatorService {
     private final SensorsHandlerService sensorsHandlerService;
     @Autowired
     private final DeviceRepository deviceRepository;
-    private Sensors sensors;
-    private List<Device> pumps;
-    private List<Device> leds;
-    private List<Device> lights;
+    private static Sensors sensors;
+    private static List<Device> pumps;
+    private static List<Device> leds;
+    private static List<Device> lights;
 
     public static void changePumpMultiplier(float multiplier) {
         pumpPowerMultiplier = multiplier;
@@ -83,7 +83,7 @@ public class DMXValidatorService {
         return dmxData;
     }
 
-    public byte[] validateArrayCyclic(byte[] dmxData){
+    public static byte[] validateArrayCyclic(byte[] dmxData){
         //turning off the pumps if the water level is too low
         if (sensors.getWaterBottom()) {
             for(Device pump : pumps){
