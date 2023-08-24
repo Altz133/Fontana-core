@@ -1,5 +1,6 @@
 package com.fontana.backend.dmxHandler.validator.controller;
 
+import com.fontana.backend.dmxHandler.dto.PumpMultiplierDTO;
 import com.fontana.backend.dmxHandler.validator.service.DMXValidatorService;
 import com.fontana.backend.exception.customExceptions.DMXValidatorException;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,10 @@ public class DMXValidatorController {
     @Autowired
     private final DMXValidatorService dmxValidatorService;
 
-    @PostMapping(value = DMX_CHANGE_PUMP_POWER_MULTIPLIER)
-    public ResponseEntity<Object> changePumpMultiplier(@RequestBody float multiplier) {
+    @PutMapping(value = DMX_CHANGE_PUMP_POWER_MULTIPLIER)
+    public ResponseEntity<Object> changePumpMultiplier(@RequestBody PumpMultiplierDTO pumpMultiplierDTO) {
         try {
-            DMXValidatorService.changePumpMultiplier(multiplier);
+            DMXValidatorService.changePumpMultiplier(pumpMultiplierDTO.getPumpMultiplier());
             return ResponseEntity.ok().build();
         } catch (DMXValidatorException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

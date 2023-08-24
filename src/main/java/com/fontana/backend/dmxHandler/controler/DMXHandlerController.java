@@ -8,6 +8,7 @@ import com.fontana.backend.devices.light.dto.LightDTO;
 import com.fontana.backend.devices.light.mapper.LightMapper;
 import com.fontana.backend.devices.pump.dto.PumpDTO;
 import com.fontana.backend.devices.pump.mapper.PumpMapper;
+import com.fontana.backend.dmxHandler.dto.SensorsStatusDTO;
 import com.fontana.backend.dmxHandler.service.DMXHandlerService;
 import com.fontana.backend.exception.customExceptions.DMXValidatorException;
 import com.fontana.backend.frame.entity.Frame;
@@ -80,9 +81,9 @@ public class DMXHandlerController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = DMX_CHANGE_API_STATUS)
-    public ResponseEntity<Object> changeApiStatus(@RequestBody boolean status) {
-        DMXHandlerService.changeApiValidationStatus(status);
+    @PutMapping(value = DMX_CHANGE_API_STATUS)
+    public ResponseEntity<Object> changeApiStatus(@RequestBody SensorsStatusDTO sensorsStatusDTO) {
+        DMXHandlerService.changeApiValidationStatus(sensorsStatusDTO.isSensorsStatus());
         return ResponseEntity.ok().build();
     }
 
