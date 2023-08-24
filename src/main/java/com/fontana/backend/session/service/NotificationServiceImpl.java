@@ -50,8 +50,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public ResponseEntity<?> updateAllSessionsWatcher(SessionWatcherRequestDTO request) {
-        return null;
+    public ResponseEntity<?> updateAllSessionsWatchers(SessionWatcherRequestDTO request) {
+
+        return ResponseEntity.ok().build();
     }
 
     private SessionWatcher buildSessionWatcher(Integer sessionId, SessionWatcherRequestDTO request) {
