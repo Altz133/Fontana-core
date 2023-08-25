@@ -44,18 +44,18 @@ public class LogController {
         return logService.add(logRequestDTO);
     }
 
-    @GetMapping("/download")
-    public ResponseEntity<ByteArrayResource> downloadLogs(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<LogResponseDTO> pageOfLogs = logService.findAll(null, null, pageable);
-        List<LogResponseDTO> logs = pageOfLogs.getContent(); // This gets the list of logs from the page
 
-        String content = ""; // Convert this list to a CSV or any other format you prefer
+    @GetMapping("/download/all")
+    public ResponseEntity<ByteArrayResource> downloadAllLogs() {
+        List<LogResponseDTO> allLogs = logService.findAllLogs();
 
-        for (LogResponseDTO log : logs) {
-            content += log.toString() + "\n"; // Assuming LogResponseDTO has a proper toString() method
+        StringBuilder content = new StringBuilder();
+
+        for (LogResponseDTO log : allLogs) {
+            content.append(log.toString()).append("\n");
         }
 
-        byte[] bytes = content.getBytes();
+        byte[] bytes = content.toString().getBytes();
         ByteArrayResource resource = new ByteArrayResource(bytes);
 
         return ResponseEntity.ok()
@@ -63,4 +63,6 @@ public class LogController {
                 .contentType(MediaType.TEXT_PLAIN)
                 .body(resource);
     }
+
 }
+
