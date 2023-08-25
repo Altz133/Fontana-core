@@ -60,18 +60,6 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public ResponseEntity<?> getNonDisplayedAmount(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new NotFoundException(userNotFoundMsg));
-
-        List<Session> sessions = sessionService.filterSessionsInReversedOrder(user);
-
-        Map<String, Integer> response = new HashMap<>();
-        response.put("amount", sessions.size());
-        return ResponseEntity.ok().body(response);
-    }
-
-    @Override
     public ResponseEntity<?> updateAllSessionsWatchers(SessionWatcherRequestDTO request) {
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow(
                 () -> new NotFoundException(userNotFoundMsg));
