@@ -7,26 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TemplateCardDto {
-
-    private Integer id;
-
-    private String name;
-
-    private String ownerUsername;
-
-    private Integer favourites;
-
-    private boolean isFavouritedByUser;
-
-    private Timestamp updatedAt;
-
+public class TemplateDto {
     private TemplateStatus status;
+    private Timestamp created_at;
+    private String name;
+    private String username;
+    private List<Integer> snapshots;
 
-    private Integer length;
 }

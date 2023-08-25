@@ -18,7 +18,7 @@ public class TemplateCardDtoMapper {
                 .name(template.getName())
                 .ownerUsername(template.getUser().getUsername())
                 .favourites(templateService.getFavouriteCount(template))
-                .isFavouritedByOwner(templateService.isFavouritedByOwner(template))
+                .isFavouritedByUser(templateService.isFavouritedByUser(template))
                 .updatedAt(template.getUpdatedAt())
                 .status(template.getStatus())
                 .length(templateService.getDurationFromTemplate(template))

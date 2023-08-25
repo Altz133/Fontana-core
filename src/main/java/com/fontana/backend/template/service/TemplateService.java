@@ -1,13 +1,14 @@
 package com.fontana.backend.template.service;
 
 
+import com.fontana.backend.template.dto.TemplateDto;
 import com.fontana.backend.template.entity.Template;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface TemplateService {
-    void addTemplate(Template template);
+    void addTemplate(TemplateDto templateDto);
 
     void deleteTemplate(Template template);
 
@@ -19,7 +20,7 @@ public interface TemplateService {
 
     int getFavouriteCount(Template template);
 
-    boolean isFavouritedByOwner(Template template);
+    boolean isFavouritedByUser(Template template);
 
     Template getTemplateById(Integer templateId);
 
