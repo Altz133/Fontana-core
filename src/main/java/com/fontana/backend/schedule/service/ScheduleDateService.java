@@ -103,11 +103,15 @@ public class ScheduleDateService {
         return scheduleCardDtos;
     }
 
-    public Schedule getNextSchedule(){
+    public Schedule getNextSchedule() {
         Schedule schedule = null;
 
 
-
         return schedule;
+    }
+
+    public Timestamp getScheduleStartTimestamp(Schedule schedule) {
+
+        return null;
     }
 }

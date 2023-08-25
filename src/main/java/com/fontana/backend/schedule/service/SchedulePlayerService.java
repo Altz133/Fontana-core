@@ -8,7 +8,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -22,10 +27,7 @@ public class SchedulePlayerService {
     private static Schedule currentSchedule = null;
 
     private final ScheduleDateService scheduleDateService;
-
-    public static boolean isPlaying() {
-        return isPlaying;
-    }
+    ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     public void pauseCurrentSchedule() {
         isPlaying = false;
@@ -33,6 +35,14 @@ public class SchedulePlayerService {
 
     public void continueCurrentSchedule() {
         isPlaying = true;
+    }
+
+    public static void start() {
+        isPlaying = true;
+    }
+
+    public static boolean isPlaying() {
+        return isPlaying;
     }
 
     public static boolean isPlaying(Schedule schedule) {
@@ -48,6 +58,7 @@ public class SchedulePlayerService {
         updateCurrentSchedule();
     }
 
+    //every day at midnight
     @Scheduled(cron = "0 0 0 * * *")
     private void autoStop() {
         if (currentSchedule != null) {
@@ -87,7 +98,10 @@ public class SchedulePlayerService {
     }
 
     private void scheduleSchedule(Schedule schedule) {
+        scheduledExecutorService.shutdownNow();
 
+        long timeLeft = scheduleDateService.getScheduleStartTimestamp(currentSchedule).getTime() - Timestamp.valueOf(LocalDateTime.now()).getTime();
+        scheduledExecutorService.schedule(new SchedulePlayerStarter(), timeLeft, TimeUnit.MILLISECONDS);
     }
 
     public byte[] nextDmxData() {
