@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+
 
 import java.util.List;
 
@@ -22,44 +26,44 @@ import static com.fontana.backend.config.RestEndpoints.LOG;
 @Slf4j
 public class LogServiceImpl implements LogService {
 
-    private final LogRepository logRepository;
-    private final LogDtoMapper logDtoMapper;
-    @Value("${log.not-found-msg}")
-    private String notFoundMsg;
+        private final LogRepository logRepository;
+        private final LogDtoMapper logDtoMapper;
+        @Value("${log.not-found-msg}")
+        private String notFoundMsg;
 
-    @Override
-    public List<LogResponseDTO> findAll(String username, Integer sessionId) {
-        List<Log> logs = logRepository.findAll();
+        @Override
+        public Page<LogResponseDTO> findAll(String username, Integer sessionId, Pageable pageable) {
+            Page<Log> logs = logRepository.findAll(pageable);
 
-        if (username != null) {
-            logs = logRepository.findAllByUsername(username);
-            log.info("Logs by username: " + logs);
+            if (username != null) {
+                logs = logRepository.findAllByUsername(username, pageable);
+                log.info("Logs by username: " + logs);
+            }
+
+            if (sessionId != null) {
+                // Adjust this line as per the new method signature in the repository
+                logs = logRepository.findAllBySessionId(sessionId, pageable);
+            }
+
+            return logs.map(logDtoMapper::map);
         }
 
-        if (sessionId != null) {
-            logs = logRepository.findAllBySessionId(sessionId);
+
+        @Override
+        public LogResponseDTO findById(int id) {
+            Log searched = logRepository.findById(id).orElseThrow(
+                    () -> new NotFoundException(notFoundMsg));
+
+            return logDtoMapper.map(searched);
         }
 
-        return logs.stream()
-                .map(logDtoMapper::map)
-                .toList();
-    }
+        @Override
+        public ResponseEntity<?> add(LogRequestDTO logRequestDTO) {
+            Log savedLog = logRepository.save(logDtoMapper.map(logRequestDTO));
 
-    @Override
-    public LogResponseDTO findById(int id) {
-        Log searched = logRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(notFoundMsg));
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.LOCATION, LOG.concat("/").concat(savedLog.getId().toString()));
 
-        return logDtoMapper.map(searched);
-    }
-
-    @Override
-    public ResponseEntity<?> add(LogRequestDTO logRequestDTO) {
-        Log savedLog = logRepository.save(logDtoMapper.map(logRequestDTO));
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.LOCATION, LOG.concat("/").concat(savedLog.getId().toString()));
-
-        return ResponseEntity.ok().headers(headers).build();
-    }
+            return ResponseEntity.ok().headers(headers).build();
+        }
 }
