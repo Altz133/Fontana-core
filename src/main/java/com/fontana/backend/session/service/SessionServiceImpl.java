@@ -13,6 +13,8 @@ import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.fontana.backend.config.RestEndpoints.SESSION;
 
@@ -49,6 +52,9 @@ public class SessionServiceImpl implements SessionService {
     @Value("${user.not-found-msg}")
     private String userNotFoundMsg;
 
+    @Value("${cache.active-session}")
+    private String activeSessionLabel;
+
     @Value("${session.expiration-delay}")
     private String expirationDelay;
 
@@ -56,17 +62,21 @@ public class SessionServiceImpl implements SessionService {
     private final UserRepository userRepository;
     private final SessionMapper sessionMapper;
     private final AuthUtils authUtils;
+    private final CacheManager cacheManager;
 
     @Scheduled(fixedRate = 15000)
     public void autoCloseSession() {
         Session session = getActiveSession();
-        log.info("AutoCloseSession scheduler invoked with no action.");
 
-        if (session != null && session.getExpirationTime().isBefore(LocalDateTime.now())) {
+        if ((session != null && session.getExpirationTime().isBefore(LocalDateTime.now()))) {
             Session updated = buildUpdatedSession(session, null, false, true);
             sessionRepository.save(updated);
+            Objects.requireNonNull(cacheManager.getCache(activeSessionLabel)).clear();
             log.info("Auto closed session due to no activity: " + session);
+            return;
         }
+
+        log.info("AutoCloseSession scheduler invoked with no action.");
     }
 
     @Override
@@ -120,7 +130,8 @@ public class SessionServiceImpl implements SessionService {
         }
 
         Session saved = sessionRepository.save(sessionMapper.map(sessionRequestDTO));
-        log.info(saved.toString());
+        Objects.requireNonNull(cacheManager.getCache(activeSessionLabel)).put("id", saved.getId());
+        log.info("(OPEN) activeSession: " + saved);
 
         return buildAddSessionResponse(saved);
     }
@@ -128,6 +139,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public ResponseEntity<?> updateCloseSession(SessionCloseRequest sessionCloseRequest) {
         Session activeSession = getActiveSession();
+        log.info("(CLOSE) active session: " + activeSession);
         String authority = authUtils.extractAuthenticatedAuthority();
         log.info("Request:" + sessionCloseRequest);
 
@@ -143,6 +155,8 @@ public class SessionServiceImpl implements SessionService {
             log.info("Updated:" + updated);
 
             sessionRepository.save(updated);
+            Objects.requireNonNull(cacheManager.getCache(activeSessionLabel)).clear();
+
             return ResponseEntity.ok().build();
         } else {
             throw new SessionNotModifiedException(notAllowedToCloseMsg);
@@ -170,14 +184,15 @@ public class SessionServiceImpl implements SessionService {
         }
     }
 
-    private Session getActiveSession() {
-        List<Session> activeSessions = sessionRepository.findAll().stream()
-                .filter(session -> session.getClosedTime() == null)
-                .toList();
-        if (activeSessions.size() >= 1) {
-            log.info("Active session:" + activeSessions.get(0));
-            return activeSessions.get(0);
+    public Session getActiveSession() {
+        Cache cache = cacheManager.getCache(activeSessionLabel);
+        Cache.ValueWrapper valueWrapper = cache.get("id");
+
+        if (valueWrapper != null && valueWrapper.get() != null) {
+            log.info("Active session id: " + valueWrapper.get());
+            return sessionRepository.findById((int) valueWrapper.get()).orElse(null);
         }
+
         return null;
     }
 
