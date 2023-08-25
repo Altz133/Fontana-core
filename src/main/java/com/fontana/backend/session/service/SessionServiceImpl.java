@@ -91,7 +91,6 @@ public class SessionServiceImpl implements SessionService {
                 .toList();
     }
 
-
     @Override
     public SessionResponseDTO findById(Integer id) {
         Session session = sessionRepository.findById(id).orElseThrow(
