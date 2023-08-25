@@ -101,11 +101,10 @@ public class ScheduleDateService {
     public Schedule getNextSchedule() {
         Schedule nextSchedule = null;
 
-        Long now = Timestamp.valueOf(LocalDateTime.now()).getTime();
-
         LocalDateTime localDateTime = LocalDateTime.now();
         LocalDate localDate = localDateTime.toLocalDate();
 
+        Long now = Timestamp.valueOf(LocalDateTime.now()).getTime();
         List<Schedule> schedules = scheduleRepository.getEnabledSchedulesInFutureFrom(now);
 
         Map<Integer, LocalDateTime> dateTimes = new HashMap<>();
@@ -164,6 +163,38 @@ public class ScheduleDateService {
     }
 
     public Timestamp getScheduleStartTimestamp(Schedule schedule) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDate localDate = localDateTime.toLocalDate();
+
+        LocalTime startTime = schedule.getStartTimestamp().toLocalDateTime().toLocalTime();
+
+        if (scheduleService.isCycle(schedule)) {
+            DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+
+            for (int i = 0; i < 7; i++) {
+                ScheduleCycleDays scheduleCycleDay = scheduleDateMapper.map(dayOfWeek);
+
+                if (schedule.getCycleDays().contains(scheduleCycleDay)) {
+                    LocalDateTime nextDateTime = LocalDateTime.of(localDate.plusDays(i + 1), startTime);
+
+                    if (schedule.getEndTimestamp() == null) {
+                        return Timestamp.valueOf(nextDateTime);
+                    } else if (nextDateTime.isBefore(schedule.getEndTimestamp().toLocalDateTime().toLocalDate().plusDays(1).atStartOfDay())) {
+                        return Timestamp.valueOf(nextDateTime);
+                    }
+
+                    break;
+                }
+
+                dayOfWeek = dayOfWeek.plus(1);
+            }
+        } else {
+            LocalDateTime nextDateTime = LocalDateTime.of(schedule.getStartTimestamp().toLocalDateTime().toLocalDate(), startTime);
+
+            if (nextDateTime.isAfter(localDateTime)) {
+                return Timestamp.valueOf(nextDateTime);
+            }
+        }
 
         return null;
     }
