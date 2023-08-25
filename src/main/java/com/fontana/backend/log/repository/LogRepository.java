@@ -1,13 +1,16 @@
 package com.fontana.backend.log.repository;
 
 import com.fontana.backend.log.entity.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 
 public interface LogRepository extends JpaRepository<Log, Integer> {
 
-    List<Log> findAllByUsername(String username);
+    Page<Log> findAll(Pageable pageable);
 
-    List<Log> findAllBySessionId(int sessionId);
+    Page<Log> findAllByUsername(String username, Pageable pageable);
+
+    Page<Log> findAllBySessionId(int sessionId, Pageable pageable);
 }
