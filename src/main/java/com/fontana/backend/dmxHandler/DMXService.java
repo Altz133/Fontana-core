@@ -4,9 +4,11 @@ import com.fontana.backend.devices.dto.DeviceDTO;
 import com.fontana.backend.dmxHandler.currentStateDTO.mapper.CurrentStateDTOMapper;
 import com.fontana.backend.dmxHandler.validator.service.DMXValidatorService;
 import com.fontana.backend.frame.entity.Frame;
+import com.fontana.backend.schedule.service.SchedulePlayerService;
 import jakarta.annotation.PostConstruct;
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @Service
 @EnableScheduling
+@RequiredArgsConstructor
 public class DMXService {
 
     private static byte[] dmxData;
@@ -27,6 +30,7 @@ public class DMXService {
     private DMXValidatorService dmxValidatorService;
     @Autowired
     private CurrentStateDTOMapper currentStateDTOMapper;
+    private final SchedulePlayerService schedulePlayerService;
 
     public static byte[] getDMXData() {
         return dmxData;
@@ -53,7 +57,12 @@ public class DMXService {
                 jd.setFlowControl(JD2XX.FLOW_NONE, 11, 13);
                 jd.setBreakOn();
                 jd.setBreakOff();
-                ostream.write(dmxData);
+
+                if (SchedulePlayerService.isPlaying()) {
+                    ostream.write(schedulePlayerService.nextDmxData());
+                } else {
+                    ostream.write(dmxData);
+                }
             }
         } catch (IOException e) {
             try {
