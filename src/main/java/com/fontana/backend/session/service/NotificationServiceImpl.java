@@ -1,6 +1,7 @@
 package com.fontana.backend.session.service;
 
 import com.fontana.backend.exception.customExceptions.NotFoundException;
+import com.fontana.backend.session.dto.SessionResponseDTO;
 import com.fontana.backend.session.dto.SessionWatcherRequestDTO;
 import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.session.entity.SessionWatcher;
@@ -56,6 +57,18 @@ public class NotificationServiceImpl implements NotificationService {
         watcherRepository.save(watcher);
 
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<?> getNonDisplayedAmount(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new NotFoundException(userNotFoundMsg));
+
+        List<Session> sessions = sessionService.filterSessionsInReversedOrder(user);
+
+        Map<String, Integer> response = new HashMap<>();
+        response.put("amount", sessions.size());
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
