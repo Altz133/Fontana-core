@@ -1,13 +1,12 @@
 package com.fontana.backend.security.blacklist.entity;
 
-import com.fontana.backend.security.TokenType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
+import com.fontana.backend.security.TokenType;
 
 @Data
 @NoArgsConstructor

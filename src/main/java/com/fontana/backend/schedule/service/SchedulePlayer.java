@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SchedulePlayer {
-    private static boolean isPlaying = false;
+    private boolean isPlaying = false;
 
-    public static boolean isPlaying() {
+    public boolean isPlaying() {
         return isPlaying;
     }
 }

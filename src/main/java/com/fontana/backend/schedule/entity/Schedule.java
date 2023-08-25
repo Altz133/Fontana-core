@@ -34,7 +34,7 @@ public class Schedule {
     private Timestamp startTimestamp;
 
     private Timestamp endTimestamp;
-    
+
     private int repeat;
 
     private boolean enabled;
