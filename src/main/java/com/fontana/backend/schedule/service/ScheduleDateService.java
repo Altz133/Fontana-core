@@ -3,6 +3,7 @@ package com.fontana.backend.schedule.service;
 import com.fontana.backend.schedule.dto.ScheduleCardDto;
 import com.fontana.backend.schedule.entity.Schedule;
 import com.fontana.backend.schedule.entity.ScheduleCycleDays;
+import com.fontana.backend.schedule.mapper.ScheduleDateMapper;
 import com.fontana.backend.schedule.mapper.ScheduleMapper;
 import com.fontana.backend.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class ScheduleDateService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleService scheduleService;
     private final ScheduleMapper scheduleMapper;
+    private final ScheduleDateMapper scheduleDateMapper;
 
     public Set<Integer> getDaysHavingSchedulesInMonth(Integer year, Integer month) {
         LocalDate date = LocalDate.of(year, month, 1);
@@ -51,42 +53,8 @@ public class ScheduleDateService {
                         end = LocalDate.of(schedule.getEndTimestamp().getYear() + 1900, schedule.getEndTimestamp().getMonth() + 1, schedule.getEndTimestamp().getDate()).plusDays(1);
                     }
 
-                    switch (cycleDays) {
-                        case MON:
-                            for (LocalDate localDate : getCycleDays(start, end, DayOfWeek.MONDAY)) {
-                                days.add(localDate.getDayOfMonth());
-                            }
-                            break;
-                        case TUE:
-                            for (LocalDate localDate : getCycleDays(start, end, DayOfWeek.TUESDAY)) {
-                                days.add(localDate.getDayOfMonth());
-                            }
-                            break;
-                        case WED:
-                            for (LocalDate localDate : getCycleDays(start, end, DayOfWeek.WEDNESDAY)) {
-                                days.add(localDate.getDayOfMonth());
-                            }
-                            break;
-                        case THU:
-                            for (LocalDate localDate : getCycleDays(start, end, DayOfWeek.THURSDAY)) {
-                                days.add(localDate.getDayOfMonth());
-                            }
-                            break;
-                        case FRI:
-                            for (LocalDate localDate : getCycleDays(start, end, DayOfWeek.FRIDAY)) {
-                                days.add(localDate.getDayOfMonth());
-                            }
-                            break;
-                        case SAT:
-                            for (LocalDate localDate : getCycleDays(start, end, DayOfWeek.SATURDAY)) {
-                                days.add(localDate.getDayOfMonth());
-                            }
-                            break;
-                        case SUN:
-                            for (LocalDate localDate : getCycleDays(start, end, DayOfWeek.SUNDAY)) {
-                                days.add(localDate.getDayOfMonth());
-                            }
-                            break;
+                    for (LocalDate localDate : getCycleDays(start, end, scheduleDateMapper.map(cycleDays))) {
+                        days.add(localDate.getDayOfMonth());
                     }
                 }
             } else {
@@ -118,31 +86,7 @@ public class ScheduleDateService {
 
         List<Schedule> schedules = scheduleRepository.getSchedulesInTimestampRange(dayStart, dayEnd);
 
-        ScheduleCycleDays scheduleCycleDays = null;
-
-        switch (date.getDayOfWeek()) {
-            case MONDAY:
-                scheduleCycleDays = ScheduleCycleDays.MON;
-                break;
-            case TUESDAY:
-                scheduleCycleDays = ScheduleCycleDays.TUE;
-                break;
-            case WEDNESDAY:
-                scheduleCycleDays = ScheduleCycleDays.WED;
-                break;
-            case THURSDAY:
-                scheduleCycleDays = ScheduleCycleDays.THU;
-                break;
-            case FRIDAY:
-                scheduleCycleDays = ScheduleCycleDays.FRI;
-                break;
-            case SATURDAY:
-                scheduleCycleDays = ScheduleCycleDays.SAT;
-                break;
-            case SUNDAY:
-                scheduleCycleDays = ScheduleCycleDays.SUN;
-                break;
-        }
+        ScheduleCycleDays scheduleCycleDays = scheduleDateMapper.map(date.getDayOfWeek());
 
         for (Schedule schedule : schedules) {
             if (schedule.isEnabled()) {
@@ -157,5 +101,13 @@ public class ScheduleDateService {
         }
 
         return scheduleCardDtos;
+    }
+
+    public Schedule getNextSchedule(){
+        Schedule schedule = null;
+
+
+
+        return schedule;
     }
 }
