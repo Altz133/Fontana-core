@@ -77,7 +77,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     username, null, Collections.singleton(new SimpleGrantedAuthority(authority))
             );
 
-            log.info("Jwt filter: " + authToken);
+            log.info("(SECURITY) Jwt filter: " + authToken);
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
