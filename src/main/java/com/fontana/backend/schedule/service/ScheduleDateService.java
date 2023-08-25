@@ -10,14 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Period;
+import java.time.*;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -104,10 +99,68 @@ public class ScheduleDateService {
     }
 
     public Schedule getNextSchedule() {
-        Schedule schedule = null;
+        Schedule nextSchedule = null;
 
+        Long now = Timestamp.valueOf(LocalDateTime.now()).getTime();
 
-        return schedule;
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDate localDate = localDateTime.toLocalDate();
+
+        List<Schedule> schedules = scheduleRepository.getEnabledSchedulesInFutureFrom(now);
+
+        Map<Integer, LocalDateTime> dateTimes = new HashMap<>();
+
+        for (Schedule schedule : schedules) {
+            LocalTime startTime = schedule.getStartTimestamp().toLocalDateTime().toLocalTime();
+
+            if (scheduleService.isCycle(schedule)) {
+                DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+
+                for (int i = 0; i < 7; i++) {
+                    ScheduleCycleDays scheduleCycleDay = scheduleDateMapper.map(dayOfWeek);
+
+                    if (schedule.getCycleDays().contains(scheduleCycleDay)) {
+                        LocalDateTime nextDateTime = LocalDateTime.of(localDate.plusDays(i + 1), startTime);
+
+                        if (schedule.getEndTimestamp() == null) {
+                            dateTimes.put(schedule.getId(), nextDateTime);
+                        } else if (nextDateTime.isBefore(schedule.getEndTimestamp().toLocalDateTime().toLocalDate().plusDays(1).atStartOfDay())) {
+                            dateTimes.put(schedule.getId(), nextDateTime);
+                        }
+
+                        break;
+                    }
+
+                    dayOfWeek = dayOfWeek.plus(1);
+                }
+            } else {
+                LocalDateTime nextDateTime = LocalDateTime.of(schedule.getStartTimestamp().toLocalDateTime().toLocalDate(), startTime);
+
+                if (nextDateTime.isAfter(localDateTime)) {
+                    dateTimes.put(schedule.getId(), nextDateTime);
+                }
+            }
+        }
+
+        if (dateTimes.size() != 0) {
+            LocalDateTime first = dateTimes.values().stream().sorted().toList().get(0);
+
+            for (Integer id : dateTimes.keySet()) {
+                if (first == dateTimes.get(id)) {
+                    for (Schedule schedule : schedules) {
+                        if (schedule.getId() == id) {
+                            nextSchedule = schedule;
+
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return nextSchedule;
     }
 
     public Timestamp getScheduleStartTimestamp(Schedule schedule) {

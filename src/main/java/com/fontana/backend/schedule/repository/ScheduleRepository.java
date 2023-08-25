@@ -10,4 +10,7 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query(value = "SELECT s FROM Schedule s WHERE (s.endTimestamp is NULL or s.endTimestamp >= ?1) AND s.startTimestamp < ?2")
     List<Schedule> getSchedulesInTimestampRange(Long start, Long end);
+
+    @Query(value = "SELECT s FROM Schedule s WHERE (s.endTimestamp is NULL or s.endTimestamp >= ?1) AND s.enabled = true")
+    List<Schedule> getEnabledSchedulesInFutureFrom(Long start);
 }
