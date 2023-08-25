@@ -59,7 +59,7 @@ public class DMXService {
                 jd.setBreakOff();
 
                 if (SchedulePlayerService.isPlaying()) {
-                    ostream.write(schedulePlayerService.nextDmxData());
+                    ostream.write(DMXValidatorService.validateArrayCyclic(schedulePlayerService.nextDmxData()));
                 } else {
                     ostream.write(dmxData);
                 }
