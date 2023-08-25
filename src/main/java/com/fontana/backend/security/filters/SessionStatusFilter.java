@@ -47,7 +47,7 @@ public class SessionStatusFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         final String header = request.getHeader(sessionHeader);
         final String username;
-        log.info("Session filter invoked" + header);
+        log.info("(SECURITY) Session filter invoked" + header);
 
         if (header == null || !header.startsWith(sessionPrefix)) {
             filterChain.doFilter(request, response);
@@ -55,7 +55,7 @@ public class SessionStatusFilter extends OncePerRequestFilter {
         }
 
         username = appUtils.getAuthentication().getPrincipal().toString();
-        log.info("Logged user:" + username);
+        log.info("(SECURITY) Logged user:" + username);
 
         if (sessionService.checkIsActive(username)) {
             sessionService.updateExpirationTime();
