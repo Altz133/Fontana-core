@@ -1,6 +1,5 @@
 package com.fontana.backend.snapshot.entity;
 
-import com.fontana.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,12 +16,8 @@ public class Snapshot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "username")
-    private User user;
-
+    private Integer snapshot_index;
+    private Integer template_id;
     private byte[] data;
 }
