@@ -68,7 +68,7 @@ public class SessionServiceImpl implements SessionService {
     public void autoCloseSession() {
         Session session = getActiveSession();
 
-        if ((session != null && session.getExpirationTime().isBefore(LocalDateTime.now()))) {
+        if (session != null && session.getExpirationTime().isBefore(LocalDateTime.now())) {
             Session updated = buildUpdatedSession(session, null, false, true);
             sessionRepository.save(updated);
             Objects.requireNonNull(cacheManager.getCache(activeSessionLabel)).clear();
