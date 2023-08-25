@@ -4,13 +4,14 @@ import com.fontana.backend.session.dto.SessionCloseRequest;
 import com.fontana.backend.session.dto.SessionRequestDTO;
 import com.fontana.backend.session.dto.SessionResponseDTO;
 import com.fontana.backend.session.entity.Session;
+import com.fontana.backend.user.entity.User;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface SessionService {
 
-    List<SessionResponseDTO> findAll();
+    List<SessionResponseDTO> findAll(String watcher);
 
     SessionResponseDTO findById(Integer id);
 
@@ -21,4 +22,6 @@ public interface SessionService {
     boolean checkIsActive(String username);
 
     void updateExpirationTime();
+
+    List<Session> filterSessionsInReversedOrder(User user);
 }

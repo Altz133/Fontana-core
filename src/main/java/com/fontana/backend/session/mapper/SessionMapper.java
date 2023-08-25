@@ -2,6 +2,7 @@ package com.fontana.backend.session.mapper;
 
 import com.fontana.backend.session.dto.SessionRequestDTO;
 import com.fontana.backend.session.dto.SessionResponseDTO;
+import com.fontana.backend.session.dto.SessionWatcherRequestDTO;
 import com.fontana.backend.session.entity.Session;
 import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,7 @@ public class SessionMapper {
                 .isForcedToClose(session.isForcedToClose())
                 .isAutoClosed(session.isAutoClosed())
                 .logsAmount(logsAmount)
+                .watchers(session.getWatchers())
                 .build();
 
         log.info("Mapped SessionResponseDTO: " + sessionResponseDTO);

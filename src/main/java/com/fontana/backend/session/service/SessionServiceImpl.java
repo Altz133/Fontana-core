@@ -4,9 +4,11 @@ import com.fontana.backend.exception.customExceptions.NotFoundException;
 import com.fontana.backend.exception.customExceptions.SessionNotModifiedException;
 import com.fontana.backend.role.entity.RoleType;
 import com.fontana.backend.session.dto.*;
-import com.fontana.backend.session.mapper.SessionMapper;
 import com.fontana.backend.session.entity.Session;
+import com.fontana.backend.session.mapper.SessionMapper;
 import com.fontana.backend.session.repository.SessionRepository;
+import com.fontana.backend.user.entity.User;
+import com.fontana.backend.user.repository.UserRepository;
 import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,10 +46,14 @@ public class SessionServiceImpl implements SessionService {
     @Value("${session.role-not-allowed-msg}")
     private String roleNotAllowedMsg;
 
+    @Value("${user.not-found-msg}")
+    private String userNotFoundMsg;
+
     @Value("${session.expiration-delay}")
     private String expirationDelay;
 
     private final SessionRepository sessionRepository;
+    private final UserRepository userRepository;
     private final SessionMapper sessionMapper;
     private final AuthUtils authUtils;
 
@@ -64,10 +70,23 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public List<SessionResponseDTO> findAll() {
-        List<Session> sessions = sessionRepository.findAll();
+    public List<SessionResponseDTO> findAll(String watcher) {
+        if (watcher != null) {
+            User user = userRepository.findByUsername(watcher).orElseThrow(
+                    () -> new NotFoundException(userNotFoundMsg));
 
-        return sessions.stream()
+            if (!user.getRole().getName().equals(RoleType.ADMIN.name())) {
+                log.warn("Only admin should be parsed as watcher into parameter.");
+                return null;
+            }
+
+            log.info("Filtered sessions: " + filterSessionsInReversedOrder(user));
+            return filterSessionsInReversedOrder(user).stream()
+                    .map(sessionMapper::map)
+                    .toList();
+        }
+
+        return sessionRepository.findAll().stream()
                 .map(sessionMapper::map)
                 .toList();
     }
@@ -170,6 +189,22 @@ public class SessionServiceImpl implements SessionService {
         response.put("expirationTime", saved.getExpirationTime());
 
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
+    }
+
+    /**
+     * Filters and retrieves a list of closed sessions in reversed order of opening time,
+     * where the session's opening time is after the user's last role change.
+     *
+     * @param user for whom to filter sessions.
+     * @return A list of SessionResponseDTO objects representing the filtered sessions.
+     */
+    public List<Session> filterSessionsInReversedOrder(User user) {
+        return sessionRepository.findAllInReversedOrder().stream()
+                .filter(session -> user.getLastRoleChange().isBefore(session.getOpenedTime()))
+                .filter(session -> session.getClosedTime() != null)
+                .filter(session -> session.getWatchers().stream()
+                        .noneMatch(watcher -> watcher.getWatcher().equals(user.getUsername())))
+                .toList();
     }
 
     private Session buildUpdatedSession(

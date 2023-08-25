@@ -19,9 +19,15 @@ public class RestEndpoints {
     public static final String DMX_CHANGE_API_STATUS = "/enableApiValidation";
     public static final String DMX_CHANGE_PUMP_POWER_MULTIPLIER = "/changePumpPowerMultiplier";
     public static final String DMX_UPDATE_DMX_ADDRESSES = "/updateDMXAddresses";
+    public static final String DMX_GET_API_STATUS = "/getApiValidationStatus";
+    public static final String DMX_GET_PUMP_POWER_MULTIPLIER = "/getPumpPowerMultiplier";
+
     public static final String SESSION = BASE + "/session";
     public static final String SESSION_FIND_BY_ID = "/{id}";
+    public static final String SESSION_FIND_NON_DISPLAYED_AMOUNT = "/non-displayed-amount/{username}";
     public static final String SESSION_UPDATE_CLOSE = "/close";
+    public static final String SESSION_UPDATE_WATCHER = "/{sessionId}/watcher";
+    public static final String SESSION_UPDATE_WATCHER_ALL = "/all/watcher";
 
     public static final String SENSORS_URL = "http://192.168.253.29/api";
 
@@ -38,4 +44,11 @@ public class RestEndpoints {
     public static final String TEMPLATE = BASE + "/template";
     public static final String TEMPLATE_MY_TEMPLATES_PAGINATION = "/myTemplatesCards";
     public static final String TEMPLATE_PUBLIC_TEMPLATES_PAGINATION = "/publicTemplatesCards";
+
+    public static final String SCHEDULE = BASE + "/schedule";
+    public static final String SCHEDULE_ADD = "/add";
+    public static final String SCHEDULE_DELETE = "/delete/{id}";
+    public static final String SCHEDULE_UPDATE = "/update";
+    public static final String SCHEDULE_GET_MONTH = "/get/month";
+    public static final String SCHEDULE_GET_DAY = "/get/day";
 }

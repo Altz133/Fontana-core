@@ -13,4 +13,3 @@ public enum DeviceDTOFactoryMessages {
         return message;
     }
 }
-

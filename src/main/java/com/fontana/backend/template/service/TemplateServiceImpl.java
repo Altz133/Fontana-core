@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -81,5 +82,16 @@ public class TemplateServiceImpl implements TemplateService {
         }
 
         return sum / SEQUENCES_PER_SECOND;
+    }
+
+    @Override
+    public List<Template> getTemplatesByIds(List<Integer> templateIds) {
+        List<Template> templates = new ArrayList<>();
+
+        for (Integer id : templateIds) {
+            templates.add(templateRepository.getReferenceById(id));
+        }
+
+        return templates;
     }
 }
