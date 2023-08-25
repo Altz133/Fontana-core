@@ -1,6 +1,7 @@
 package com.fontana.backend.exception;
 
 import com.fontana.backend.exception.customExceptions.NotFoundException;
+import com.fontana.backend.exception.customExceptions.RoleNotAllowedException;
 import com.fontana.backend.exception.customExceptions.SessionNotModifiedException;
 import com.fontana.backend.security.jwt.JwtExpiredOrUntrustedException;
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +78,12 @@ public class GlobalExceptionController {
     public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException exc) {
         Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(RoleNotAllowedException.class)
+    public ResponseEntity<Map<String, Object>> handleRoleNotAllowedException(RoleNotAllowedException exc) {
+        Map<String, Object> response = generateDefaultExcResponseBody(exc.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 }
 
