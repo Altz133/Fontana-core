@@ -119,15 +119,17 @@ public class ScheduleDateService {
                     ScheduleCycleDays scheduleCycleDay = scheduleDateMapper.map(dayOfWeek);
 
                     if (schedule.getCycleDays().contains(scheduleCycleDay)) {
-                        LocalDateTime nextDateTime = LocalDateTime.of(localDate.plusDays(i + 1), startTime);
+                        LocalDateTime nextDateTime = LocalDateTime.of(localDate.plusDays(i), startTime);
 
-                        if (schedule.getEndTimestamp() == null) {
-                            dateTimes.put(schedule.getId(), nextDateTime);
-                        } else if (nextDateTime.isBefore(schedule.getEndTimestamp().toLocalDateTime().toLocalDate().plusDays(1).atStartOfDay())) {
-                            dateTimes.put(schedule.getId(), nextDateTime);
+                        if (nextDateTime.isAfter(localDateTime)) {
+                            if (schedule.getEndTimestamp() == null) {
+                                dateTimes.put(schedule.getId(), nextDateTime);
+                            } else if (nextDateTime.isBefore(schedule.getEndTimestamp().toLocalDateTime().toLocalDate().plusDays(1).atStartOfDay())) {
+                                dateTimes.put(schedule.getId(), nextDateTime);
+                            }
+
+                            break;
                         }
-
-                        break;
                     }
 
                     dayOfWeek = dayOfWeek.plus(1);
@@ -175,15 +177,17 @@ public class ScheduleDateService {
                 ScheduleCycleDays scheduleCycleDay = scheduleDateMapper.map(dayOfWeek);
 
                 if (schedule.getCycleDays().contains(scheduleCycleDay)) {
-                    LocalDateTime nextDateTime = LocalDateTime.of(localDate.plusDays(i + 1), startTime);
+                    LocalDateTime nextDateTime = LocalDateTime.of(localDate.plusDays(i), startTime);
 
-                    if (schedule.getEndTimestamp() == null) {
-                        return Timestamp.valueOf(nextDateTime);
-                    } else if (nextDateTime.isBefore(schedule.getEndTimestamp().toLocalDateTime().toLocalDate().plusDays(1).atStartOfDay())) {
-                        return Timestamp.valueOf(nextDateTime);
+                    if (nextDateTime.isAfter(localDateTime)) {
+                        if (schedule.getEndTimestamp() == null) {
+                            return Timestamp.valueOf(nextDateTime);
+                        } else if (nextDateTime.isBefore(schedule.getEndTimestamp().toLocalDateTime().toLocalDate().plusDays(1).atStartOfDay())) {
+                            return Timestamp.valueOf(nextDateTime);
+                        }
+
+                        break;
                     }
-
-                    break;
                 }
 
                 dayOfWeek = dayOfWeek.plus(1);

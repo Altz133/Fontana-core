@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -27,8 +28,11 @@ public class SchedulePlayerService {
     private Integer currentRepetition = 0;
     private static Schedule currentSchedule = null;
 
-    private final ScheduleDateService scheduleDateService;
     ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    private ScheduledFuture<?> futureTask = scheduledExecutorService.schedule(() -> {
+    }, 0, TimeUnit.MILLISECONDS);
+
+    private final ScheduleDateService scheduleDateService;
 
     public void pauseCurrentSchedule() {
         isPlaying = false;
@@ -80,6 +84,7 @@ public class SchedulePlayerService {
     }
 
     public void updateCurrentSchedule() {
+        futureTask.cancel(true);
         currentSchedule = scheduleDateService.getNextSchedule();
 
         if (currentSchedule != null) {
@@ -99,10 +104,9 @@ public class SchedulePlayerService {
     }
 
     private void scheduleSchedule(Schedule schedule) {
-        scheduledExecutorService.shutdownNow();
-
         long timeLeft = scheduleDateService.getScheduleStartTimestamp(currentSchedule).getTime() - Timestamp.valueOf(LocalDateTime.now()).getTime();
-        scheduledExecutorService.schedule(new SchedulePlayerStarter(), timeLeft, TimeUnit.MILLISECONDS);
+
+        futureTask = scheduledExecutorService.schedule(new SchedulePlayerStarter(), timeLeft, TimeUnit.MILLISECONDS);
     }
 
     public byte[] nextDmxData() {
