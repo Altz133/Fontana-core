@@ -5,6 +5,7 @@ import com.fontana.backend.schedule.dto.ScheduleFormDto;
 import com.fontana.backend.schedule.entity.Schedule;
 import com.fontana.backend.schedule.service.player.SchedulePlayerService;
 import com.fontana.backend.schedule.service.ScheduleService;
+import com.fontana.backend.template.entity.Template;
 import com.fontana.backend.template.service.TemplateServiceImpl;
 import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,9 @@ public class ScheduleMapper {
                 .isCycle(scheduleService.isCycle(schedule))
                 .cycleDays(List.copyOf(schedule.getCycleDays()))
                 .isEnabled(schedule.isEnabled())
+                .repetitions(schedule.getRepeat())
+                .templateIds(schedule.getTemplates().stream().map(Template::getId).toList())
+                .templateNames(schedule.getTemplates().stream().map(Template::getName).toList())
                 .build();
     }
 
