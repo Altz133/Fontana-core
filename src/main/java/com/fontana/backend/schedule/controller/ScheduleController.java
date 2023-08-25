@@ -4,8 +4,8 @@ import com.fontana.backend.schedule.dto.ScheduleCardDto;
 import com.fontana.backend.schedule.dto.ScheduleFormDto;
 import com.fontana.backend.schedule.mapper.ScheduleMapper;
 import com.fontana.backend.schedule.service.ScheduleDateService;
-import com.fontana.backend.schedule.service.SchedulePlayerService;
 import com.fontana.backend.schedule.service.ScheduleService;
+import com.fontana.backend.schedule.service.player.SchedulePlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +55,7 @@ public class ScheduleController {
 
     @GetMapping(value = SCHEDULE_GET_IS_PLAYING)
     public boolean getIsSchedulePlaying() {
-        return schedulePlayerService.isPlaying();
+        return SchedulePlayerService.isPlaying();
     }
 
 }

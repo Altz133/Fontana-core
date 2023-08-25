@@ -3,7 +3,7 @@ package com.fontana.backend.schedule.mapper;
 import com.fontana.backend.schedule.dto.ScheduleCardDto;
 import com.fontana.backend.schedule.dto.ScheduleFormDto;
 import com.fontana.backend.schedule.entity.Schedule;
-import com.fontana.backend.schedule.service.SchedulePlayerService;
+import com.fontana.backend.schedule.service.player.SchedulePlayerService;
 import com.fontana.backend.schedule.service.ScheduleService;
 import com.fontana.backend.template.service.TemplateServiceImpl;
 import com.fontana.backend.user.repository.UserRepository;

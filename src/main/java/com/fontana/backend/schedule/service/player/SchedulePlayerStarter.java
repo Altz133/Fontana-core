@@ -1,4 +1,4 @@
-package com.fontana.backend.schedule.service;
+package com.fontana.backend.schedule.service.player;
 
 public class SchedulePlayerStarter implements Runnable {
     @Override

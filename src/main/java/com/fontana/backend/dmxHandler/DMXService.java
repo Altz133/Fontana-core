@@ -4,7 +4,7 @@ import com.fontana.backend.devices.dto.DeviceDTO;
 import com.fontana.backend.dmxHandler.currentStateDTO.mapper.CurrentStateDTOMapper;
 import com.fontana.backend.dmxHandler.validator.service.DMXValidatorService;
 import com.fontana.backend.frame.entity.Frame;
-import com.fontana.backend.schedule.service.SchedulePlayerService;
+import com.fontana.backend.schedule.service.player.SchedulePlayerService;
 import jakarta.annotation.PostConstruct;
 import jd2xx.JD2XX;
 import jd2xx.JD2XXOutputStream;
