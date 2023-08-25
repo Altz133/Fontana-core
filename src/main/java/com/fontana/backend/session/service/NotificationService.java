@@ -9,5 +9,5 @@ public interface NotificationService {
 
     ResponseEntity<?> updateAllSessionsWatchers(SessionWatcherRequestDTO request);
 
-    ResponseEntity<?> getNonDisplayedAmount(String username);
+    ResponseEntity<?> findNonDisplayedAmount(String username);
 }

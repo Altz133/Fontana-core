@@ -28,14 +28,14 @@ public class SessionController {
         return sessionService.findAll(watcher);
     }
 
-    @GetMapping(SESSION_GET_NON_DISPLAYED_AMOUNT)
-    public ResponseEntity<?> getNonDisplayedAmount(@PathVariable("username") String username) {
-        return notificationService.getNonDisplayedAmount(username);
-    }
-
     @GetMapping(SESSION_FIND_BY_ID)
     public SessionResponseDTO findById(@PathVariable("id") Integer id) {
         return sessionService.findById(id);
+    }
+
+    @GetMapping(SESSION_FIND_NON_DISPLAYED_AMOUNT)
+    public ResponseEntity<?> findNonDisplayedAmount(@PathVariable("username") String username) {
+        return notificationService.findNonDisplayedAmount(username);
     }
 
     @PostMapping()
