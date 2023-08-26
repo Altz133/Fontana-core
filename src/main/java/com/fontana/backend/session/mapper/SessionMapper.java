@@ -23,21 +23,18 @@ public class SessionMapper {
     public Session map(SessionRequestDTO sessionRequestDTO) {
         String currentPrincipalName = appUtils.getAuthentication().getPrincipal().toString();
 
-        Session session = Session.builder()
+        return Session.builder()
                 .username(currentPrincipalName)
                 .openedTime(sessionRequestDTO.getOpenedTime())
                 .closedTime(null)
                 .expirationTime(sessionRequestDTO.getOpenedTime().plusMinutes(Integer.parseInt(expirationDelay)))
                 .build();
-
-        log.info("Mapped session: " + session);
-        return session;
     }
 
     public SessionResponseDTO map(Session session) {
         int logsAmount = session.getLogs().size();
 
-        SessionResponseDTO sessionResponseDTO = SessionResponseDTO.builder()
+        return SessionResponseDTO.builder()
                 .id(session.getId())
                 .username(session.getUsername())
                 .openedTime(session.getOpenedTime())
@@ -48,8 +45,5 @@ public class SessionMapper {
                 .logsAmount(logsAmount)
                 .watchers(session.getWatchers())
                 .build();
-
-        log.info("Mapped SessionResponseDTO: " + sessionResponseDTO);
-        return sessionResponseDTO;
     }
 }

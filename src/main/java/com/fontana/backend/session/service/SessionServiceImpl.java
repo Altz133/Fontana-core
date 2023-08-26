@@ -1,6 +1,7 @@
 package com.fontana.backend.session.service;
 
 import com.fontana.backend.exception.customExceptions.NotFoundException;
+import com.fontana.backend.exception.customExceptions.RoleNotAllowedException;
 import com.fontana.backend.exception.customExceptions.SessionNotModifiedException;
 import com.fontana.backend.role.entity.RoleType;
 import com.fontana.backend.session.dto.*;
@@ -13,6 +14,11 @@ import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.fontana.backend.config.RestEndpoints.SESSION;
 
@@ -49,6 +56,9 @@ public class SessionServiceImpl implements SessionService {
     @Value("${user.not-found-msg}")
     private String userNotFoundMsg;
 
+    @Value("${cache.active-session}")
+    private String activeSessionLabel;
+
     @Value("${session.expiration-delay}")
     private String expirationDelay;
 
@@ -56,17 +66,21 @@ public class SessionServiceImpl implements SessionService {
     private final UserRepository userRepository;
     private final SessionMapper sessionMapper;
     private final AuthUtils authUtils;
+    private final CacheManager cacheManager;
 
     @Scheduled(fixedRate = 15000)
     public void autoCloseSession() {
         Session session = getActiveSession();
-        log.info("AutoCloseSession scheduler invoked with no action.");
 
         if (session != null && session.getExpirationTime().isBefore(LocalDateTime.now())) {
             Session updated = buildUpdatedSession(session, null, false, true);
             sessionRepository.save(updated);
-            log.info("Auto closed session due to no activity: " + session);
+            Objects.requireNonNull(cacheManager.getCache(activeSessionLabel)).clear();
+            log.info("(SESSION SCHEDULER) Auto closed session due to no activity: " + session);
+            return;
         }
+
+        log.info("(SESSION SCHEDULER) AutoCloseSession scheduler invoked with no action.");
     }
 
     @Override
@@ -76,11 +90,10 @@ public class SessionServiceImpl implements SessionService {
                     () -> new NotFoundException(userNotFoundMsg));
 
             if (!user.getRole().getName().equals(RoleType.ADMIN.name())) {
-                log.warn("Only admin should be parsed as watcher into parameter.");
-                return null;
+                throw new RoleNotAllowedException(roleNotAllowedMsg);
             }
 
-            log.info("Filtered sessions: " + filterSessionsInReversedOrder(user));
+            log.info("Filtered sessions: " + filterSessionsInReversedOrder(user).size());
             return filterSessionsInReversedOrder(user).stream()
                     .map(sessionMapper::map)
                     .toList();
@@ -120,7 +133,8 @@ public class SessionServiceImpl implements SessionService {
         }
 
         Session saved = sessionRepository.save(sessionMapper.map(sessionRequestDTO));
-        log.info(saved.toString());
+        Objects.requireNonNull(cacheManager.getCache(activeSessionLabel)).put("id", saved.getId());
+        log.info("(OPEN) activeSession: " + saved);
 
         return buildAddSessionResponse(saved);
     }
@@ -128,6 +142,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public ResponseEntity<?> updateCloseSession(SessionCloseRequest sessionCloseRequest) {
         Session activeSession = getActiveSession();
+        log.info("(CLOSE) active session: " + activeSession);
         String authority = authUtils.extractAuthenticatedAuthority();
         log.info("Request:" + sessionCloseRequest);
 
@@ -143,6 +158,8 @@ public class SessionServiceImpl implements SessionService {
             log.info("Updated:" + updated);
 
             sessionRepository.save(updated);
+            Objects.requireNonNull(cacheManager.getCache(activeSessionLabel)).clear();
+
             return ResponseEntity.ok().build();
         } else {
             throw new SessionNotModifiedException(notAllowedToCloseMsg);
@@ -170,14 +187,15 @@ public class SessionServiceImpl implements SessionService {
         }
     }
 
-    private Session getActiveSession() {
-        List<Session> activeSessions = sessionRepository.findAll().stream()
-                .filter(session -> session.getClosedTime() == null)
-                .toList();
-        if (activeSessions.size() >= 1) {
-            log.info("Active session:" + activeSessions.get(0));
-            return activeSessions.get(0);
+    public Session getActiveSession() {
+        Cache cache = cacheManager.getCache(activeSessionLabel);
+        Cache.ValueWrapper valueWrapper = cache.get("id");
+
+        if (valueWrapper != null && valueWrapper.get() != null) {
+            log.info("Active session id: " + valueWrapper.get());
+            return sessionRepository.findById((int) valueWrapper.get()).orElse(null);
         }
+
         return null;
     }
 
@@ -199,8 +217,10 @@ public class SessionServiceImpl implements SessionService {
      * @return A list of SessionResponseDTO objects representing the filtered sessions.
      */
     public List<Session> filterSessionsInReversedOrder(User user) {
-        return sessionRepository.findAllInReversedOrder().stream()
-                .filter(session -> user.getLastRoleChange().isBefore(session.getOpenedTime()))
+        Pageable pageable = PageRequest.of(0, 21, Sort.by(Sort.Direction.DESC, "id"));
+
+        return sessionRepository.findAllInReversedOrderAfterDate(user.getLastRoleChange(), pageable).stream()
+                .filter(session -> !session.getUsername().equals(authUtils.getAuthentication().getPrincipal()))
                 .filter(session -> session.getClosedTime() != null)
                 .filter(session -> session.getWatchers().stream()
                         .noneMatch(watcher -> watcher.getWatcher().equals(user.getUsername())))
