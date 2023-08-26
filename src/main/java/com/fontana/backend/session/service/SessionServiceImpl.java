@@ -1,6 +1,7 @@
 package com.fontana.backend.session.service;
 
 import com.fontana.backend.exception.customExceptions.NotFoundException;
+import com.fontana.backend.exception.customExceptions.RoleNotAllowedException;
 import com.fontana.backend.exception.customExceptions.SessionNotModifiedException;
 import com.fontana.backend.role.entity.RoleType;
 import com.fontana.backend.session.dto.*;
@@ -15,6 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,11 +76,11 @@ public class SessionServiceImpl implements SessionService {
             Session updated = buildUpdatedSession(session, null, false, true);
             sessionRepository.save(updated);
             Objects.requireNonNull(cacheManager.getCache(activeSessionLabel)).clear();
-            log.info("Auto closed session due to no activity: " + session);
+            log.info("(SESSION SCHEDULER) Auto closed session due to no activity: " + session);
             return;
         }
 
-        log.info("AutoCloseSession scheduler invoked with no action.");
+        log.info("(SESSION SCHEDULER) AutoCloseSession scheduler invoked with no action.");
     }
 
     @Override
@@ -86,11 +90,10 @@ public class SessionServiceImpl implements SessionService {
                     () -> new NotFoundException(userNotFoundMsg));
 
             if (!user.getRole().getName().equals(RoleType.ADMIN.name())) {
-                log.warn("Only admin should be parsed as watcher into parameter.");
-                return null;
+                throw new RoleNotAllowedException(roleNotAllowedMsg);
             }
 
-            log.info("Filtered sessions: " + filterSessionsInReversedOrder(user));
+            log.info("Filtered sessions: " + filterSessionsInReversedOrder(user).size());
             return filterSessionsInReversedOrder(user).stream()
                     .map(sessionMapper::map)
                     .toList();
@@ -214,8 +217,10 @@ public class SessionServiceImpl implements SessionService {
      * @return A list of SessionResponseDTO objects representing the filtered sessions.
      */
     public List<Session> filterSessionsInReversedOrder(User user) {
-        return sessionRepository.findAllInReversedOrder().stream()
-                .filter(session -> user.getLastRoleChange().isBefore(session.getOpenedTime()))
+        Pageable pageable = PageRequest.of(0, 21, Sort.by(Sort.Direction.DESC, "id"));
+
+        return sessionRepository.findAllInReversedOrderAfterDate(user.getLastRoleChange(), pageable).stream()
+                .filter(session -> !session.getUsername().equals(authUtils.getAuthentication().getPrincipal()))
                 .filter(session -> session.getClosedTime() != null)
                 .filter(session -> session.getWatchers().stream()
                         .noneMatch(watcher -> watcher.getWatcher().equals(user.getUsername())))
