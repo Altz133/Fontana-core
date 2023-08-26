@@ -33,7 +33,6 @@ public class BootstrapInMemoryData implements CommandLineRunner {
     private final UserRepository userRepository;
     private final LogRepository logRepository;
     private final SessionRepository sessionRepository;
-    private final DeviceRepository deviceRepository;
 
     @Transactional
     @Override
@@ -45,7 +44,7 @@ public class BootstrapInMemoryData implements CommandLineRunner {
     }
 
     private void loadTestRoles() {
-        if (roleRepository.findAll().size() == 0) {
+        if (roleRepository.findAll().isEmpty()) {
             Role admin = Role.builder()
                     .name(RoleType.ADMIN.name())
                     .build();
