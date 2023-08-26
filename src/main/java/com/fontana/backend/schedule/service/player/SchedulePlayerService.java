@@ -4,9 +4,9 @@ import com.fontana.backend.schedule.entity.Schedule;
 import com.fontana.backend.schedule.service.ScheduleDateService;
 import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.template.entity.Template;
-import jakarta.annotation.PostConstruct;
+import com.fontana.backend.template.service.TemplateServiceImpl;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -23,29 +23,27 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @EnableScheduling
 public class SchedulePlayerService {
+    public static Schedule currentSchedule = null;
+    private Timestamp currentScheduleStartTimestamp = null;
     private static boolean isPlaying = false;
     private List<Integer> snapshotsSequence = new ArrayList<>();
     private Map<Integer, byte[]> snapshotData = new HashMap<>();
     private Integer currentSnapshotCounter = 0;
     private Integer currentRepetition = 0;
-    private static Schedule currentSchedule = null;
 
     ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-    private ScheduledFuture<?> futureTask = scheduledExecutorService.schedule(() -> {
-    }, 0, TimeUnit.MILLISECONDS);
+    private ScheduledFuture<?> futureScheduleStartTask = scheduledExecutorService.schedule(() -> {}, 0, TimeUnit.MILLISECONDS);
+    private ScheduledFuture<?> futureScheduleUpdateTask = scheduledExecutorService.schedule(() -> {}, 0, TimeUnit.MILLISECONDS);
+    private Timestamp oldUpdateTimestamp = null;
 
     private final ScheduleDateService scheduleDateService;
+    private final TemplateServiceImpl templateService;
 
-    public void pauseCurrentSchedule() {
-        isPlaying = false;
-    }
-
-    public void continueCurrentSchedule() {
-        isPlaying = true;
-    }
-
-    public static void start() {
-        isPlaying = true;
+    @PreDestroy
+    private void preDestroy() {
+        futureScheduleUpdateTask.cancel(true);
+        futureScheduleStartTask.cancel(true);
+        scheduledExecutorService.shutdownNow();
     }
 
     public static boolean isPlaying() {
@@ -60,42 +58,75 @@ public class SchedulePlayerService {
         }
     }
 
-    public void stop() {
+    private static void start() {
+        if (currentSchedule != null) {
+            isPlaying = true;
+        }
+    }
+
+    public void updatePlayer() {
+        if (oldUpdateTimestamp == null) {
+            oldUpdateTimestamp = Timestamp.valueOf(LocalDateTime.now());
+        }
+
+        futureScheduleUpdateTask.cancel(true);
+        futureScheduleUpdateTask = scheduledExecutorService.schedule(() -> {
+            updateCurrentSchedule(oldUpdateTimestamp);
+        }, 0, TimeUnit.MILLISECONDS);
+    }
+
+    public void stopAndResetCurrentSchedule() {
+        futureScheduleUpdateTask.cancel(true);
+        futureScheduleStartTask.cancel(true);
+
         reset();
-        updateCurrentSchedule();
+
+        updatePlayer();
     }
 
     //every day at midnight
     @Scheduled(cron = "0 0 0 * * *")
-    private void autoStop() {
-        if (currentSchedule != null) {
-            if (currentSchedule.getRepeat() == 0) {
-                reset();
-                updateCurrentSchedule();
+    private void autoStopEndless() {
+        if (currentSchedule != null && isPlaying()) {
+            if (currentSchedule.getRepeat() <= 0) {
+                stopAndResetCurrentSchedule();
             }
         }
     }
 
     private void reset() {
+        currentSchedule = null;
+        currentScheduleStartTimestamp = null;
         isPlaying = false;
         snapshotsSequence.clear();
         snapshotData.clear();
         currentSnapshotCounter = 0;
         currentRepetition = 0;
-        currentSchedule = null;
+
+        oldUpdateTimestamp = null;
     }
 
-    public void updateCurrentSchedule() {
-        futureTask.cancel(true);
-        currentSchedule = scheduleDateService.getNextSchedule();
+    private void updateCurrentSchedule(Timestamp now) {
+        if (!isPlaying()) {
+            futureScheduleStartTask.cancel(true);
+            oldUpdateTimestamp = now;
 
-        if (currentSchedule != null) {
-            loadScheduleData(currentSchedule);
-            scheduleSchedule(currentSchedule);
+            Schedule newNextSchedule = scheduleDateService.getNextSchedule(oldUpdateTimestamp);
+
+            if (newNextSchedule != null) {
+                currentSchedule = newNextSchedule;
+                currentScheduleStartTimestamp = scheduleDateService.getScheduleStartTimestamp(currentSchedule, oldUpdateTimestamp);
+
+                loadScheduleData(currentSchedule);
+                scheduleCurrentSchedule();
+            }
         }
     }
 
     private void loadScheduleData(Schedule schedule) {
+        snapshotsSequence.clear();
+        snapshotData.clear();
+
         for (Template template : schedule.getTemplates()) {
             snapshotsSequence.addAll(template.getSnapshotsSequence().stream().map(Snapshot::getId).toList());
 
@@ -105,10 +136,9 @@ public class SchedulePlayerService {
         }
     }
 
-    private void scheduleSchedule(Schedule schedule) {
-        long timeLeft = scheduleDateService.getScheduleStartTimestamp(currentSchedule).getTime() - Timestamp.valueOf(LocalDateTime.now()).getTime();
-
-        futureTask = scheduledExecutorService.schedule(new SchedulePlayerStarter(), timeLeft, TimeUnit.MILLISECONDS);
+    private void scheduleCurrentSchedule() {
+        futureScheduleStartTask.cancel(true);
+        futureScheduleStartTask = scheduledExecutorService.schedule(SchedulePlayerService::start, currentScheduleStartTimestamp.getTime() - Timestamp.valueOf(LocalDateTime.now()).getTime(), TimeUnit.MILLISECONDS);
     }
 
     public byte[] nextDmxData() {
@@ -127,6 +157,12 @@ public class SchedulePlayerService {
 
                 if (currentRepetition >= currentSchedule.getRepeat()) {
                     isPlaying = false;
+
+                    futureScheduleUpdateTask.cancel(true);
+                    futureScheduleStartTask.cancel(true);
+                    futureScheduleUpdateTask = scheduledExecutorService.schedule(() -> {
+                        updateCurrentSchedule(Timestamp.valueOf(currentScheduleStartTimestamp.toLocalDateTime().plusSeconds(templateService.getDurationFromTemplates(currentSchedule.getTemplates()))));
+                    }, 0, TimeUnit.MILLISECONDS);
                 }
             }
         }

@@ -50,7 +50,7 @@ public class ScheduleController {
 
     @PutMapping(value = SCHEDULE_STOP)
     public void stopSchedule() {
-        schedulePlayerService.stop();
+        schedulePlayerService.stopAndResetCurrentSchedule();
     }
 
     @GetMapping(value = SCHEDULE_GET_IS_PLAYING)

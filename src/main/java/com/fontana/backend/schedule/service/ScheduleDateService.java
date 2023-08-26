@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -98,74 +101,26 @@ public class ScheduleDateService {
         return scheduleCardDtos;
     }
 
-    public Schedule getNextSchedule() {
+    public Schedule getNextSchedule(Timestamp now) {
         Schedule nextSchedule = null;
+        Timestamp nextScheduleTimestamp = Timestamp.valueOf(now.toLocalDateTime().toLocalDate().plusDays(8).atStartOfDay());
 
-        LocalDateTime localDateTime = LocalDateTime.now();
-        LocalDate localDate = localDateTime.toLocalDate();
-
-        Long now = Timestamp.valueOf(LocalDateTime.now()).getTime();
-        List<Schedule> schedules = scheduleRepository.getEnabledSchedulesInFutureFrom(now);
-
-        Map<Integer, LocalDateTime> dateTimes = new HashMap<>();
+        List<Schedule> schedules = scheduleRepository.getEnabledSchedulesInFutureFrom(now.getTime());
 
         for (Schedule schedule : schedules) {
-            LocalTime startTime = schedule.getStartTimestamp().toLocalDateTime().toLocalTime();
+            Timestamp timestamp = getScheduleStartTimestamp(schedule, now);
 
-            if (scheduleService.isCycle(schedule)) {
-                DayOfWeek dayOfWeek = localDate.getDayOfWeek();
-
-                for (int i = 0; i < 7; i++) {
-                    ScheduleCycleDays scheduleCycleDay = scheduleDateMapper.map(dayOfWeek);
-
-                    if (schedule.getCycleDays().contains(scheduleCycleDay)) {
-                        LocalDateTime nextDateTime = LocalDateTime.of(localDate.plusDays(i), startTime);
-
-                        if (nextDateTime.isAfter(localDateTime)) {
-                            if (schedule.getEndTimestamp() == null) {
-                                dateTimes.put(schedule.getId(), nextDateTime);
-                            } else if (nextDateTime.isBefore(schedule.getEndTimestamp().toLocalDateTime().toLocalDate().plusDays(1).atStartOfDay())) {
-                                dateTimes.put(schedule.getId(), nextDateTime);
-                            }
-
-                            break;
-                        }
-                    }
-
-                    dayOfWeek = dayOfWeek.plus(1);
-                }
-            } else {
-                LocalDateTime nextDateTime = LocalDateTime.of(schedule.getStartTimestamp().toLocalDateTime().toLocalDate(), startTime);
-
-                if (nextDateTime.isAfter(localDateTime)) {
-                    dateTimes.put(schedule.getId(), nextDateTime);
-                }
-            }
-        }
-
-        if (dateTimes.size() != 0) {
-            LocalDateTime first = dateTimes.values().stream().sorted().toList().get(0);
-
-            for (Integer id : dateTimes.keySet()) {
-                if (first == dateTimes.get(id)) {
-                    for (Schedule schedule : schedules) {
-                        if (schedule.getId() == id) {
-                            nextSchedule = schedule;
-
-                            break;
-                        }
-                    }
-
-                    break;
-                }
+            if (nextScheduleTimestamp.getTime() >= timestamp.getTime()) {
+                nextSchedule = schedule;
+                nextScheduleTimestamp = timestamp;
             }
         }
 
         return nextSchedule;
     }
 
-    public Timestamp getScheduleStartTimestamp(Schedule schedule) {
-        LocalDateTime localDateTime = LocalDateTime.now();
+    public Timestamp getScheduleStartTimestamp(Schedule schedule, Timestamp now) {
+        LocalDateTime localDateTime = now.toLocalDateTime();
         LocalDate localDate = localDateTime.toLocalDate();
 
         LocalTime startTime = schedule.getStartTimestamp().toLocalDateTime().toLocalTime();
@@ -173,13 +128,13 @@ public class ScheduleDateService {
         if (scheduleService.isCycle(schedule)) {
             DayOfWeek dayOfWeek = localDate.getDayOfWeek();
 
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 8; i++) {
                 ScheduleCycleDays scheduleCycleDay = scheduleDateMapper.map(dayOfWeek);
 
                 if (schedule.getCycleDays().contains(scheduleCycleDay)) {
                     LocalDateTime nextDateTime = LocalDateTime.of(localDate.plusDays(i), startTime);
 
-                    if (nextDateTime.isAfter(localDateTime)) {
+                    if (nextDateTime.isAfter(localDateTime) || nextDateTime.isEqual(localDateTime)) {
                         if (schedule.getEndTimestamp() == null) {
                             return Timestamp.valueOf(nextDateTime);
                         } else if (nextDateTime.isBefore(schedule.getEndTimestamp().toLocalDateTime().toLocalDate().plusDays(1).atStartOfDay())) {
@@ -195,7 +150,7 @@ public class ScheduleDateService {
         } else {
             LocalDateTime nextDateTime = LocalDateTime.of(schedule.getStartTimestamp().toLocalDateTime().toLocalDate(), startTime);
 
-            if (nextDateTime.isAfter(localDateTime)) {
+            if (nextDateTime.isAfter(localDateTime) || nextDateTime.isEqual(localDateTime)) {
                 return Timestamp.valueOf(nextDateTime);
             }
         }

@@ -41,7 +41,7 @@ public class DMXService {
         try {
 //            openConnection();
             initialSetup();
-            schedulePlayerService.updateCurrentSchedule();
+            schedulePlayerService.stopAndResetCurrentSchedule();
             startScheduler();
         } catch (Exception e) {
         }
