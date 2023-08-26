@@ -26,17 +26,19 @@ public class ScheduleController {
     @PostMapping(value = SCHEDULE_ADD)
     public void addSchedule(@RequestBody ScheduleFormDto scheduleFormDto) {
         scheduleService.addSchedule(scheduleMapper.ScheduleFormDtoToSchedule(scheduleFormDto));
+        schedulePlayerService.updatePlayer();
     }
 
     @DeleteMapping(value = SCHEDULE_DELETE)
     public void deleteSchedule(@PathVariable Integer id) {
-        System.out.println(id);
         scheduleService.deleteSchedule(id);
+        schedulePlayerService.updatePlayer();
     }
 
     @PutMapping(value = SCHEDULE_UPDATE)
     public void updateSchedule(@RequestBody ScheduleFormDto scheduleFormDto) {
         scheduleService.updateSchedule(scheduleMapper.ScheduleFormDtoToSchedule(scheduleFormDto));
+        schedulePlayerService.updatePlayer();
     }
 
 // zakomentowane bo nieużywane, ale może będzie potrzebne
