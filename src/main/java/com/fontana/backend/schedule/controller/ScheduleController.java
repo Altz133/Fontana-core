@@ -30,6 +30,7 @@ public class ScheduleController {
 
     @DeleteMapping(value = SCHEDULE_DELETE)
     public void deleteSchedule(@PathVariable Integer id) {
+        System.out.println(id);
         scheduleService.deleteSchedule(id);
     }
 
@@ -38,10 +39,11 @@ public class ScheduleController {
         scheduleService.updateSchedule(scheduleMapper.ScheduleFormDtoToSchedule(scheduleFormDto));
     }
 
-    @GetMapping(value = SCHEDULE_GET_MONTH)
-    public Set<Integer> getDaysHavingSchedulesInMonth(@RequestParam Integer year, @RequestParam Integer month) {
-        return scheduleDateService.getDaysHavingSchedulesInMonth(year, month);
-    }
+// zakomentowane bo nieużywane, ale może będzie potrzebne
+//    @GetMapping(value = SCHEDULE_GET_MONTH)
+//    public Set<Integer> getDaysHavingSchedulesInMonth(@RequestParam Integer year, @RequestParam Integer month) {
+//        return scheduleDateService.getDaysHavingSchedulesInMonth(year, month);
+//    }
 
     @GetMapping(value = SCHEDULE_GET_DAY)
     public List<ScheduleCardDto> getSchedulesInDay(@RequestParam Integer year, @RequestParam Integer month, @RequestParam Integer day) {
