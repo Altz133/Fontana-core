@@ -169,4 +169,11 @@ public class SchedulePlayerService {
 
         return data;
     }
+
+    public void panic(){
+        futureScheduleUpdateTask.cancel(true);
+        futureScheduleStartTask.cancel(true);
+
+        reset();
+    }
 }
