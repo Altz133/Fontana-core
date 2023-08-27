@@ -68,7 +68,7 @@ public class SessionServiceImpl implements SessionService {
     private final AuthUtils authUtils;
     private final CacheManager cacheManager;
 
-    @Scheduled(fixedRate = 15000)
+    @Scheduled(fixedRate = 10000)
     public void autoCloseSession() {
         Session session = getActiveSession();
 
@@ -83,8 +83,17 @@ public class SessionServiceImpl implements SessionService {
         log.info("(SESSION SCHEDULER) AutoCloseSession scheduler invoked with no action.");
     }
 
+    /**
+     * Retrieves sessions based on the provided watcher and optional size parameter, or all sessions if no arguments.
+     *
+     * @param watcher username of the watcher, or null if not filtering by watcher.
+     * @param size maximum number of sessions to retrieve, or null for all sessions.
+     * @return a list of SessionResponseDTO objects representing the retrieved sessions.
+     * @throws NotFoundException if the user specified by 'watcher' is not found.
+     * @throws RoleNotAllowedException if the user specified by 'watcher' does not have the required role.
+     */
     @Override
-    public List<SessionResponseDTO> findAll(String watcher) {
+    public List<SessionResponseDTO> findAll(String watcher, Integer size) {
         if (watcher != null) {
             User user = userRepository.findByUsername(watcher).orElseThrow(
                     () -> new NotFoundException(userNotFoundMsg));
@@ -95,6 +104,14 @@ public class SessionServiceImpl implements SessionService {
 
             log.info("Filtered sessions: " + filterSessionsInReversedOrder(user).size());
             return filterSessionsInReversedOrder(user).stream()
+                    .map(sessionMapper::map)
+                    .toList();
+        }
+
+        if (size != null) {
+            Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "id"));
+
+            return sessionRepository.findLatestSessions(pageable).stream()
                     .map(sessionMapper::map)
                     .toList();
         }
@@ -139,6 +156,13 @@ public class SessionServiceImpl implements SessionService {
         return buildAddSessionResponse(saved);
     }
 
+    /**
+     * Updates the state of the active session to indicate closure, based on the provided session close request.
+     *
+     * @param sessionCloseRequest containing session closed time.
+     * @return ResponseEntity with no content if the session is successfully closed.
+     * @throws SessionNotModifiedException if the active session is already closed or if the user is not authorized to close the session.
+     */
     @Override
     public ResponseEntity<?> updateCloseSession(SessionCloseRequest sessionCloseRequest) {
         Session activeSession = getActiveSession();
@@ -187,6 +211,11 @@ public class SessionServiceImpl implements SessionService {
         }
     }
 
+    /**
+     * Retrieves the active session based on cached session ID.
+     *
+     * @return the active Session object if found, or null if no active session exists.
+     */
     public Session getActiveSession() {
         Cache cache = cacheManager.getCache(activeSessionLabel);
         Cache.ValueWrapper valueWrapper = cache.get("id");
