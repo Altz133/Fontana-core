@@ -1,6 +1,7 @@
 package com.fontana.backend.schedule.service.player;
 
 import com.fontana.backend.schedule.entity.Schedule;
+import com.fontana.backend.schedule.repository.ScheduleRepository;
 import com.fontana.backend.schedule.service.ScheduleDateService;
 import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.template.entity.Template;
@@ -38,6 +39,7 @@ public class SchedulePlayerService {
 
     private final ScheduleDateService scheduleDateService;
     private final TemplateServiceImpl templateService;
+    private final ScheduleRepository scheduleRepository;
 
     @PreDestroy
     private void preDestroy() {
@@ -114,7 +116,7 @@ public class SchedulePlayerService {
             Schedule newNextSchedule = scheduleDateService.getNextSchedule(oldUpdateTimestamp);
 
             if (newNextSchedule != null) {
-                currentSchedule = newNextSchedule;
+                currentSchedule = scheduleRepository.getScheduleByIdFetchedTemplatesAndSnapshots(newNextSchedule.getId());
                 currentScheduleStartTimestamp = scheduleDateService.getScheduleStartTimestamp(currentSchedule, oldUpdateTimestamp);
 
                 loadScheduleData(currentSchedule);
