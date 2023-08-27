@@ -37,7 +37,11 @@ public class AuthenticationController {
     public ResponseEntity<Void> addToBlacklist(@Valid @RequestBody BlacklistTokenRequest tokenRequest) {
         String token = tokenRequest.getToken();
         TokenType tokenType = tokenRequest.getTokenType();
+        if (tokenType == null) {
+            return ResponseEntity.badRequest().build();
+        }
         authService.blacklistToken(token, tokenType);
         return ResponseEntity.ok().build();
     }
+
 }

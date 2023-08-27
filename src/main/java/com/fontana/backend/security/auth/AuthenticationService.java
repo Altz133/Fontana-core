@@ -77,7 +77,9 @@ public class AuthenticationService {
     public void blacklistToken(String token, TokenType tokenType) {
         Date now = new Date();
         Date expirationDate = Date.from(now.toInstant().plus(Duration.ofHours(2)));
-
+        if (tokenType == null) {
+            throw new IllegalArgumentException("TokenType must not be null");
+        }
         BlacklistedToken blacklistedToken = BlacklistedToken.builder()
                 .token(token)
                 .tokenType(tokenType)
