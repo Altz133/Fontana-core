@@ -38,14 +38,14 @@ public class ScheduleDateService {
         for (Schedule schedule : schedules) {
             if (scheduleService.isCycle(schedule)) {
                 for (ScheduleCycleDays cycleDays : schedule.getCycleDays()) {
-                    LocalDate start = LocalDate.of(schedule.getStartTimestamp().getYear() + 1900, schedule.getStartTimestamp().getMonth() + 1, schedule.getStartTimestamp().getDate());
+                    LocalDate start = schedule.getStartTimestamp().toLocalDateTime().toLocalDate();
 
                     LocalDate end;
 
                     if (schedule.getEndTimestamp() == null) {
                         end = date;
                     } else {
-                        end = LocalDate.of(schedule.getEndTimestamp().getYear() + 1900, schedule.getEndTimestamp().getMonth() + 1, schedule.getEndTimestamp().getDate()).plusDays(1);
+                        end = schedule.getEndTimestamp().toLocalDateTime().toLocalDate().plusDays(1);
                     }
 
                     for (LocalDate localDate : getCycleDays(start, end, scheduleDateMapper.map(cycleDays))) {
