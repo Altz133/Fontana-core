@@ -2,8 +2,6 @@ package com.fontana.backend.dmxHandler.validator.service;
 
 import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.entity.DeviceType;
-import com.fontana.backend.devices.pump.entity.Pump;
-import com.fontana.backend.frame.entity.Frame;
 import com.fontana.backend.sensorsHandler.entity.Sensors;
 import org.junit.jupiter.api.Test;
 
