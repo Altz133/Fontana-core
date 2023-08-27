@@ -97,8 +97,6 @@ public class ScheduleDateService {
 
         scheduleCardDtos.sort((Comparator.comparing(o -> o.getStartTime().toLocalDateTime().toLocalTime())));
 
-        System.out.println(scheduleCardDtos.stream().map(ScheduleCardDto::getStartTime).toList());
-
         return scheduleCardDtos;
     }
 
