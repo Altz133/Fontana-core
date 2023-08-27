@@ -51,4 +51,5 @@ public class RestEndpoints {
     public static final String SCHEDULE_UPDATE = "/update";
     public static final String SCHEDULE_GET_MONTH = "/get/month";
     public static final String SCHEDULE_GET_DAY = "/get/day";
+    public static final String LOG_DOWNLOAD_ALL = "/download/all";
 }
