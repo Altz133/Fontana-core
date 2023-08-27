@@ -33,7 +33,6 @@ public class BootstrapInMemoryData implements CommandLineRunner {
     private final UserRepository userRepository;
     private final LogRepository logRepository;
     private final SessionRepository sessionRepository;
-    private final DeviceRepository deviceRepository;
 
     @Transactional
     @Override

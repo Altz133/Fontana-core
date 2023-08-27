@@ -24,4 +24,6 @@ public interface SessionService {
     void updateExpirationTime();
 
     List<Session> filterSessionsInReversedOrder(User user);
+
+    Session getActiveSession();
 }
