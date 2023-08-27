@@ -1,5 +1,7 @@
 package com.fontana.backend.template.dto;
 
+import com.fontana.backend.snapshot.dto.SnapshotRequestDto;
+
 import com.fontana.backend.template.entity.TemplateStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +20,6 @@ public class TemplateDto {
     private Timestamp created_at;
     private String name;
     private String username;
-    private List<Integer> snapshots;
+    private List<SnapshotRequestDto> snapshots;
 
 }

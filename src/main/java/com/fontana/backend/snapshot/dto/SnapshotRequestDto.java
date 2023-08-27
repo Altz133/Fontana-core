@@ -1,7 +1,10 @@
 package com.fontana.backend.snapshot.dto;
 
+import com.fontana.backend.devices.dto.DeviceDTO;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -11,10 +14,9 @@ public class SnapshotRequestDto {
     @NotBlank
     private Integer id;
     @NotBlank
-    private String name;
-    @NotBlank
     private Integer snapshot_index;
     @NotBlank
     private Integer template_id;
-    private byte[] data;
+    private List<DeviceDTO> data;
+
 }

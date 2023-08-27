@@ -20,7 +20,7 @@ public interface TemplateService {
 
     int getFavouriteCount(Template template);
 
-    boolean isFavouritedByUser(Template template);
+    boolean isFavouritedByUser(Template template, String username);
 
     Template getTemplateById(Integer templateId);
 
@@ -33,4 +33,5 @@ public interface TemplateService {
     int getDurationFromTemplates(List<Template> templates);
 
     List<Template> getTemplatesByIds(List<Integer> templateIds);
+    Integer getHighestTemplateId();
 }

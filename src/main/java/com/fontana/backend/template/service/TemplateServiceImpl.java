@@ -55,8 +55,9 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public boolean isFavouritedByUser(Template template) {
-        return template.getUsersFavourited().contains(template.getUser());
+    public boolean isFavouritedByUser(Template template, String username) {
+
+        return template.getUsersFavourited().contains(userRepository.getReferenceById(username));
     }
 
     @Override
@@ -78,6 +79,9 @@ public class TemplateServiceImpl implements TemplateService {
     public int getDurationFromTemplate(Template template) {
         return template.getSnapshotsSequence().size() / SEQUENCES_PER_SECOND;
     }
+    public Integer getHighestTemplateId(){
+        return templateRepository.findTopByOrderByIdDesc();
+    }
 
     @Override
     public int getDurationFromTemplates(List<Template> templates) {
@@ -96,7 +100,6 @@ public class TemplateServiceImpl implements TemplateService {
         for (Integer id : templateIds) {
             templates.add(templateRepository.getReferenceById(id));
         }
-
         return templates;
     }
 }

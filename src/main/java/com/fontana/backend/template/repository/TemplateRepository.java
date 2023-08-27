@@ -15,4 +15,6 @@ public interface TemplateRepository extends JpaRepository<Template, Integer> {
     List<Template> getAllByStatusAndNameContaining(TemplateStatus status, String name, Pageable pageable);
 
     List<Template> getTemplatesByUser(User user, Pageable pageable);
+
+    Integer findTopByOrderByIdDesc();
 }

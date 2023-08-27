@@ -1,6 +1,5 @@
 package com.fontana.backend.snapshot.controller;
 
-import com.fontana.backend.snapshot.dto.SnapshotRequestDto;
 import com.fontana.backend.snapshot.mapper.SnapshotMapper;
 import com.fontana.backend.snapshot.service.SnapshotService;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +14,9 @@ public class SnapshotController {
     SnapshotService snapshotService;
     SnapshotMapper snapshotMapper;
 
-    @PostMapping
-    public void postSnapshot(@RequestBody SnapshotRequestDto snapshotRequestDto){
-        this.snapshotService.addSnapshot(this.snapshotMapper.map(snapshotRequestDto));
-    }
+//    @PostMapping
+//    public void postSnapshot(@RequestBody SnapshotRequestDto snapshotRequestDto){
+//        this.snapshotService.addSnapshot(this.snapshotMapper.map(snapshotRequestDto));
+//    }
 
 }
