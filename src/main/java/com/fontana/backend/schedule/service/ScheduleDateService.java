@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -97,6 +94,10 @@ public class ScheduleDateService {
                 }
             }
         }
+
+        scheduleCardDtos.sort((Comparator.comparing(o -> o.getStartTime().toLocalDateTime().toLocalTime())));
+
+        System.out.println(scheduleCardDtos.stream().map(ScheduleCardDto::getStartTime).toList());
 
         return scheduleCardDtos;
     }
