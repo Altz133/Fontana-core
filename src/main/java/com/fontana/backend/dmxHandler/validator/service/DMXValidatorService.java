@@ -27,12 +27,12 @@ public class DMXValidatorService {
     private static final int byteMaxValue = 255;
     public static boolean enableApiValidation = false;
     private static float pumpPowerMultiplier = 0.1f;
-    private static boolean waterLevelTopStatus = true;
-    private static boolean waterLevelBottomStatus = true;
-    private static Sensors sensors;
-    private static List<Device> pumps;
-    private static List<Device> leds;
-    private static List<Device> lights;
+    static boolean waterLevelTopStatus = true;
+    static boolean waterLevelBottomStatus = true;
+    static Sensors sensors;
+    static List<Device> pumps;
+    static List<Device> leds;
+    static List<Device> lights;
     @Autowired
     private final SensorsHandlerService sensorsHandlerService;
     @Autowired
