@@ -10,9 +10,9 @@ import java.util.List;
 public interface LogService {
 
     Page<LogResponseDTO> findAll(String username, Integer sessionId, Pageable pageable);
-
     LogResponseDTO findById(int id);
-
     ResponseEntity<?> add(LogRequestDTO logRequestDTO);
     List<LogResponseDTO> findAllLogs();
+    byte[] downloadAllLogs();
+
 }

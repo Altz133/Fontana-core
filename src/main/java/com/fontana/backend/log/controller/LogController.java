@@ -14,10 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 import static com.fontana.backend.config.RestEndpoints.LOG;
 import static com.fontana.backend.config.RestEndpoints.LOG_FIND_BY_ID;
+import static com.fontana.backend.config.RestEndpoints.LOG_DOWNLOAD_ALL;
 
 @RestController
 @RequestMapping(LOG)
@@ -45,17 +45,9 @@ public class LogController {
     }
 
 
-    @GetMapping("/download/all")
+    @GetMapping(LOG_DOWNLOAD_ALL)
     public ResponseEntity<ByteArrayResource> downloadAllLogs() {
-        List<LogResponseDTO> allLogs = logService.findAllLogs();
-
-        StringBuilder content = new StringBuilder();
-
-        for (LogResponseDTO log : allLogs) {
-            content.append(log.toString()).append("\n");
-        }
-
-        byte[] bytes = content.toString().getBytes();
+        byte[] bytes = logService.downloadAllLogs();
         ByteArrayResource resource = new ByteArrayResource(bytes);
 
         return ResponseEntity.ok()
@@ -63,6 +55,7 @@ public class LogController {
                 .contentType(MediaType.TEXT_PLAIN)
                 .body(resource);
     }
-
 }
+
+
 

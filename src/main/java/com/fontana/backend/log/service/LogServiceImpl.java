@@ -65,13 +65,24 @@ public class LogServiceImpl implements LogService {
 
             return ResponseEntity.ok().headers(headers).build();
         }
-    @Override
-    public List<LogResponseDTO> findAllLogs() {
-        List<Log> logs = logRepository.findAll();
+        @Override
+        public List<LogResponseDTO> findAllLogs() {
+            List<Log> logs = logRepository.findAll();
 
-        return logs.stream()
-                .map(logDtoMapper::map)
-                .collect(Collectors.toList());
-    }
+            return logs.stream()
+                    .map(logDtoMapper::map)
+                    .collect(Collectors.toList());
+        }
+        @Override
+        public byte[] downloadAllLogs() {
+            List<Log> logs = logRepository.findAll();
+            StringBuilder content = new StringBuilder();
+
+            for (Log log : logs) {
+                content.append(log.toString()).append("\n");
+            }
+
+            return content.toString().getBytes();
+        }
 
 }
