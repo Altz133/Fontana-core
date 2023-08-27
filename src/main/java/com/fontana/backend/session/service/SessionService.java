@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface SessionService {
 
-    List<SessionResponseDTO> findAll(String watcher);
+    List<SessionResponseDTO> findAll(String watcher, Integer size);
 
     SessionResponseDTO findById(Integer id);
 

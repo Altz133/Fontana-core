@@ -24,8 +24,9 @@ public class SessionController {
     private final NotificationService notificationService;
 
     @GetMapping()
-    public List<SessionResponseDTO> findAll(@RequestParam(name = "watcher", required = false) String watcher) {
-        return sessionService.findAll(watcher);
+    public List<SessionResponseDTO> findAll(@RequestParam(name = "watcher", required = false) String watcher,
+                                            @RequestParam(name = "size", required = false) Integer size) {
+        return sessionService.findAll(watcher, size);
     }
 
     @GetMapping(SESSION_FIND_BY_ID)
