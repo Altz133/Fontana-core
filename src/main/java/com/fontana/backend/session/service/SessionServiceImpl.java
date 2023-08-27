@@ -217,9 +217,9 @@ public class SessionServiceImpl implements SessionService {
      * @return A list of SessionResponseDTO objects representing the filtered sessions.
      */
     public List<Session> filterSessionsInReversedOrder(User user) {
-        Pageable pageable = PageRequest.of(0, 21, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(0, 26, Sort.by(Sort.Direction.DESC, "id"));
 
-        return sessionRepository.findAllInReversedOrderAfterDate(user.getLastRoleChange(), pageable).stream()
+        return sessionRepository.findAllInReversedOrderAfterDate(user.getLastRoleChange(), user.getUsername(), pageable).stream()
                 .filter(session -> !session.getUsername().equals(authUtils.getAuthentication().getPrincipal()))
                 .filter(session -> session.getClosedTime() != null)
                 .filter(session -> session.getWatchers().stream()
