@@ -18,7 +18,7 @@ public class Snapshot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    private Integer duration;
 
     private byte[] data;
 

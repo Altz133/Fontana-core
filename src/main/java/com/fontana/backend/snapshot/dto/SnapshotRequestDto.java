@@ -10,12 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class SnapshotRequestDto {
-    private Integer id;
-//    @NotBlank
-//    private Integer snapshot_index;
-//    @NotBlank
-//    private Integer template_id;
-//    private Integer duration;
+
+    private Integer duration;
 
     private DevicesRequestDto devices;
 

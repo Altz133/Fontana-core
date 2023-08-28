@@ -16,10 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class TemplateDto {
-    private TemplateStatus status;
-    private Timestamp created_at;
     private String name;
-    private String username;
+    private TemplateStatus status;
     private List<SnapshotRequestDto> snapshots;
 
 }

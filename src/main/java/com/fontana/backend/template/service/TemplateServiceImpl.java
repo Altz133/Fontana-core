@@ -1,5 +1,6 @@
 package com.fontana.backend.template.service;
 
+import com.fontana.backend.snapshot.repository.SnapshotRepository;
 import com.fontana.backend.template.dto.TemplateDto;
 import com.fontana.backend.template.entity.Template;
 import com.fontana.backend.template.entity.TemplateStatus;
@@ -19,14 +20,15 @@ public class TemplateServiceImpl implements TemplateService {
     private final TemplateRepository templateRepository;
     private final UserRepository userRepository;
     private final TemplateDtoMapper templateDtoMapper;
+    private final SnapshotRepository snapshotRepository;
 
     private final int SEQUENCES_PER_SECOND = 4;
 
     @Override
     public void addTemplate(TemplateDto templateDto) {
         Template template = templateRepository.save(templateDtoMapper.mapNew(templateDto));
+        snapshotRepository.saveAll(template.getSnapshotsSequence());
         templateRepository.save(template);
-
     }
 
     @Override

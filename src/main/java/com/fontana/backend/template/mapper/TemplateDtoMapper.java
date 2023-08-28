@@ -19,14 +19,11 @@ public class TemplateDtoMapper {
     private final SnapshotMapper snapshotMapper;
 
     public Template mapNew(TemplateDto templateDto){
-        Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
         List<Snapshot> snapshotList = snapshotMapper.map(templateDto.getSnapshots());
 
         return Template.builder()
                 .name(templateDto.getName())
                 .status(templateDto.getStatus())
-                .updatedAt(updatedAt)
-                .createdAt(templateDto.getCreated_at())
                 .snapshotsSequence(snapshotList)
                 .build();
     }

@@ -18,6 +18,7 @@ public class DevicesRequestDto {
     List<JetDTO> jets;
     List<PumpDTO> pumps;
     List<LedDTO> leds;
-    List<LightDTO> lights;
     List<JetDTO> foams;
+    List<LightDTO> lights;
+
 }

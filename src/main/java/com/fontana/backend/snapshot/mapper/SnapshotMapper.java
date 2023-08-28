@@ -30,7 +30,7 @@ public class SnapshotMapper {
 
         snapshotData = snapshotDataFactory.createData(snapshotRequestDto.getDevices(), snapshotData);
         Snapshot snapshot = new Snapshot();
-//        snapshot.setDuration(snapshotRequestDto.getDuration());
+        snapshot.setDuration(snapshotRequestDto.getDuration());
         snapshot.setData(snapshotData);
 
         return snapshot;

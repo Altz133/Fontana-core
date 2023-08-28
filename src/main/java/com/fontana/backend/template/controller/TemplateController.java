@@ -6,6 +6,7 @@ import com.fontana.backend.template.service.TemplatePaginationService;
 import com.fontana.backend.template.service.TemplateService;
 import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +31,10 @@ public class TemplateController {
     public List<TemplateCardDto> getPublicTemplates(@RequestParam String name, @RequestParam int page, @RequestParam int size) {
         return templatePaginationService.getPublicTemplatesPaginated(name, page, size);
     }
-    @PostMapping(TEMPLATE)
-    public void addTemplate(@RequestBody TemplateDto templateDto){
+    @PostMapping()
+    public ResponseEntity<?> addTemplate(@RequestBody TemplateDto templateDto){
+
         this.templateService.addTemplate(templateDto);
+        return ResponseEntity.ok().build();
     }
 }
