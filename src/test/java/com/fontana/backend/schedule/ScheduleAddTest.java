@@ -1,10 +1,7 @@
 package com.fontana.backend.schedule;
 
-import com.fontana.backend.role.entity.Role;
 import com.fontana.backend.schedule.entity.Schedule;
 import com.fontana.backend.schedule.repository.ScheduleRepository;
-import com.fontana.backend.user.entity.User;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
