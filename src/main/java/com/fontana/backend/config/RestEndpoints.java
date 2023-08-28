@@ -54,4 +54,5 @@ public class RestEndpoints {
     public static final String SCHEDULE_GET_DAY = "/get/day";
     public static final String SCHEDULE_GET_IS_PLAYING = "/get/isPlaying";
     public static final String SCHEDULE_STOP = "/stop";
+    public static final String SCHEDULE_GET_SNIPPETS = "/get/snippets";
 }
