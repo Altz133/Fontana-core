@@ -2,6 +2,7 @@ package com.fontana.backend.template.service;
 
 
 import com.fontana.backend.template.entity.Template;
+import com.fontana.backend.template.entity.TemplateStatus;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -17,15 +18,13 @@ public interface TemplateService {
 
     List<Template> getTemplatesByUsername(String username);
 
-    int getFavouriteCount(Template template);
-
-    boolean isFavouritedByOwner(Template template);
-
     Template getTemplateById(Integer templateId);
 
     List<Template> getAllPublicTemplatesByName(String name, Pageable pageable);
 
-    List<Template> getTemplatesByUsernamePaginated(String username, Pageable pageable);
+    public List<Template> getTemplatesByUsernameAndStatusNotPaginated(String username, TemplateStatus status, Pageable pageable);
+
+    public List<Template> getTemplatesByUsernameAndStatusPaginated(String username, TemplateStatus status, Pageable pageable);
 
     int getDurationFromTemplate(Template template);
 

@@ -39,13 +39,6 @@ public class Template {
     private TemplateStatus status;
 
     @ManyToMany
-    @JoinTable(name = "favourite_templates",
-            joinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "username", referencedColumnName = "username")
-    )
-    private List<User> usersFavourited;
-
-    @ManyToMany
     @JoinTable(name = "snapshots_templates",
             joinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "snapshotId", referencedColumnName = "id")
