@@ -12,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -39,14 +38,10 @@ public class Template {
     @Enumerated
     private TemplateStatus status;
 
-    @ManyToMany
-    @JoinTable(name = "favourite_templates",
-            joinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "username", referencedColumnName = "username")
-    )
-    private Set<User> usersFavourited;
 
-    @OneToMany(mappedBy = "template_id")
+    @OneToMany
+    @JoinColumn(name="id")
+    @OrderColumn(name = "snapshotIndex")
     private List<Snapshot> snapshotsSequence;
 
 }

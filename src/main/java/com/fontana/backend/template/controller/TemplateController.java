@@ -4,6 +4,7 @@ import com.fontana.backend.template.dto.TemplateCardDto;
 import com.fontana.backend.template.dto.TemplateDto;
 import com.fontana.backend.template.service.TemplatePaginationService;
 import com.fontana.backend.template.service.TemplateService;
+import com.fontana.backend.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +17,12 @@ import static com.fontana.backend.config.RestEndpoints.*;
 @RequiredArgsConstructor
 public class TemplateController {
     private final TemplatePaginationService templatePaginationService;
+    private final AuthUtils authUtils;
     private final TemplateService templateService;
 
     @GetMapping(TEMPLATE_MY_TEMPLATES_PAGINATION)
-    public List<TemplateCardDto> getMyTemplates(@RequestParam String username, @RequestParam int page, @RequestParam int size) {
+    public List<TemplateCardDto> getMyTemplates(@RequestParam int page, @RequestParam int size) {
+        String username = authUtils.getAuthentication().getPrincipal().toString();
         return templatePaginationService.getMyTemplatesPaginated(username, page, size);
     }
 

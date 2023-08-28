@@ -50,34 +50,28 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public int getFavouriteCount(Template template) {
-        return template.getUsersFavourited().size();
-    }
-
-    @Override
-    public boolean isFavouritedByUser(Template template, String username) {
-
-        return template.getUsersFavourited().contains(userRepository.getReferenceById(username));
-    }
-
-    @Override
     public Template getTemplateById(Integer templateId) {
         return templateRepository.getReferenceById(templateId);
     }
 
     @Override
     public List<Template> getAllPublicTemplatesByName(String name, Pageable pageable) {
-        return templateRepository.getAllByStatusAndNameContaining(TemplateStatus.PUBLIC, name, pageable);
+        return templateRepository.getAllByStatusAndNameContainingOrderByUpdatedAtDesc(TemplateStatus.PUBLIC, name, pageable);
     }
 
     @Override
-    public List<Template> getTemplatesByUsernamePaginated(String username, Pageable pageable) {
-        return templateRepository.getTemplatesByUser(userRepository.getReferenceById(username), pageable);
+    public List<Template> getTemplatesByUsernameAndStatusNotPaginated(String username, TemplateStatus status, Pageable pageable) {
+        return templateRepository.getTemplatesByUserAndStatusNotOrderByUpdatedAt(userRepository.getReferenceById(username), status, pageable);
+    }
+
+    @Override
+    public List<Template> getTemplatesByUsernameAndStatusPaginated(String username, TemplateStatus status, Pageable pageable) {
+        return templateRepository.getTemplatesByUserAndStatusOrderByUpdatedAt(userRepository.getReferenceById(username), status, pageable);
     }
 
     @Override
     public int getDurationFromTemplate(Template template) {
-        return (int)Math.ceil((double)template.getSnapshotsSequence().size() / SEQUENCES_PER_SECOND);
+        return (int) Math.ceil((double) template.getSnapshotsSequence().size() / SEQUENCES_PER_SECOND);
     }
     public Integer getHighestTemplateId(){
         return templateRepository.findTopByOrderByIdDesc();
@@ -90,7 +84,7 @@ public class TemplateServiceImpl implements TemplateService {
             sum += t.getSnapshotsSequence().size();
         }
 
-        return (int)Math.ceil((double)sum / SEQUENCES_PER_SECOND);
+        return (int) Math.ceil((double) sum / SEQUENCES_PER_SECOND);
     }
 
     @Override

@@ -20,10 +20,6 @@ public class TemplateCardDto {
 
     private String ownerUsername;
 
-    private Integer favourites;
-
-    private boolean isFavouritedByUser;
-
     private Timestamp updatedAt;
 
     private TemplateStatus status;
