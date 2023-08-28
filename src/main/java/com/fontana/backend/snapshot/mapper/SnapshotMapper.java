@@ -1,6 +1,7 @@
 package com.fontana.backend.snapshot.mapper;
 
 import com.fontana.backend.devices.repository.DeviceRepository;
+import com.fontana.backend.dmxHandler.validator.service.DMXValidatorService;
 import com.fontana.backend.snapshot.dto.SnapshotRequestDto;
 import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.snapshot.factory.SnapshotDataFactory;
@@ -15,6 +16,7 @@ import java.util.List;
 public class SnapshotMapper {
     private final SnapshotDataFactory snapshotDataFactory;
     private final DeviceRepository deviceRepository;
+    private final DMXValidatorService dmxValidatorService;
 
 
     public List<Snapshot> map(List<SnapshotRequestDto> snapshotRequestDto){
@@ -29,6 +31,8 @@ public class SnapshotMapper {
         byte[] snapshotData = new byte[512];
 
         snapshotData = snapshotDataFactory.createData(snapshotRequestDto.getDevices(), snapshotData);
+        snapshotData = dmxValidatorService.validateArray(snapshotData);
+
         Snapshot snapshot = new Snapshot();
         snapshot.setDuration(snapshotRequestDto.getDuration());
         snapshot.setData(snapshotData);

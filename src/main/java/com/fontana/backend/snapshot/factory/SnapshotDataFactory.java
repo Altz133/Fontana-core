@@ -49,6 +49,7 @@ public class SnapshotDataFactory {
 
     private byte[] setJetValue(JetDTO jetDto, byte[] snapshotData) {
         Jet jet = jetMapper.DTOToJet(jetDto);
+
         snapshotData[jet.getId()] = jet.getValue();
         return snapshotData;
     }
