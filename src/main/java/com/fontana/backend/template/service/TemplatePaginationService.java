@@ -2,6 +2,7 @@ package com.fontana.backend.template.service;
 
 import com.fontana.backend.template.dto.TemplateCardDto;
 import com.fontana.backend.template.entity.Template;
+import com.fontana.backend.template.entity.TemplateStatus;
 import com.fontana.backend.template.mapper.TemplateCardDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +22,7 @@ public class TemplatePaginationService {
         List<TemplateCardDto> list = new ArrayList<>();
         Pageable pageable = PageRequest.of(page, size);
 
-        for (Template t : templateService.getTemplatesByUsernamePaginated(username, pageable)) {
+        for (Template t : templateService.getTemplatesByUsernameAndStatusNotPaginated(username, TemplateStatus.DRAFT, pageable)) {
             list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
         }
 

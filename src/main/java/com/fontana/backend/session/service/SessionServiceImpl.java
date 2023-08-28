@@ -102,7 +102,6 @@ public class SessionServiceImpl implements SessionService {
                 throw new RoleNotAllowedException(roleNotAllowedMsg);
             }
 
-            log.info("Filtered sessions: " + filterSessionsInReversedOrder(user).size());
             return filterSessionsInReversedOrder(user).stream()
                     .map(sessionMapper::map)
                     .toList();
@@ -248,9 +247,9 @@ public class SessionServiceImpl implements SessionService {
     public List<Session> filterSessionsInReversedOrder(User user) {
         Pageable pageable = PageRequest.of(0, 26, Sort.by(Sort.Direction.DESC, "id"));
 
+        log.info(sessionRepository.findAllInReversedOrderAfterDate(user.getLastRoleChange(), user.getUsername(), pageable).toString());
+
         return sessionRepository.findAllInReversedOrderAfterDate(user.getLastRoleChange(), user.getUsername(), pageable).stream()
-                .filter(session -> !session.getUsername().equals(authUtils.getAuthentication().getPrincipal()))
-                .filter(session -> session.getClosedTime() != null)
                 .filter(session -> session.getWatchers().stream()
                         .noneMatch(watcher -> watcher.getWatcher().equals(user.getUsername())))
                 .toList();
