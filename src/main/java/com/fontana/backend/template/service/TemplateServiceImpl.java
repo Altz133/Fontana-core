@@ -29,6 +29,8 @@ public class TemplateServiceImpl implements TemplateService {
 
     }
 
+
+
     @Override
     public void deleteTemplate(Template template) {
         templateRepository.delete(template);
@@ -73,10 +75,6 @@ public class TemplateServiceImpl implements TemplateService {
     public int getDurationFromTemplate(Template template) {
         return (int) Math.ceil((double) template.getSnapshotsSequence().size() / SEQUENCES_PER_SECOND);
     }
-    public Integer getHighestTemplateId(){
-        return templateRepository.findTopByOrderByIdDesc();
-    }
-
     @Override
     public int getDurationFromTemplates(List<Template> templates) {
         int sum = 0;

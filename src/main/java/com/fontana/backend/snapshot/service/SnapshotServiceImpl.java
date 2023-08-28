@@ -2,6 +2,7 @@ package com.fontana.backend.snapshot.service;
 
 import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.snapshot.repository.SnapshotRepository;
+import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SnapshotServiceImpl implements SnapshotService {
     private final SnapshotRepository snapshotRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void addSnapshot(Snapshot snapshot) {
@@ -52,4 +54,14 @@ public class SnapshotServiceImpl implements SnapshotService {
         return temp;
     }
 
+
+    @Override
+    public Snapshot[] getSnapshotsByUsername(String username) {
+        return snapshotRepository.getSnapshotsByUser(userRepository.getReferenceById(username));
+    }
+
+    @Override
+    public Snapshot getSnapshotById(Integer snapshotId) {
+        return snapshotRepository.getReferenceById(snapshotId);
+    }
 }

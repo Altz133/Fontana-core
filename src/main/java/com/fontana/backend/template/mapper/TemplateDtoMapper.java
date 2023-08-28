@@ -20,8 +20,7 @@ public class TemplateDtoMapper {
     private final TemplateService templateService;
     public Template mapNew(TemplateDto templateDto){
         Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
-        Integer highestTemplateId = templateService.getHighestTemplateId();
-        List<Snapshot> snapshotList = snapshotMapper.map(templateDto.getSnapshots(), highestTemplateId+1);
+        List<Snapshot> snapshotList = snapshotMapper.map(templateDto.getSnapshots());
 
         return Template.builder()
                 .name(templateDto.getName())

@@ -1,15 +1,20 @@
 package com.fontana.backend.snapshot.factory;
 
-import com.fontana.backend.devices.dto.DeviceDTO;
-import com.fontana.backend.devices.entity.Device;
 import com.fontana.backend.devices.jet.dto.JetDTO;
+import com.fontana.backend.devices.jet.entity.Jet;
+import com.fontana.backend.devices.jet.mapper.JetMapper;
 import com.fontana.backend.devices.led.dto.LedDTO;
+import com.fontana.backend.devices.led.entity.Led;
+import com.fontana.backend.devices.led.mapper.LedMapper;
 import com.fontana.backend.devices.light.dto.LightDTO;
+import com.fontana.backend.devices.light.entity.Light;
+import com.fontana.backend.devices.light.mapper.LightMapper;
 import com.fontana.backend.devices.pump.dto.PumpDTO;
 import com.fontana.backend.devices.pump.entity.Pump;
+import com.fontana.backend.devices.pump.mapper.PumpMapper;
 import com.fontana.backend.devices.repository.DeviceRepository;
-import com.fontana.backend.dmxHandler.currentStateDTO.factory.messages.DeviceDTOFactoryMessages;
-import com.fontana.backend.exception.customExceptions.DeviceDTOFactoryException;
+import com.fontana.backend.frame.entity.Frame;
+import com.fontana.backend.snapshot.dto.DevicesRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,48 +25,62 @@ public class SnapshotDataFactory {
 
     @Autowired
     private DeviceRepository deviceRepository;
+    private Frame frame;
+    private JetMapper jetMapper;
+    private PumpMapper pumpMapper;
+    private LedMapper ledMapper;
+    private LightMapper lightMapper;
 
-    public byte[] createData(DeviceDTO deviceDto, byte[] snapshotData) {
-        Device device = deviceRepository.findByName(deviceDto.getName());
 
-        return switch (device.getType()) {
-            case PUMP -> setPumpValue(device, deviceDto, snapshotData);
-            case JET -> setJetValue(device,deviceDto, snapshotData);
-            case LED -> setLedValue(device,deviceDto, snapshotData);
-            case LIGHT -> setLightValue(device,deviceDto, snapshotData);
-            default -> throw new DeviceDTOFactoryException(DeviceDTOFactoryMessages.UNKNOWN_DEVICE.getMessage());
-        };
-    }
+    public byte[] createData(DevicesRequestDto deviceDto, byte[] snapshotData) {
 
-    public byte[] setPumpValue(Device device,DeviceDTO deviceDto, byte[] snapshotData){
-        PumpDTO pumpDTO = (PumpDTO) deviceDto;
-        snapshotData[device.getId()] = pumpDTO.getValue();
-        return snapshotData;
-    }
-    private byte[] setJetValue(Device device,DeviceDTO deviceDto, byte[] snapshotData) {
-        JetDTO jetDTO = (JetDTO) deviceDto;
-        snapshotData[device.getId()] = (byte) (jetDTO.getValue() ? 1 : 0);
-        return snapshotData;
-    }
-    private byte[] setLedValue(Device device,DeviceDTO deviceDto, byte[] snapshotData) {
-        LedDTO ledDTO = (LedDTO) deviceDto;
-        snapshotData[device.getAddress()[0]] = ledDTO.getColorR();
-        snapshotData[device.getAddress()[1]] = ledDTO.getColorG();
-        snapshotData[device.getAddress()[2]] = ledDTO.getColorB();
-        snapshotData[device.getAddress()[3]] = ledDTO.getColorW();
-        snapshotData[device.getAddress()[4]] = ledDTO.getPower();
-        snapshotData[device.getAddress()[5]] = ledDTO.getStroboscopeFrequency();
 
-        return snapshotData;
-    }
-    private byte[] setLightValue(Device device,DeviceDTO deviceDto, byte[] snapshotData) {
-        LightDTO lightDTO = (LightDTO) deviceDto;
-        snapshotData[device.getAddress()[0]] = lightDTO.getColorR();
-        snapshotData[device.getAddress()[1]] = lightDTO.getColorG();
-        snapshotData[device.getAddress()[2]] = lightDTO.getColorB();
+        for (int i = 0; i < deviceDto.getJets().size(); i++) {
+            snapshotData = setJetValue(deviceDto.getJets().get(i), snapshotData);
+        }
+        for (int i = 0; i < deviceDto.getPumps().size(); i++) {
+            snapshotData = setPumpValue(deviceDto.getPumps().get(i), snapshotData);
+        }
+        for (int i = 0; i < deviceDto.getLights().size(); i++) {
+            snapshotData = setLightValue(deviceDto.getLights().get(i), snapshotData);
+        }
+        for (int i =0;i<deviceDto.getFoams().size(); i++){
+            snapshotData = setJetValue(deviceDto.getFoams().get(i),snapshotData );
+        }
+
+        snapshotData = setLedValue(deviceDto.getLeds().get(0), snapshotData);
 
         return snapshotData;
     }
 
+    private byte[] setJetValue(JetDTO jetDto, byte[] snapshotData) {
+        Jet jet = jetMapper.DTOToJet(jetDto);
+        snapshotData[jet.getId()] = jet.getValue();
+        return snapshotData;
+    }
 
+    public byte[] setPumpValue(PumpDTO pumpDTO, byte[] snapshotData) {
+        Pump pump = pumpMapper.DTOToPump(pumpDTO);
+        snapshotData[pump.getId()] = pump.getValue();
+        return snapshotData;
+    }
+
+    private byte[] setLedValue(LedDTO ledDTO, byte[] snapshotData) {
+        Led led = ledMapper.DTOToLed(ledDTO);
+        snapshotData[led.getColorRID()] = led.getColorRValue();
+        snapshotData[led.getColorGID()] = led.getColorGValue();
+        snapshotData[led.getColorBID()] = led.getColorBValue();
+        snapshotData[led.getColorWID()] = led.getColorWValue();
+        snapshotData[led.getDimmID()] = led.getDimmValue();
+        snapshotData[led.getStrobeFreqID()] = led.getStrobeFreqValue();
+        return snapshotData;
+    }
+
+    private byte[] setLightValue(LightDTO lightDTO, byte[] snapshotData) {
+        Light light = lightMapper.DTOToLight(lightDTO);
+        snapshotData[light.getColorRID()] = light.getColorRValue();
+        snapshotData[light.getColorGID()] = light.getColorGValue();
+        snapshotData[light.getColorBID()] = light.getColorBValue();
+        return snapshotData;
+    }
 }

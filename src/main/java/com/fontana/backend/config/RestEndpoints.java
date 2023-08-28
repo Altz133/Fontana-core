@@ -37,7 +37,6 @@ public class RestEndpoints {
 
     public static final String BLACKLIST = "/blacklist";
     public static final String LOGOUT = "/logout";
-    public static final String REMOVE_TOKEN_IMMEDIATELY = "/remove-token-immediately";
 
     public static final String LOG = BASE + "/log";
     public static final String LOG_FIND_BY_ID = "/{id}";
@@ -53,8 +52,6 @@ public class RestEndpoints {
     public static final String SCHEDULE_UPDATE = "/update";
     public static final String SCHEDULE_GET_MONTH = "/get/month";
     public static final String SCHEDULE_GET_DAY = "/get/day";
-
-    public static final String SNAPSHOT = BASE  + "/snapshot";
     public static final String SCHEDULE_GET_IS_PLAYING = "/get/isPlaying";
     public static final String SCHEDULE_STOP = "/stop";
 }

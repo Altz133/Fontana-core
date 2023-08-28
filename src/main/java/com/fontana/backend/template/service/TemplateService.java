@@ -32,5 +32,4 @@ public interface TemplateService {
     int getDurationFromTemplates(List<Template> templates);
 
     List<Template> getTemplatesByIds(List<Integer> templateIds);
-    Integer getHighestTemplateId();
 }
