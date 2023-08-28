@@ -12,6 +12,7 @@ import com.fontana.backend.dmxHandler.dto.SensorsStatusDTO;
 import com.fontana.backend.dmxHandler.service.DMXHandlerService;
 import com.fontana.backend.exception.customExceptions.DMXValidatorException;
 import com.fontana.backend.frame.entity.Frame;
+import com.fontana.backend.schedule.service.player.SchedulePlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class DMXHandlerController {
     private final LightMapper lightMapper;
     private final LedMapper ledMapper;
     private final Frame frame;
+    private final SchedulePlayerService schedulePlayerService;
 
     @PostMapping(value = DMX_UPDATE_JET)
     public ResponseEntity<Object> updateFrameJet(@RequestBody JetDTO jetDTO) throws IOException {
@@ -77,6 +79,7 @@ public class DMXHandlerController {
 
     @PostMapping(value = DMX_PANIC)
     public ResponseEntity<Object> panic() throws IOException {
+        schedulePlayerService.panic();
         DMXHandlerService.panic();
         return ResponseEntity.ok().build();
     }

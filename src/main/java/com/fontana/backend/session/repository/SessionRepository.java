@@ -11,6 +11,12 @@ import java.util.List;
 
 public interface SessionRepository extends JpaRepository<Session, Integer> {
 
-    @Query("SELECT session FROM Session session WHERE session.openedTime > :cutoffDate ORDER BY session.id DESC")
-    List<Session> findAllInReversedOrderAfterDate(@Param("cutoffDate") LocalDateTime cutoffDate, Pageable pageable);
+    @Query("SELECT session FROM Session session WHERE session.openedTime > :cutoffDate AND session.username != :username ORDER BY session.id DESC")
+    List<Session> findAllInReversedOrderAfterDate(
+            @Param("cutoffDate") LocalDateTime cutoffDate,
+            @Param("username") String username,
+            Pageable pageable);
+
+    @Query("SELECT session FROM Session session ORDER BY session.id DESC")
+    List<Session> findLatestSessions(Pageable pageable);
 }

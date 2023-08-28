@@ -77,7 +77,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public int getDurationFromTemplate(Template template) {
-        return template.getSnapshotsSequence().size() / SEQUENCES_PER_SECOND;
+        return (int)Math.ceil((double)template.getSnapshotsSequence().size() / SEQUENCES_PER_SECOND);
     }
     public Integer getHighestTemplateId(){
         return templateRepository.findTopByOrderByIdDesc();
@@ -90,7 +90,7 @@ public class TemplateServiceImpl implements TemplateService {
             sum += t.getSnapshotsSequence().size();
         }
 
-        return sum / SEQUENCES_PER_SECOND;
+        return (int)Math.ceil((double)sum / SEQUENCES_PER_SECOND);
     }
 
     @Override
