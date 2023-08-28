@@ -20,10 +20,6 @@ public class Snapshot {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "username")
-    private User user;
-
     private byte[] data;
 
 }
