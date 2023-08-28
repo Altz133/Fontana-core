@@ -11,8 +11,11 @@ import java.util.List;
 @Builder
 public class SnapshotRequestDto {
     private Integer id;
-
-    private Integer duration;
+//    @NotBlank
+//    private Integer snapshot_index;
+//    @NotBlank
+//    private Integer template_id;
+//    private Integer duration;
 
     private DevicesRequestDto devices;
 

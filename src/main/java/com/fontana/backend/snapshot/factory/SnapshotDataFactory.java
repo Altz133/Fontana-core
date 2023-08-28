@@ -12,8 +12,6 @@ import com.fontana.backend.devices.light.mapper.LightMapper;
 import com.fontana.backend.devices.pump.dto.PumpDTO;
 import com.fontana.backend.devices.pump.entity.Pump;
 import com.fontana.backend.devices.pump.mapper.PumpMapper;
-import com.fontana.backend.devices.repository.DeviceRepository;
-import com.fontana.backend.frame.entity.Frame;
 import com.fontana.backend.snapshot.dto.DevicesRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +22,6 @@ import org.springframework.stereotype.Service;
 public class SnapshotDataFactory {
 
     @Autowired
-    private DeviceRepository deviceRepository;
-    private Frame frame;
     private JetMapper jetMapper;
     private PumpMapper pumpMapper;
     private LedMapper ledMapper;
@@ -33,8 +29,6 @@ public class SnapshotDataFactory {
 
 
     public byte[] createData(DevicesRequestDto deviceDto, byte[] snapshotData) {
-
-
         for (int i = 0; i < deviceDto.getJets().size(); i++) {
             snapshotData = setJetValue(deviceDto.getJets().get(i), snapshotData);
         }

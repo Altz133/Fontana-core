@@ -29,8 +29,6 @@ public class TemplateServiceImpl implements TemplateService {
 
     }
 
-
-
     @Override
     public void deleteTemplate(Template template) {
         templateRepository.delete(template);

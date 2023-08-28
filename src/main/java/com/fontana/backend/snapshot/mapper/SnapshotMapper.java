@@ -23,15 +23,14 @@ public class SnapshotMapper {
             snapList.add(mapSnapshotFromTemplate(snapshot));
 
         }
-
         return snapList;
     }
     private Snapshot mapSnapshotFromTemplate(SnapshotRequestDto snapshotRequestDto){
         byte[] snapshotData = new byte[512];
 
-        snapshotData = snapshotDataFactory.createData(snapshotRequestDto.getDevices(), snapshotData );
+        snapshotData = snapshotDataFactory.createData(snapshotRequestDto.getDevices(), snapshotData);
         Snapshot snapshot = new Snapshot();
-        snapshot.setDuration(snapshotRequestDto.getDuration());
+//        snapshot.setDuration(snapshotRequestDto.getDuration());
         snapshot.setData(snapshotData);
 
         return snapshot;

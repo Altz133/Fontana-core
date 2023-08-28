@@ -5,6 +5,7 @@ import com.fontana.backend.snapshot.mapper.SnapshotMapper;
 import com.fontana.backend.snapshot.service.SnapshotService;
 import com.fontana.backend.template.dto.TemplateDto;
 import com.fontana.backend.template.entity.Template;
+import com.fontana.backend.template.repository.TemplateRepository;
 import com.fontana.backend.template.service.TemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TemplateDtoMapper {
-    private final SnapshotService snapshotService;
     private final SnapshotMapper snapshotMapper;
-    private final TemplateService templateService;
+
     public Template mapNew(TemplateDto templateDto){
         Timestamp updatedAt = new Timestamp(System.currentTimeMillis());
         List<Snapshot> snapshotList = snapshotMapper.map(templateDto.getSnapshots());
