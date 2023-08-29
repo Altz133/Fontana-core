@@ -95,8 +95,4 @@ public class TemplateServiceImpl implements TemplateService {
         }
         return templates;
     }
-//    @Override
-//    public Integer getHighestTemplateId(){
-//        return templateRepository.findTopByOrderByIdDesc();
-//    }
 }
