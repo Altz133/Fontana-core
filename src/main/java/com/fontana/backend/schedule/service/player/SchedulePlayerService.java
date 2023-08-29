@@ -130,9 +130,11 @@ public class SchedulePlayerService {
         snapshotData.clear();
 
         for (Template template : schedule.getTemplates()) {
-            snapshotsSequence.addAll(template.getSnapshotsSequence().stream().map(Snapshot::getId).toList());
-
             for (Snapshot snapshot : template.getSnapshotsSequence()) {
+                for (int i = 0; i < snapshot.getDuration(); i++) {
+                    snapshotsSequence.add(snapshot.getId());
+                }
+
                 snapshotData.putIfAbsent(snapshot.getId(), Arrays.copyOf(snapshot.getData(), 512));
             }
         }
@@ -172,7 +174,7 @@ public class SchedulePlayerService {
         return data;
     }
 
-    public void panic(){
+    public void panic() {
         futureScheduleUpdateTask.cancel(true);
         futureScheduleStartTask.cancel(true);
 

@@ -55,10 +55,6 @@ public class SnapshotServiceImpl implements SnapshotService {
     }
 
 
-    @Override
-    public Snapshot[] getSnapshotsByUsername(String username) {
-        return snapshotRepository.getSnapshotsByUser(userRepository.getReferenceById(username));
-    }
 
     @Override
     public Snapshot getSnapshotById(Integer snapshotId) {

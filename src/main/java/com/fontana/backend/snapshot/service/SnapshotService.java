@@ -15,7 +15,6 @@ public interface SnapshotService {
 
     byte[] getDmxDataArrayBySnapshotId(Integer snapshotId);
 
-    Snapshot[] getSnapshotsByUsername(String username);
 
     Snapshot getSnapshotById(Integer snapshotId);
 }

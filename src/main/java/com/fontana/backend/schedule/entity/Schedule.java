@@ -46,8 +46,8 @@ public class Schedule {
     @ManyToMany
     @JoinTable(
             name = "templates_schedules",
-            joinColumns = @JoinColumn(name = "scheduleId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id")
+            joinColumns = @JoinColumn(name = "schedule_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "template_id", referencedColumnName = "id")
     )
     @OrderColumn(name = "templateIndex")
     private List<Template> templates;

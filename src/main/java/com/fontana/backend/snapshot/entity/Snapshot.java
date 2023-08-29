@@ -18,11 +18,8 @@ public class Snapshot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "username")
-    private User user;
+    private Integer duration;
 
     private byte[] data;
+
 }
