@@ -231,8 +231,9 @@ public class SessionServiceImpl implements SessionService {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, SESSION.concat("/").concat(saved.getId().toString()));
 
-        Map<String, LocalDateTime> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         response.put("expirationTime", saved.getExpirationTime());
+        response.put("id", saved.getId());
 
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
     }

@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SnapshotRepository extends JpaRepository<Snapshot, Integer> {
 
-    Snapshot[] getSnapshotsByUser(User user);
 }

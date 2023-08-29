@@ -47,7 +47,6 @@ public class LogServiceImpl implements LogService {
             return logs.map(logDtoMapper::map);
         }
 
-
         @Override
         public LogResponseDTO findById(int id) {
             Log searched = logRepository.findById(id).orElseThrow(

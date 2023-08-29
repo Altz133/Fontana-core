@@ -39,11 +39,11 @@ public class Template {
     private TemplateStatus status;
 
     @ManyToMany
-    @JoinTable(name = "snapshots_templates",
-            joinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "snapshotId", referencedColumnName = "id")
+    @JoinTable(
+            name = "snapshots_templates",
+            joinColumns = @JoinColumn(name = "template_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "snapshot_id", referencedColumnName = "id")
     )
     @OrderColumn(name = "snapshotIndex")
     private List<Snapshot> snapshotsSequence;
-
 }

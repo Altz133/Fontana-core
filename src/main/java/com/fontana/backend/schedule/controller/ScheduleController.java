@@ -62,4 +62,9 @@ public class ScheduleController {
         return SchedulePlayerService.isPlaying();
     }
 
+    @GetMapping(value = SCHEDULE_GET_SNIPPETS)
+    public List<ScheduleCardDto> getSnippets() {
+        return scheduleDateService.getSnippets();
+    }
+
 }
