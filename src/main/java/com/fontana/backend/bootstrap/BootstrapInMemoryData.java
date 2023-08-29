@@ -102,7 +102,7 @@ public class BootstrapInMemoryData implements CommandLineRunner {
                 .username(userRepository.findAll().get(0).getUsername())
                 .sessionId(sessionRepository.findAll().get(0).getId())
                 .deviceType(DeviceType.PUMP)
-                .deviceValue(48)
+                .deviceValue("")
                 .build();
 
         logRepository.save(first);
