@@ -3,10 +3,10 @@ package com.fontana.backend.schedule.mapper;
 import com.fontana.backend.schedule.dto.ScheduleCardDto;
 import com.fontana.backend.schedule.dto.ScheduleFormDto;
 import com.fontana.backend.schedule.entity.Schedule;
-import com.fontana.backend.schedule.service.player.SchedulePlayerService;
 import com.fontana.backend.schedule.service.ScheduleService;
+import com.fontana.backend.schedule.service.player.SchedulePlayerService;
 import com.fontana.backend.template.entity.Template;
-import com.fontana.backend.template.service.TemplateServiceImpl;
+import com.fontana.backend.template.service.TemplateService;
 import com.fontana.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ScheduleMapper {
     private final ScheduleService scheduleService;
-    private final TemplateServiceImpl templateService;
+    private final TemplateService templateService;
     private final UserRepository userRepository;
 
     public ScheduleCardDto ScheduleToScheduleCardDto(Schedule schedule) {

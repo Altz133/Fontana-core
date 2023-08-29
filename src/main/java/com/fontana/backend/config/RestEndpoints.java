@@ -44,6 +44,8 @@ public class RestEndpoints {
 
     public static final String TEMPLATE = BASE + "/template";
     public static final String TEMPLATE_MY_TEMPLATES_PAGINATION = "/myTemplatesCards";
+    public static final String TEMPLATE_MY_TEMPLATES_SNIPPET = "/myTemplatesSnippet";
+    public static final String TEMPLATE_DRAFT_TEMPLATES_SNIPPET = "/draftTemplatesSnippet";
     public static final String TEMPLATE_PUBLIC_TEMPLATES_PAGINATION = "/publicTemplatesCards";
 
     public static final String SCHEDULE = BASE + "/schedule";
