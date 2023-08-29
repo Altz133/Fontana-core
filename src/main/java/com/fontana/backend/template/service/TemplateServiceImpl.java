@@ -1,5 +1,6 @@
 package com.fontana.backend.template.service;
 
+import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.snapshot.repository.SnapshotRepository;
 import com.fontana.backend.template.dto.TemplateDto;
 import com.fontana.backend.template.entity.Template;
@@ -72,13 +73,14 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public int getDurationFromTemplate(Template template) {
-        return (int) Math.ceil((double) template.getSnapshotsSequence().size() / SEQUENCES_PER_SECOND);
+        return (int) Math.ceil((double) template.getSnapshotsSequence().stream().map(Snapshot::getDuration).mapToInt(o -> o).sum() / SEQUENCES_PER_SECOND);
     }
+
     @Override
     public int getDurationFromTemplates(List<Template> templates) {
         int sum = 0;
         for (Template t : templates) {
-            sum += t.getSnapshotsSequence().size();
+            sum += t.getSnapshotsSequence().stream().map(Snapshot::getDuration).mapToInt(o -> o).sum();
         }
 
         return (int) Math.ceil((double) sum / SEQUENCES_PER_SECOND);
