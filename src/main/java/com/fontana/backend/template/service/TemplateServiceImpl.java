@@ -26,10 +26,8 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public void addTemplate(TemplateDto templateDto) {
-        Template template = templateRepository.save(templateDtoMapper.mapNew(templateDto));
-        snapshotRepository.saveAll(template.getSnapshotsSequence());
-        templateRepository.save(template);
-        System.out.println(template.getSnapshotsSequence());
+        templateRepository.save(templateDtoMapper.mapNew(templateDto));
+
     }
 
     @Override
