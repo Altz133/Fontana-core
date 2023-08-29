@@ -27,6 +27,6 @@ public class Log {
     @Enumerated(EnumType.STRING)
     private DeviceType deviceType;
 
-    private Integer deviceValue;
+    private String deviceValue;
     private String deviceName;
 }
