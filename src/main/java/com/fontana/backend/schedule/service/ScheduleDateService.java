@@ -156,4 +156,18 @@ public class ScheduleDateService {
 
         return null;
     }
+
+    public List<ScheduleCardDto> getSnippets() {
+        LocalDateTime nowDateTime = LocalDateTime.now();
+        List<ScheduleCardDto> scheduleCardDtos = getSchedulesInDay(nowDateTime.getYear(), nowDateTime.getMonthValue(), nowDateTime.getDayOfMonth());
+
+        scheduleCardDtos = scheduleCardDtos.stream()
+                .filter(ScheduleCardDto::isEnabled)
+                .filter(scheduleCardDto -> scheduleCardDto.getStartTime().toLocalDateTime().toLocalTime().isAfter(nowDateTime.toLocalTime()) || scheduleCardDto.isPlaying())
+                .toList();
+
+        int maxSize = Math.min(4, scheduleCardDtos.size());
+
+        return scheduleCardDtos.subList(0, maxSize);
+    }
 }
