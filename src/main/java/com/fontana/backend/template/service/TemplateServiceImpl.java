@@ -29,6 +29,7 @@ public class TemplateServiceImpl implements TemplateService {
         Template template = templateRepository.save(templateDtoMapper.mapNew(templateDto));
         snapshotRepository.saveAll(template.getSnapshotsSequence());
         templateRepository.save(template);
+        System.out.println(template.getSnapshotsSequence());
     }
 
     @Override
@@ -94,4 +95,8 @@ public class TemplateServiceImpl implements TemplateService {
         }
         return templates;
     }
+//    @Override
+//    public Integer getHighestTemplateId(){
+//        return templateRepository.findTopByOrderByIdDesc();
+//    }
 }

@@ -38,10 +38,12 @@ public class Template {
     @Enumerated
     private TemplateStatus status;
 
-
-    @OneToMany
-    @JoinColumn(name="id")
+    @ManyToMany
+    @JoinTable(
+            name = "snapshots_templates",
+            joinColumns = @JoinColumn(name = "templateId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "snapshotId", referencedColumnName = "id")
+    )
     @OrderColumn(name = "snapshotIndex")
     private List<Snapshot> snapshotsSequence;
-
 }

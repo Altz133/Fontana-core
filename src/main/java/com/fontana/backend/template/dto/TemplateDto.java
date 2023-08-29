@@ -18,6 +18,7 @@ import java.util.List;
 public class TemplateDto {
     private String name;
     private TemplateStatus status;
+
     private List<SnapshotRequestDto> snapshots;
 
 }
