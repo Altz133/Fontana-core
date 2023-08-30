@@ -176,7 +176,6 @@ public class DMXValidatorService {
             }
             if (closedValveCounter == singlePumpAddresses.length && pumpPower != 0) {
                 dmxData[pumpId] = 0;
-                throw new DMXValidatorException("Pump " + pumpId + DMXValidatorMessages.CLOSED_VALVES.getMessage());
             }
         }
         return dmxData;
