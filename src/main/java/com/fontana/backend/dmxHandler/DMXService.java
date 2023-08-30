@@ -39,7 +39,7 @@ public class DMXService {
     @PostConstruct
     public void init() throws IOException {
         try {
-//            openConnection();
+            openConnection();
             initialSetup();
             schedulePlayerService.stopAndResetCurrentSchedule();
             startScheduler();
@@ -66,10 +66,7 @@ public class DMXService {
                 }
             }
         } catch (IOException e) {
-            try {
-                refreshConnection();
-            } catch (IOException ex) {
-            }
+            refreshConnection();
         }
     }
 
@@ -145,9 +142,15 @@ public class DMXService {
         connectionOpened = true;
     }
 
-    private void refreshConnection() throws IOException {
-        closeConnection();
-        openConnection();
+    private void refreshConnection(){
+
+        try{
+            closeConnection();
+        } catch (IOException e) {}
+        try{
+            openConnection();
+        }catch(IOException e){}
+
     }
 
     public void panic() throws IOException {
