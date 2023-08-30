@@ -36,14 +36,14 @@ class TemplateServiceImplTest {
     @Mock
     private SnapshotMapper snapshotMapper;
     @Mock
-    private TemplateServiceImpl templateService;
+    private TemplateService templateService;
     @Mock
     private UserRepository userRepository;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        templateService = new TemplateServiceImpl(templateRepositoryMock, userRepository, templateDtoMapper, snapshotRepository);
+        templateService = new TemplateService(templateRepositoryMock, userRepository, templateDtoMapper);
     }
 
     @Test
