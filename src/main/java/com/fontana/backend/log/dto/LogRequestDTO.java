@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Date;
+
 
 import java.time.LocalDateTime;
 
@@ -25,11 +27,14 @@ public class LogRequestDTO {
 
     @NotEmpty
     @PastOrPresent
-    private LocalDateTime executedAt;
+    private  Date executedAt;
 
     @NotBlank
-    private DeviceType deviceType;
+    private String deviceType;
 
     @NotEmpty
     private String deviceValue;
+
+    @NotEmpty
+    private String deviceName;
 }
