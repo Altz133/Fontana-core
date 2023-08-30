@@ -19,5 +19,5 @@ public class LogResponseDTO {
     private int sessionId;
     private LocalDateTime executedAt;
     private DeviceType deviceType;
-    private Integer deviceValue;
+    private String deviceValue;
 }

@@ -31,5 +31,5 @@ public class LogRequestDTO {
     private DeviceType deviceType;
 
     @NotEmpty
-    private Integer deviceValue;
+    private String deviceValue;
 }
