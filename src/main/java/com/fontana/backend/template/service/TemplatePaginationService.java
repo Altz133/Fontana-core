@@ -5,38 +5,36 @@ import com.fontana.backend.template.entity.Template;
 import com.fontana.backend.template.entity.TemplateStatus;
 import com.fontana.backend.template.mapper.TemplateCardDtoMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TemplatePaginationService {
-    private final TemplateServiceImpl templateService;
+    private final TemplateService templateService;
     private final TemplateCardDtoMapper templateCardDtoMapper;
 
-    public List<TemplateCardDto> getMyTemplatesPaginated(String username, int page, int size) {
-        List<TemplateCardDto> list = new ArrayList<>();
+    public Page<TemplateCardDto> getMyTemplatesPaginated(String username, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
-        for (Template t : templateService.getTemplatesByUsernameAndStatusNotPaginated(username, TemplateStatus.DRAFT, pageable)) {
-            list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
-        }
-
-        return list;
+        Page<Template> list = templateService.getMyTemplatesByUsername(username, pageable);
+        return list.map(templateCardDtoMapper::TemplateToTemplateCardDto);
     }
 
-    public List<TemplateCardDto> getPublicTemplatesPaginated(String name, int page, int size) {
-        List<TemplateCardDto> list = new ArrayList<>();
+    public Page<TemplateCardDto> getPublicTemplatesPaginated(String name, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+        Page<Template> list = templateService.getAllPublicTemplatesByName(name, pageable);
+        return list.map(templateCardDtoMapper::TemplateToTemplateCardDto);
+    }
 
-        for (Template t : templateService.getAllPublicTemplatesByName(name, pageable)) {
-            list.add(templateCardDtoMapper.TemplateToTemplateCardDto(t));
-        }
+    public List<TemplateCardDto> getMyTemplatesSnippets(String username, int page, int size) {
+        return templateService.getTemplatesByUsernameAndWithoutStatusSortedByUpdate(username, TemplateStatus.DRAFT, PageRequest.of(page, size)).stream().map(templateCardDtoMapper::TemplateToTemplateCardDto).toList();
+    }
 
-        return list;
+    public List<TemplateCardDto> getDraftTemplatesSnippets(String username, int page, int size) {
+        return templateService.getTemplatesByUsernameAndStatusSortedByUpdate(username, TemplateStatus.DRAFT, PageRequest.of(page, size)).stream().map(templateCardDtoMapper::TemplateToTemplateCardDto).toList();
     }
 }

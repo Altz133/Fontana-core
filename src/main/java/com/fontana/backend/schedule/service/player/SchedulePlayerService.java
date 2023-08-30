@@ -5,7 +5,7 @@ import com.fontana.backend.schedule.repository.ScheduleRepository;
 import com.fontana.backend.schedule.service.ScheduleDateService;
 import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.template.entity.Template;
-import com.fontana.backend.template.service.TemplateServiceImpl;
+import com.fontana.backend.template.service.TemplateService;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -38,7 +38,7 @@ public class SchedulePlayerService {
     private Timestamp oldUpdateTimestamp = null;
 
     private final ScheduleDateService scheduleDateService;
-    private final TemplateServiceImpl templateService;
+    private final TemplateService templateService;
     private final ScheduleRepository scheduleRepository;
 
     @PreDestroy

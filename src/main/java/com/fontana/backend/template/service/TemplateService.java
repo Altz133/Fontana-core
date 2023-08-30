@@ -1,35 +1,88 @@
 package com.fontana.backend.template.service;
 
-
+import com.fontana.backend.snapshot.entity.Snapshot;
 import com.fontana.backend.template.dto.TemplateDto;
 import com.fontana.backend.template.entity.Template;
 import com.fontana.backend.template.entity.TemplateStatus;
+import com.fontana.backend.template.mapper.TemplateDtoMapper;
+import com.fontana.backend.template.repository.TemplateRepository;
+import com.fontana.backend.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface TemplateService {
-    void addTemplate(TemplateDto templateDto);
+@Service
+@RequiredArgsConstructor
+public class TemplateService {
+    private final TemplateRepository templateRepository;
+    private final UserRepository userRepository;
+    private final TemplateDtoMapper templateDtoMapper;
+    private final int SEQUENCES_PER_SECOND = 4;
 
-    void deleteTemplate(Template template);
+    public void addTemplate(TemplateDto templateDto) {
+        templateRepository.save(templateDtoMapper.mapNew(templateDto));
 
-    void deleteTemplateById(Integer templateId);
+    }
 
-    void updateTemplate(Template template);
+    public void deleteTemplate(Template template) {
+        templateRepository.delete(template);
+    }
 
-    List<Template> getTemplatesByUsername(String username);
+    public void deleteTemplateById(Integer templateId) {
+        templateRepository.delete(templateRepository.getReferenceById(templateId));
+    }
 
-    Template getTemplateById(Integer templateId);
+    public void updateTemplate(Template template) {
+        templateRepository.save(template);
+    }
 
-    List<Template> getAllPublicTemplatesByName(String name, Pageable pageable);
+    public Template getTemplateById(Integer templateId) {
+        return templateRepository.getReferenceById(templateId);
+    }
 
-    public List<Template> getTemplatesByUsernameAndStatusNotPaginated(String username, TemplateStatus status, Pageable pageable);
+    //my templates
+    public Page<Template> getMyTemplatesByUsername(String username, Pageable pageable) {
+        return templateRepository.getTemplatesByUserOrderByNameAsc(userRepository.getReferenceById(username), pageable);
+    }
 
-    public List<Template> getTemplatesByUsernameAndStatusPaginated(String username, TemplateStatus status, Pageable pageable);
+    //public templates with search
+    public Page<Template> getAllPublicTemplatesByName(String name, Pageable pageable) {
+        return templateRepository.getTemplatesByStatusAndNameContainsOrderByNameAsc(TemplateStatus.PUBLIC, name, pageable);
+    }
 
-    int getDurationFromTemplate(Template template);
+    //snippet my templates
+    public List<Template> getTemplatesByUsernameAndWithoutStatusSortedByUpdate(String username, TemplateStatus status, Pageable pageable) {
+        return templateRepository.getTemplatesByUserAndStatusNotOrderByNameAsc(userRepository.getReferenceById(username), status, pageable);
+    }
 
-    int getDurationFromTemplates(List<Template> templates);
+    //snippet editing tool
+    public List<Template> getTemplatesByUsernameAndStatusSortedByUpdate(String username, TemplateStatus status, Pageable pageable) {
+        return templateRepository.getTemplatesByUserAndStatusOrderByUpdatedAtDesc(userRepository.getReferenceById(username), status, pageable);
+    }
 
-    List<Template> getTemplatesByIds(List<Integer> templateIds);
+    public int getDurationFromTemplate(Template template) {
+        return (int) Math.ceil((double) template.getSnapshotsSequence().stream().map(Snapshot::getDuration).mapToInt(o -> o).sum() / SEQUENCES_PER_SECOND);
+    }
+
+    public int getDurationFromTemplates(List<Template> templates) {
+        int sum = 0;
+        for (Template t : templates) {
+            sum += t.getSnapshotsSequence().stream().map(Snapshot::getDuration).mapToInt(o -> o).sum();
+        }
+
+        return (int) Math.ceil((double) sum / SEQUENCES_PER_SECOND);
+    }
+
+    public List<Template> getTemplatesByIds(List<Integer> templateIds) {
+        List<Template> templates = new ArrayList<>();
+
+        for (Integer id : templateIds) {
+            templates.add(templateRepository.getReferenceById(id));
+        }
+        return templates;
+    }
 }
