@@ -56,7 +56,7 @@ public class TemplateService {
 
     //snippet my templates
     public List<Template> getTemplatesByUsernameAndWithoutStatusSortedByUpdate(String username, TemplateStatus status, Pageable pageable) {
-        return templateRepository.getTemplatesByUserAndStatusNotOrderByNameAsc(userRepository.getReferenceById(username), status, pageable);
+        return templateRepository.getTemplatesByUserAndStatusNotOrderByUpdatedAtDesc(userRepository.getReferenceById(username), status, pageable);
     }
 
     //snippet editing tool

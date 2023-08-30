@@ -52,6 +52,14 @@ public class SchedulePlayerService {
         return isPlaying;
     }
 
+    public static boolean isPlaying(Integer scheduleId) {
+        if (currentSchedule == null) {
+            return false;
+        } else {
+            return Objects.equals(scheduleId, currentSchedule.getId()) && isPlaying;
+        }
+    }
+
     public static boolean isPlaying(Schedule schedule) {
         if (currentSchedule == null) {
             return false;

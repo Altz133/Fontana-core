@@ -16,9 +16,9 @@ public interface TemplateRepository extends JpaRepository<Template, Integer> {
     //my templates
     Page<Template> getTemplatesByUserOrderByNameAsc(User user, Pageable pageable);
 
-    //snippet my templates + public template
-    List<Template> getTemplatesByUserAndStatusOrderByUpdatedAtDesc(User user, TemplateStatus status, Pageable pageable);
+    //snippet my templates
+    List<Template> getTemplatesByUserAndStatusNotOrderByUpdatedAtDesc(User user, TemplateStatus status, Pageable pageable);
 
     //snippet editing tool
-    List<Template> getTemplatesByUserAndStatusNotOrderByNameAsc(User user, TemplateStatus status, Pageable pageable);
+    List<Template> getTemplatesByUserAndStatusOrderByUpdatedAtDesc(User user, TemplateStatus status, Pageable pageable);
 }
