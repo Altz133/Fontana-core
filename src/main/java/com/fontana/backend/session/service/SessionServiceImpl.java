@@ -148,7 +148,10 @@ public class SessionServiceImpl implements SessionService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
 
+        // The new lines of code
         Session saved = sessionRepository.save(sessionMapper.map(sessionRequestDTO));
+        log.info("Real Session ID: {}", saved.getId());
+
         Objects.requireNonNull(cacheManager.getCache(activeSessionLabel)).put("id", saved.getId());
         log.info("(OPEN) activeSession: " + saved);
 

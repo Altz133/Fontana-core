@@ -14,10 +14,11 @@ import java.time.LocalDateTime;
 @Builder
 public class LogResponseDTO {
 
-    private int id;
-    private String userFullName;
-    private int sessionId;
+    private Integer id;
+    private String username;
+    private Integer sessionId;
     private LocalDateTime executedAt;
     private DeviceType deviceType;
+    private String deviceName;
     private String deviceValue;
 }
