@@ -43,6 +43,7 @@ public class RestEndpoints {
     public static final String LOG_DOWNLOAD_ALL = "/download/all";
 
     public static final String TEMPLATE = BASE + "/template";
+    public static final String TEMPLATE_DELETE = "/delete/{id}";
     public static final String TEMPLATE_MY_TEMPLATES_PAGINATION = "/myTemplatesCards";
     public static final String TEMPLATE_MY_TEMPLATES_SNIPPET = "/myTemplatesSnippet";
     public static final String TEMPLATE_DRAFT_TEMPLATES_SNIPPET = "/draftTemplatesSnippet";

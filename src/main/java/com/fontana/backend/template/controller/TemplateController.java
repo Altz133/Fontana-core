@@ -51,4 +51,10 @@ public class TemplateController {
         this.templateService.addTemplate(templateDto);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping(TEMPLATE_DELETE)
+    public ResponseEntity<?> deleteTemplate(@PathVariable Integer id) {
+        templateService.hideTemplate(id);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -31,10 +31,10 @@ public class TemplatePaginationService {
     }
 
     public List<TemplateCardDto> getMyTemplatesSnippets(String username, int page, int size) {
-        return templateService.getTemplatesByUsernameAndWithoutStatusSortedByUpdate(username, TemplateStatus.DRAFT, PageRequest.of(page, size)).stream().map(templateCardDtoMapper::TemplateToTemplateCardDto).toList();
+        return templateService.getTemplatesByUsernameAndWithoutStatusSortedByUpdate(username, PageRequest.of(page, size)).stream().map(templateCardDtoMapper::TemplateToTemplateCardDto).toList();
     }
 
     public List<TemplateCardDto> getDraftTemplatesSnippets(String username, int page, int size) {
-        return templateService.getTemplatesByUsernameAndStatusSortedByUpdate(username, TemplateStatus.DRAFT, PageRequest.of(page, size)).stream().map(templateCardDtoMapper::TemplateToTemplateCardDto).toList();
+        return templateService.getTemplatesByUsernameAndStatusSortedByUpdate(username, PageRequest.of(page, size)).stream().map(templateCardDtoMapper::TemplateToTemplateCardDto).toList();
     }
 }
