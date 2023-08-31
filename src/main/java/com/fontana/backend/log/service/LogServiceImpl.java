@@ -43,7 +43,6 @@ public class LogServiceImpl implements LogService {
             }
 
             if (sessionId != null) {
-                // Adjust this line as per the new method signature in the repository
                 logs = logRepository.findAllBySessionId(sessionId, pageable);
             }
 
