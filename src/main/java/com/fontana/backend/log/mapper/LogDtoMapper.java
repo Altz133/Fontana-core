@@ -51,7 +51,7 @@ public class LogDtoMapper {
         return Log.builder()
                 .username(logRequestDTO.getUsername())
                 .sessionId(logRequestDTO.getSessionId())
-                .executedAt(localDateTime)  // tutaj używamy przekształconego LocalDateTime
+                .executedAt(localDateTime)
                 .deviceName(logRequestDTO.getDeviceName())
                 .deviceType(DeviceType.valueOf(logRequestDTO.getDeviceType()))
                 .deviceValue(logRequestDTO.getDeviceValue())
