@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class TemplateService {
 
     //my templates
     public Page<Template> getMyTemplatesByUsername(String username, Pageable pageable) {
-        return templateRepository.getTemplatesByUserOrderByNameAsc(userRepository.getReferenceById(username), pageable);
+        return templateRepository.getTemplatesByStatusNotAndUserOrderByNameAsc(TemplateStatus.HIDDEN, userRepository.getReferenceById(username), pageable);
     }
 
     //public templates with search
@@ -55,13 +56,24 @@ public class TemplateService {
     }
 
     //snippet my templates
-    public List<Template> getTemplatesByUsernameAndWithoutStatusSortedByUpdate(String username, TemplateStatus status, Pageable pageable) {
-        return templateRepository.getTemplatesByUserAndStatusNotOrderByUpdatedAtDesc(userRepository.getReferenceById(username), status, pageable);
+    public List<Template> getTemplatesByUsernameAndWithoutStatusSortedByUpdate(String username, Pageable pageable) {
+        return templateRepository.getTemplatesByUserAndStatusNotAndStatusNotOrderByUpdatedAtDesc(userRepository.getReferenceById(username), TemplateStatus.DRAFT, TemplateStatus.HIDDEN, pageable);
     }
 
     //snippet editing tool
-    public List<Template> getTemplatesByUsernameAndStatusSortedByUpdate(String username, TemplateStatus status, Pageable pageable) {
-        return templateRepository.getTemplatesByUserAndStatusOrderByUpdatedAtDesc(userRepository.getReferenceById(username), status, pageable);
+    public List<Template> getTemplatesByUsernameAndStatusSortedByUpdate(String username, Pageable pageable) {
+        return templateRepository.getTemplatesByUserAndStatusOrderByUpdatedAtDesc(userRepository.getReferenceById(username), TemplateStatus.DRAFT, pageable);
+    }
+
+    //delete template
+    public void hideTemplate(Integer templateId) {
+        Optional<Template> template = templateRepository.findById(templateId);
+
+        if (template.isPresent()) {
+            template.get().setStatus(TemplateStatus.HIDDEN);
+            templateRepository.save(template.get());
+
+        }
     }
 
     public int getDurationFromTemplate(Template template) {
