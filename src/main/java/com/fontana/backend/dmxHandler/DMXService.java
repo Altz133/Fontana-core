@@ -39,7 +39,7 @@ public class DMXService {
     @PostConstruct
     public void init() throws IOException {
         try {
-            openConnection();
+//            openConnection();
             initialSetup();
             schedulePlayerService.stopAndResetCurrentSchedule();
             startScheduler();
