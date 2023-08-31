@@ -31,7 +31,8 @@ public class AuthenticationService {
     @Value("${jwt.token-type}")
     private String tokenType;
 
-    @Value("${jwt.access-expiration-delay}")
+//    @Value("${jwt.access-expiration-delay}")
+    @Value("999999999999")
     private String accessExpDelay;
 
     public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {

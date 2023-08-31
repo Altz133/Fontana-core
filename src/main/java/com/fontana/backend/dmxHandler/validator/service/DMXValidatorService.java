@@ -27,7 +27,7 @@ public class DMXValidatorService {
     private static final int byteMaxValue = 255;
     public static boolean enableApiValidation = false;
     private static float pumpPowerMultiplier = 0.1f;
-    private static boolean waterLevelTopStatus = true;
+    private static boolean waterLevelTopStatus = false;
     private static boolean waterLevelBottomStatus = true;
     private static Sensors sensors;
     private static List<Device> pumps;
@@ -47,7 +47,7 @@ public class DMXValidatorService {
     }
 
     public static void setStatusesToEnabled() {
-        waterLevelTopStatus = true;
+        waterLevelTopStatus = false;
         waterLevelBottomStatus = true;
     }
 
@@ -68,7 +68,7 @@ public class DMXValidatorService {
     }
 
     public static byte[] validateLightsAndLeds(byte[] dmxData) {
-        if (!sensors.getWaterTop()) {
+        if (sensors.getWaterTop()) {
             for (Device led : leds) {
                 int[] singleLedAddresses = led.getAddress();
                 for (int ledId : singleLedAddresses) {
@@ -81,10 +81,10 @@ public class DMXValidatorService {
                     dmxData[lightId] = 0;
                 }
             }
-            waterLevelBottomStatus = false;
+            waterLevelBottomStatus = true;
             return dmxData;
         }
-        waterLevelBottomStatus = true;
+        waterLevelBottomStatus = false;
         return dmxData;
     }
 

@@ -1,5 +1,6 @@
 package com.fontana.backend.schedule.controller;
 
+import com.fontana.backend.exception.customExceptions.ScheduleException;
 import com.fontana.backend.schedule.dto.ScheduleCardDto;
 import com.fontana.backend.schedule.dto.ScheduleFormDto;
 import com.fontana.backend.schedule.mapper.ScheduleMapper;
@@ -7,8 +8,10 @@ import com.fontana.backend.schedule.service.ScheduleDateService;
 import com.fontana.backend.schedule.service.ScheduleService;
 import com.fontana.backend.schedule.service.player.SchedulePlayerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Set;
 
@@ -24,21 +27,41 @@ public class ScheduleController {
     private final SchedulePlayerService schedulePlayerService;
 
     @PostMapping(value = SCHEDULE_ADD)
-    public void addSchedule(@RequestBody ScheduleFormDto scheduleFormDto) {
-        scheduleService.addSchedule(scheduleMapper.ScheduleFormDtoToSchedule(scheduleFormDto));
-        schedulePlayerService.updatePlayer();
+    public ResponseEntity<Object> addSchedule(@RequestBody ScheduleFormDto scheduleFormDto) {
+        try {
+            scheduleService.addSchedule(scheduleMapper.ScheduleFormDtoToSchedule(scheduleFormDto));
+            schedulePlayerService.updatePlayer();
+
+            return ResponseEntity.ok().build();
+        }
+        catch (ScheduleException e){
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 
     @DeleteMapping(value = SCHEDULE_DELETE)
     public void deleteSchedule(@PathVariable Integer id) {
         scheduleService.deleteSchedule(id);
-        schedulePlayerService.updatePlayer();
+
+        if (SchedulePlayerService.isPlaying(id)){
+            schedulePlayerService.stopAndResetCurrentSchedule();
+        }
+        else{
+            schedulePlayerService.updatePlayer();
+        }
     }
 
     @PutMapping(value = SCHEDULE_UPDATE)
-    public void updateSchedule(@RequestBody ScheduleFormDto scheduleFormDto) {
-        scheduleService.updateSchedule(scheduleMapper.ScheduleFormDtoToSchedule(scheduleFormDto));
-        schedulePlayerService.updatePlayer();
+    public ResponseEntity<Object> updateSchedule(@RequestBody ScheduleFormDto scheduleFormDto) {
+        try {
+            scheduleService.updateSchedule(scheduleMapper.ScheduleFormDtoToSchedule(scheduleFormDto));
+            schedulePlayerService.updatePlayer();
+
+            return ResponseEntity.ok().build();
+        }
+        catch (ScheduleException e){
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 
 // zakomentowane bo nieużywane, ale może będzie potrzebne
