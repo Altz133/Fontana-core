@@ -1,30 +1,47 @@
 package com.fontana.backend.security.auth;
 
+import com.fontana.backend.security.TokenType;
+import com.fontana.backend.security.blacklist.BlacklistTokenRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
+import static com.fontana.backend.config.RestEndpoints.*;
+
 @RestController
-@RequestMapping("/fontana/api/v1/auth")
+@RequestMapping(AUTH)
 @RequiredArgsConstructor
-@Slf4j
 public class AuthenticationController {
 
     private final AuthenticationService authService;
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    @PostMapping(AUTH_AUTHENTICATE)
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request) {
         return authService.authenticate(request);
     }
 
-    /**
-     * @param token has to contain prefix of "Bearer " in order to validate token properly
-     * @return new access token wit updated expiration time
-     */
-    @PostMapping("/refreshtoken")
-    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    @GetMapping(AUTH_REFRESHTOKEN)
+    public ResponseEntity<?> refreshToken(@RequestHeader("${jwt.refresh-token-custom-header}") String token) {
         return authService.refreshToken(token);
     }
+
+    @PostMapping(LOGOUT)
+    public ResponseEntity<Void> logout(@RequestBody String refreshToken) {
+        authService.blacklistToken(refreshToken, TokenType.REFRESH);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(BLACKLIST)
+    public ResponseEntity<Void> addToBlacklist(@Valid @RequestBody BlacklistTokenRequest tokenRequest) {
+        String token = tokenRequest.getToken();
+        TokenType tokenType = tokenRequest.getTokenType();
+        if (tokenType == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        authService.blacklistToken(token, tokenType);
+        return ResponseEntity.ok().build();
+    }
+
 }

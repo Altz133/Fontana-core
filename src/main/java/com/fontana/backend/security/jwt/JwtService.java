@@ -1,14 +1,19 @@
 package com.fontana.backend.security.jwt;
 
+import com.fontana.backend.security.TokenType;
+import com.fontana.backend.security.blacklist.entity.BlacklistedToken;
+import com.fontana.backend.security.blacklist.repository.BlacklistedTokenRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.util.Date;
@@ -18,13 +23,19 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtService {
 
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    public static final Long ACCESS_EXPIRATION_DELAY = 2000000L;
-    public static final Long REFRESH_EXPIRATION_DELAY = 2629800000L;
+    @Value("${jwt.access-expiration-delay}")
+    private String accessExpDelay;
+
+    @Value("${jwt.refresh-expiration-delay}")
+    private String refreshExpDelay;
+
+    private final BlacklistedTokenRepository blacklistedTokenRepository;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -36,16 +47,15 @@ public class JwtService {
     }
 
     public String generateAccessToken(String username) {
-        return generateToken(new HashMap<>(), username, ACCESS_EXPIRATION_DELAY);
+        return generateToken(new HashMap<>(), username, Long.parseLong(accessExpDelay), TokenType.ACCESS);
     }
 
     public String generateRefreshToken(String username) {
-        return generateToken(new HashMap<>(), username, REFRESH_EXPIRATION_DELAY);
+        return generateToken(new HashMap<>(), username, Long.parseLong(refreshExpDelay), TokenType.REFRESH);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, String username, Long expiration) {
-        return Jwts
-                .builder()
+    private String generateToken(Map<String, Object> extraClaims, String username, Long expiration, TokenType tokenType) {
+        return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -55,21 +65,24 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception exc) {
+            throw new JwtExpiredOrUntrustedException(exc.getMessage());
+        }
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-    }
-
-    public boolean isTokenValid(String token) {
-        return !isTokenExpired(token);
+    private boolean isTokenValidWithSecretKey(String token) {
+        try {
+            extractAllClaims(token);
+            return true;
+        } catch (JwtException exc) {
+            return false;
+        }
     }
 
     private boolean isTokenExpired(String token) {
@@ -83,5 +96,28 @@ public class JwtService {
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            return !isTokenExpired(token) && isTokenValidWithSecretKey(token) && !isTokenBlacklisted(token);
+        } catch (JwtException exc) {
+            log.error("Invalid token: " + exc.getMessage());
+            return false;
+        }
+    }
+
+    public boolean isTokenBlacklisted(String token) {
+        return blacklistedTokenRepository.existsByToken(token);
+    }
+    @Transactional
+    public void blacklistToken(String token, TokenType tokenType) {
+        BlacklistedToken blacklistedToken = BlacklistedToken.builder()
+                .token(token)
+                .tokenType(tokenType)
+                .dateAdded(new Date())
+                .build();
+
+        blacklistedTokenRepository.save(blacklistedToken);
     }
 }

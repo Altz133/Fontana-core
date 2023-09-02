@@ -1,11 +1,11 @@
 package com.fontana.backend.config;
 
-import com.fontana.backend.security.jwt.JwtAuthenticationFilter;
-import com.fontana.backend.test.TestController;
+import com.fontana.backend.role.entity.RoleType;
+import com.fontana.backend.security.filters.JwtAuthenticationFilter;
+import com.fontana.backend.security.filters.SessionStatusFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,12 +19,15 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static com.fontana.backend.config.RestEndpoints.*;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final SessionStatusFilter sessionStatusFilter;
 
     /**
      * This method provides various security configuration solutions, including protection against CSRF attacks, CORS
@@ -50,15 +53,36 @@ public class WebSecurityConfig {
                 }))
                 .authorizeHttpRequests(requests ->
                         requests
-                                .requestMatchers(new AntPathRequestMatcher("/fontana/api/v1/auth/*")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher(AUTH + "/*")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher(SESSION + "/*")).hasAnyAuthority(
+                                        RoleType.ADMIN.name(), RoleType.OPERATOR.name())
+
+                                .requestMatchers(new AntPathRequestMatcher(DMX + "/update/*")).hasAnyAuthority(
+                                        RoleType.ADMIN.name(), RoleType.OPERATOR.name())
+                                .requestMatchers(new AntPathRequestMatcher(DMX + DMX_CHANGE_API_STATUS)).hasAnyAuthority(
+                                        RoleType.ADMIN.name(), RoleType.OPERATOR.name())
+                                .requestMatchers(new AntPathRequestMatcher(DMX + DMX_CHANGE_PUMP_POWER_MULTIPLIER)).hasAnyAuthority(
+                                        RoleType.ADMIN.name(), RoleType.OPERATOR.name())
+                                .requestMatchers(new AntPathRequestMatcher(DMX + DMX_PANIC)).hasAnyAuthority(
+                                        RoleType.ADMIN.name())
+                                .requestMatchers(new AntPathRequestMatcher(DMX + DMX_UPDATE_DMX_ADDRESSES)).hasAnyAuthority(
+                                        RoleType.ADMIN.name())
+
+                                .requestMatchers(new AntPathRequestMatcher(SCHEDULE + SCHEDULE_ADD)).hasAnyAuthority(
+                                        RoleType.ADMIN.name(), RoleType.OPERATOR.name())
+                                .requestMatchers(new AntPathRequestMatcher(SCHEDULE + SCHEDULE_UPDATE)).hasAnyAuthority(
+                                        RoleType.ADMIN.name(), RoleType.OPERATOR.name())
+                                .requestMatchers(new AntPathRequestMatcher(SCHEDULE + SCHEDULE_DELETE)).hasAnyAuthority(
+                                        RoleType.ADMIN.name(), RoleType.OPERATOR.name())
+                                .requestMatchers(new AntPathRequestMatcher(SCHEDULE + SCHEDULE_STOP)).hasAnyAuthority(
+                                        RoleType.ADMIN.name(), RoleType.OPERATOR.name())
                                 .anyRequest().authenticated())
-//                              //TODO keep adding every endpoint/group of endpoints with proper access level
+                //TODO keep adding every endpoint/group of endpoints with proper access level
                 .sessionManagement((sessionManagement) ->
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
+                .addFilterBefore(sessionStatusFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
